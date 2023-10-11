@@ -1,0 +1,3 @@
+# Declarations in Tabulate #
+int a, b; # Multiple declarations #
+bool fl;  # Single declaration #

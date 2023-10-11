@@ -8,12 +8,12 @@ fun firstPositive(range: Range) returns double {
 
         if(currentVal > 0) {
             positiveVal = currentVal;
-            break; # Exit the loop as we found a positive value
+            break; # Exit the loop as we found a positive value #
         }
 
         if(currentVal == 0) {
             currIdx = currIdx + 1;
-            continue; # Skip this iteration and move to the next value
+            continue; # Skip this iteration and move to the next value #
         }
 
         currIdx = currIdx + 1;

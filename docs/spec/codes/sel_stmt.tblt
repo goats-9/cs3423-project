@@ -1,0 +1,12 @@
+# Selection statements in Tabulate #
+bool fl1, fl2;
+
+#...#
+
+if (fl1) {
+    # CODE #
+} else if (fl2) {
+    # MORE CODE #
+} else {
+    # SOME MORE CODE #
+}

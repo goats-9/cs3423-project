@@ -1,0 +1,8 @@
+# Iteration statements in Tabulate #
+bool fl;
+
+#...#
+
+while (fl) {
+    # CODE #
+}

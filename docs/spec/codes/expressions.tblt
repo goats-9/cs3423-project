@@ -1,51 +1,33 @@
-int a = 5 + 13; # evaluates to 18
-double b = 15.23 + 5; # evaluates to 20.23
-double c = 4 - 10.2; # evaluates to -6.2
-int d = 5 * 6; # evaluates to 30
-double e = 20.0 * 0.25; # evaluates to 5.0
-int f = 10 / 2; # evaluates to 5
-double g = 10.8 / 2; # evaluates to 5.4
-int h = 13 % 3; # evaluates to 1
-double i = 15.6 % 4; # evaluates to 3.6
-double j = 2 ^ 3; # exponentiation, evaluates to 8
+int a = 5 + 13; # evaluates to 18 #
+double e = 20.0 * 0.25; # evaluates to 5.0 #
+double g = 10.8 / 2; # evaluates to 5.4 #
+int h = 13 % 3; # evaluates to 1 #
+double j = 2 ^ 3; # exponentiation, evaluates to 8 #
 
-bool k = (5 == 5); # evaluates to TRUE
-bool l = (10.2 > 4); # evaluates to TRUE
-bool m = (6.7 < 6.8); # evaluates to TRUE
-bool n = (8 != 9); # evaluates to TRUE
-
-bool o = (5 > 3 AND 4 < 7); # evaluates to TRUE
-bool p = (5 < 3 OR 4 > 2); # evaluates to TRUE
-bool q = NOT(5 == 6); # evaluates to TRUE
-
-int r = 7; # assigns value 7 to r
-double s = r; # assigns value of r to s, evaluates to 7.0
+bool l = (10.2 > 4); # evaluates to TRUE #
+bool p = (5 < 3 OR 4 > 2); # evaluates to TRUE #
+bool q = NOT(5 == 6); # evaluates to TRUE #
 
 int a = 5;
-int b = -a; # Unary negation, evaluates to -5
-
-double c = 10.5;
-double d = -c; # Unary negation, evaluates to -10.5
+int b = -a; # Unary negation, evaluates to -5 #
 
 # Assuming a function TYPEOF() that returns a string with the type
-string e_type = TYPEOF(5); # evaluates to "int"
-string f_type = TYPEOF(10.5); # evaluates to "double"
+string e_type = TYPEOF(5); # evaluates to "int" #
+string f_type = TYPEOF(10.5); # evaluates to "double" #
 
-# Assuming cells from A1 to A5 have values 1, 2, 3, 4, 5 respectively.
-Range myRange = A1:A5; # References cells from A1 to A5
+# Assuming cells from A1 to A5 have values 1, 2, 3, 4, 5 respectively. #
+Range myRange = A1:A5; # References cells from A1 to A5 #
 
-double sumRange = SUM(myRange); # Using a SUM function, evaluates to 15
+double sumRange = SUM(myRange); # Using a SUM function, evaluates to 15 #
 
-
-# Assuming a table named "SalesData" exists in the sheet.
+# Assuming a table named "SalesData" exists in the sheet. #
 Table myTable = SalesData;
 
-int rowCount = ROWS(myTable); # Returns the number of rows in "SalesData"
-int colCount = COLUMNS(myTable); # Returns the number of columns in "SalesData"
+int rowCount = ROWS(myTable); # Returns the number of rows in "SalesData" #
+int colCount = COLUMNS(myTable); # Returns the number of columns in "SalesData" #
 
-
-# Assuming a class "Student" with user-defined "name" and "grade".
+# Assuming a class "Student" with user-defined "name" and "grade". #
 Student s1 = {name: "hastar", grade: "A"}
 
-string studentName = s1.name; # Accesses the name of the student, evaluates to "John"
-string studentGrade = s1.grade; # Accesses the grade of the student, evaluates to "A"
+string studentName = s1.name; # Accesses the name of the student, evaluates to "John" #
+string studentGrade = s1.grade; # Accesses the grade of the student, evaluates to "A" #

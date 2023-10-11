@@ -1,0 +1,4 @@
+# Assignment statements in Tabluate #
+a = 3;
+# We can declare and assign too. #
+string s = "string";

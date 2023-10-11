@@ -121,6 +121,7 @@
 % (e.g., [1], [2], [3], [4]). To get the latter we need to load the cite
 % package with the nocompress option which is supported by cite.sty v4.0
 % and later.
+\usepackage{hyperref}
 
 
 
@@ -320,6 +321,23 @@
 % (Unless specifically asked to do so by the journal or conference you plan
 % to submit to, of course. )
 \usepackage{listings}
+\lstset{
+  breaklines=true,
+  columns=fullflexible,
+  numbers=left,
+  frame=single,
+  xleftmargin=1em,
+}
+\def\inputGnumericTable{}
+\usepackage[latin1]{inputenc}
+\usepackage{color}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{calc}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{ifthen}
+\usepackage{lscape}
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -431,13 +449,20 @@ Tabulate aims to provide the programmer with more control over their spreadsheet
 Tabulate has only one kind of comments; these are of the form \texttt{\#\ldots
 \#}. Notice that this style of comments can be either single line or multiline.
 
-
-
 \subsection{Whitespaces}
 Whitespaces in Tabulate are useful only in separating tokens. Excess whitespaces
 are ignored.
 
 \subsection{Reserved Keywords}
+
+Some of the reserved keywords in Tabulate are shown in \autoref{tab:keywords}.
+
+\begin{table}[!ht]
+  \input{tables/keywords.tex}
+  \vspace{3mm}
+  \caption{Keywords in Tabulate.}
+  \label{tab:keywords}
+\end{table}
 
 \subsection{Identifiers}
 Identifiers in Tabulate can contain characters, digits and underscore. However,
@@ -446,14 +471,52 @@ case-sensitive.
 
 \subsection{Punctuators}
 
-\section{Data Types}
-\subsection{Primitive Data Types}
-\subsection{Non-Primitive Data Types}
-\section{Operators and Expressions}
+The list of punctuators in Tabulate along with their meanings is given in
+\autoref{tab:punctuators}.
+
+\begin{table}[!ht]
+  \input{tables/punctuators.tex}
+  \vspace{3mm}
+  \caption{Punctuators in Tabulate.}
+  \label{tab:punctuators}
+\end{table}
+
+\section{Datatypes}
+Datatypes in Tabulate are of two types as shown below.
+
+\subsection{Primitive Datatypes}
+The list of primitive datatypes offered by Tabulate are shown in
+\autoref{tab:primitives}.
+
+\begin{table}[!ht]
+  \input{tables/primitives.tex}
+  \vspace{3mm}
+  \caption{Primitives in Tabulate.}
+  \label{tab:primitives}
+\end{table}
+
+\subsection{Non-primitive Datatypes}
+The list of non-primitive datatypes offered by Tabulate are shown in
+\autoref{tab:non-primitives}.
+
+\begin{table}[!ht]
+  \input{tables/non-primitives.tex}
+  \vspace{3mm}
+  \caption{Non-primitives in Tabulate.}
+  \label{tab:non-primitives}
+\end{table}
+
+\section{Operators}
+The list of operators provided by Tabulate are shown in \autoref{tab:operators}.
+
+\begin{table}[!ht]
+  \input{tables/operators.tex}
+  \vspace{3mm}
+  \caption{Operators in Tabulate.}
+  \label{tab:operators}
+\end{table}
 
 \section{Statements}
-
-\lstinputlisting{codes/example.tblt}
 
 \subsection{Simple Statements}
 In Tabulate, the simplest type of statements are \emph{simple statements}.
@@ -461,44 +524,75 @@ These statements are delimited with a semicolon. Expression statements can be of
 the following types.
 
 \subsubsection{Declaration Statements}
-The syntax for declaration statements is given in . Note that Tabulate allows
-for multiple declarations in a single statement for the same data type, with the
-help of comma for separation.
+The syntax for declaration statements is given in \autoref{code:declaration}.
+Note that Tabulate allows for multiple declarations in a single statement for
+the same data type, with the help of comma for separation.
+
+\lstinputlisting[label={code:declaration}, caption={Declaration Statements in Tabulate}, captionpos={b}]{codes/decl_stmt.tblt}
+
+\subsubsection{Assignment Statements}
+The syntax for assignment statements is given in \autoref{code:assignment}. Note
+that constants can appear only in the right hand side of assignment statements
+in Tabulate.
+
+\lstinputlisting[label={code:assignment}, caption={Assignment Statements in Tabulate}, captionpos={b}]{codes/assgn_stmt.tblt}
 
 \subsubsection{Function Calls}
-The syntax for function calls is given in . Note that nested function calls are
-allowed in Tabulate. Further, note that there are no return statements in
-Tabulate as the variable and its type are declared at function declaration.
+The syntax for function calls is given in \autoref{code:function-calls}. Note that nested function calls are
+allowed in Tabulate.
+
+\lstinputlisting[label={code:function-calls}, caption={Function Calls in Tabulate}, captionpos={b}]{codes/func_call.tblt}
+
+\subsubsection{Return Statements}
+The syntax for return statements is given in \autoref{code:return}.
+
+\lstinputlisting[label={code:return}, caption={Return Statements in Tabulate}, captionpos={b}]{codes/return_stmt.tblt}
 
 \subsubsection{Expression Statements}
 Expression statements in Tabulate must contain a left and right hand side, as
-shown in .
+shown in \autoref{code:expressions}.
+
+\lstinputlisting[label={code:expressions}, caption={Expression Statements in Tabulate}, captionpos={b}]{codes/expressions.tblt}
 
 \subsubsection{Jump Statements}
-Tabulate supports the jump statements \texttt{break} and \texttt{continue}.
+Tabulate supports the jump statements \texttt{break} and \texttt{continue}, as
+shown in \autoref{code:jumps}.
+
+\lstinputlisting[label={code:jumps}, caption={Jump Statements in Tabulate}, captionpos={b}]{codes/jump_stmt.tblt}
 
 \subsection{Compound Statements}
 In their simplest form, compound statements in Tabulate contain one or more
 expression statements nested within scope braces. However, compound statements
-can be nested in other compound statements.
+can be nested in other compound statements. An example is shown in
+\autoref{code:compound}.
+
+\lstinputlisting[label={code:compound}, caption={Compound Statements in Tabulate}, captionpos={b}]{codes/cmpd_stmt.tblt}
 
 \subsection{Selection Statements}
 Tabulate also offers a construct for selecting statements to be executed based
 on one or more conditions. The syntax for such selection statements is
-illustrated in
+illustrated in \autoref{code:selection}
+
+\lstinputlisting[label={code:selection}, caption={Selection Statements in Tabulate}, captionpos={b}]{codes/sel_stmt.tblt}
 
 \subsection{Iteration Statements}
 Tabulate offers one iteration statement construct, illustrated in
+\autoref{code:iter}.
+
+\lstinputlisting[label={code:iter}, caption={Iteration Statements in Tabulate}, captionpos={b}]{codes/iter_stmt.tblt}
 
 \section{Functions}
 
 \subsection{Definition}
-The syntax for definition of a function is given in . Note that the return
-variable need not be declared in the function body.
+The syntax for definition of a function is given in \autoref{code:function-def}.
+
+\lstinputlisting[label={code:function-def}, caption={Function Definitions in Tabulate}, captionpos={b}]{codes/func.tblt}
 
 \subsection{Main Function}
 Programs that can be executed must contain a \texttt{main} function, as
-illustrated in .
+illustrated in \autoref{code:function-main}.
+
+\lstinputlisting[label={code:function-main}, caption={Usage of Main Function in Tabulate}, captionpos={b}]{codes/import_main.tblt}
 
 \section{Importing Code}
 Tabulate offers a powerful feature in the form of importing source code for use
@@ -509,7 +603,10 @@ regarding its use should be noted.
   \item \texttt{import} directives occur at the top of the source code.
   \item Source codes containing a \texttt{main} function cannot be imported in
   other codes. 
+  \item Imports should not be circular, else the code will not compile.
 \end{enumerate}
+
+An example of the use of \texttt{import} is in \autoref{code:function-main}.
 
 \section{Standard Library Functions}
 Tabulate contains an extensive standard library to handle your basic spreadsheet

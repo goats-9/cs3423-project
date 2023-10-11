@@ -1,0 +1,6 @@
+# Return statements in Tabulate #
+return x;
+
+# One can simply return, meaning 
+the same as return void #
+return;

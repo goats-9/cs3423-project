@@ -1,0 +1,4 @@
+# Function calls in Tabulate #
+c = ADD(a,b);
+# Nested function calls #
+d = ADD(MUL(a,b),c);
