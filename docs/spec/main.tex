@@ -333,7 +333,7 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Hastar\\Language Specification}
+\title{Tabulate\\Language Specification}
 
 % author names and affiliations
 % use a multiple column layout for up to three different
@@ -380,12 +380,14 @@
 
 % make the title area
 \maketitle
-
+\tableofcontents
+\vspace{3mm}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-This document provides the language specification for \emph{Hastar}, a
-domain specific language (DSL) for processing 
+This document provides the language specification for \emph{Tabulate}, a domain
+specific language (DSL) that provides programming constructs to automate
+spreadsheet processing efficiently.  
 \end{abstract}
 
 % no keywords
@@ -404,9 +406,61 @@ domain specific language (DSL) for processing
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
+
+\subsection{Motivation}
+Spreadsheets are an integral part of our lives. Whether it comes to creating
+timetables, bookkeeping possessions or tabulating marks, it is difficult to
+imagine life without spreadsheets. Unfortunately, most spreadsheet softwares
+like Microsoft Excel and Google Sheets are \emph{What You See Is What You Get}
+(WYSIWYG) editors. These softwares do not offer a very good programming
+interface, which in most cases can automate jobs much faster.
+
+That's where Tabulate comes in. With high level programming constructs to abstract
+the implementation of seemingly complex operations, Tabulate makes it possible to
+\emph{program} your spreadsheet.
+
+\subsection{Goals}
+Tabulate aims to be the go-to DSL for those who manage many spreadsheets in their
+everyday life. It aims to automate the tedious process of repetitive entries,
+updates, and formulae with high performance and efficiency. Built on top of C++,
+Tabulate aims to provide the programmer with more control over their spreadsheet.
+
 \section{Lexical Conventions}
+
+\subsection{Comments}
+Tabulate has only one kind of comments; these are of the form \texttt{\#\ldots
+\#}. Notice that this style of comments can be either single line or multiline.
+
+\subsection{Whitespaces}
+Whitespaces in Tabulate are useful only in separating tokens. Excess whitespaces
+are ignored.
+
+\subsection{Reserved Keywords}
+
+\subsection{Identifiers}
+Identifiers in Tabulate can contain characters and digits. However, they must
+start with characters only.
+
+\subsection{Punctuators}
+
 \section{Data Types}
 \section{Operators and Expressions}
-\section{Declarations}
+
 \section{Statements}
+
+\subsection{Expression Statements}
+In Tabulate, the simplest type of statements are \emph{expression statements}.
+These statements are delimited with a semicolon.
+
+\subsection{Compound Statements}
+In their simplest form, compound statements in Tabulate contain one or more
+expression statements nested within scope braces. However, compound statements
+can be nested in other compound statements.
+
+\subsection{Selection Statements}
+Tabulate also offers a construct for selecting statements to be executed based
+on one or more conditions. The
+
+\subsection{Iteration Statements}
+
 \end{document}
