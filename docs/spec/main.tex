@@ -319,7 +319,7 @@
 % There should be no need to do such things with IEEEtran.cls V1.6 and later.
 % (Unless specifically asked to do so by the journal or conference you plan
 % to submit to, of course. )
-
+\usepackage{listings}
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -431,6 +431,8 @@ Tabulate aims to provide the programmer with more control over their spreadsheet
 Tabulate has only one kind of comments; these are of the form \texttt{\#\ldots
 \#}. Notice that this style of comments can be either single line or multiline.
 
+
+
 \subsection{Whitespaces}
 Whitespaces in Tabulate are useful only in separating tokens. Excess whitespaces
 are ignored.
@@ -438,21 +440,42 @@ are ignored.
 \subsection{Reserved Keywords}
 
 \subsection{Identifiers}
-Identifiers in Tabulate can contain characters and digits. However, they must
-start with characters only.
+Identifiers in Tabulate can contain characters, digits and underscore. However,
+they must start with either a character or underscore. Identifiers are
+case-sensitive.
 
 \subsection{Punctuators}
 
 \section{Data Types}
-\subsection{Primitive Data Types: }
-\subsection{Non-Primitive Data Types: }
+\subsection{Primitive Data Types}
+\subsection{Non-Primitive Data Types}
 \section{Operators and Expressions}
 
 \section{Statements}
 
-\subsection{Expression Statements}
-In Tabulate, the simplest type of statements are \emph{expression statements}.
-These statements are delimited with a semicolon.
+\lstinputlisting{codes/example.tblt}
+
+\subsection{Simple Statements}
+In Tabulate, the simplest type of statements are \emph{simple statements}.
+These statements are delimited with a semicolon. Expression statements can be of
+the following types.
+
+\subsubsection{Declaration Statements}
+The syntax for declaration statements is given in . Note that Tabulate allows
+for multiple declarations in a single statement for the same data type, with the
+help of comma for separation.
+
+\subsubsection{Function Calls}
+The syntax for function calls is given in . Note that nested function calls are
+allowed in Tabulate. Further, note that there are no return statements in
+Tabulate as the variable and its type are declared at function declaration.
+
+\subsubsection{Expression Statements}
+Expression statements in Tabulate must contain a left and right hand side, as
+shown in .
+
+\subsubsection{Jump Statements}
+Tabulate supports the jump statements \texttt{break} and \texttt{continue}.
 
 \subsection{Compound Statements}
 In their simplest form, compound statements in Tabulate contain one or more
@@ -461,8 +484,36 @@ can be nested in other compound statements.
 
 \subsection{Selection Statements}
 Tabulate also offers a construct for selecting statements to be executed based
-on one or more conditions. The
+on one or more conditions. The syntax for such selection statements is
+illustrated in
 
 \subsection{Iteration Statements}
+Tabulate offers one iteration statement construct, illustrated in
+
+\section{Functions}
+
+\subsection{Definition}
+The syntax for definition of a function is given in . Note that the return
+variable need not be declared in the function body.
+
+\subsection{Main Function}
+Programs that can be executed must contain a \texttt{main} function, as
+illustrated in .
+
+\section{Importing Code}
+Tabulate offers a powerful feature in the form of importing source code for use
+in other codes through the \texttt{import} directive. The following points
+regarding its use should be noted.
+
+\begin{enumerate}
+  \item \texttt{import} directives occur at the top of the source code.
+  \item Source codes containing a \texttt{main} function cannot be imported in
+  other codes. 
+\end{enumerate}
+
+\section{Standard Library Functions}
+Tabulate contains an extensive standard library to handle your basic spreadsheet
+requirements without having to import anything. These requirements are
+implemented purely using standard C++ libraries.
 
 \end{document}
