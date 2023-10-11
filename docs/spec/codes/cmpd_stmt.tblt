@@ -1,0 +1,17 @@
+int val1 = GET(A1);
+int val2 = GET(A2);
+double res;
+
+if(val1 > 50) {
+    if(val2 > 20) {
+        res = val1 * 0.8 + val2;
+    } else {
+        res = val1 * 0.9;
+    }
+} else {
+    if(val2 < 10) {
+        res = val1 + val2 * 1.2;
+    } else {
+        res = val1 + val2;
+    }
+}
