@@ -1,0 +1,21 @@
+fun addNumbers(a: int, b: int) returns int {
+    int result = a + b;
+    return result;
+}
+
+fun findMax(range: Range) returns double {
+    double maxVal = -INF;
+    int rangeLength = LENGTH(range);
+    int currIdx = 0;
+
+    while(currIdx < rangeLength) {
+        if(GET(range, currIdx) > maxVal) {
+            maxVal = GET(range, currIdx);
+        }
+        currIdx = currIdx + 1;
+    }
+    
+    return maxVal;
+}
+
+
