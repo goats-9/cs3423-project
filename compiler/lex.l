@@ -11,6 +11,12 @@
 
 %option noyywrap nounput noinput batch debug
 
+%{
+    // Declare token defination as follow
+%}
+
+DIGIT [0-9]+
+
 %%
 %{
     // location
@@ -24,7 +30,7 @@
     // Some tokens are added for reference
 %}
 
-[0-9]+ {
+{DIGIT} {
     return yy::parser::make_DIGIT(stoi(yytext), loc);
 }
 [ \t] {

@@ -34,7 +34,10 @@ class driver;
 %nterm <int> program
 
 %%
+// start symbol
 %start S;
+
+// Write grammar rules below
 
 S: 
     program {
