@@ -1,0 +1,4 @@
+fun main() returns void {
+    # ... your main code here ... #
+    return;
+}

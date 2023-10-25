@@ -123,9 +123,9 @@
 \setlongtables
 
 \setlength\gnumericTableWidth{%
-	65pt+%
-	190pt+%
-	164pt+%
+	82pt+%
+	210pt+%
+	179pt+%
 0pt}
 \def\gumericNumCols{3}
 \setlength\gnumericTableWidthComplete{\gnumericTableWidth+%
@@ -145,9 +145,9 @@
 %%                                                                  %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ifthenelse{\isundefined{\gnumericColA}}{\newlength{\gnumericColA}}{}\settowidth{\gnumericColA}{\begin{tabular}{@{}p{65pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{190pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{164pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColA}}{\newlength{\gnumericColA}}{}\settowidth{\gnumericColA}{\begin{tabular}{@{}p{82pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{210pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{179pt*\gnumericScale}@{}}x\end{tabular}}
 
 \begin{tabular}[c]{%
 	b{\gnumericColA}%
@@ -209,7 +209,9 @@
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}Range of cells}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}range data = A1:A10;}
+	{\gnumericPB{\raggedright}range data = (1:5:1, 1:5:1);
+range rng = (1:5:1);
+range col = (2, 1:5:1);}
 \\
 \hhline{|---|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -225,7 +227,7 @@
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}Represents structured range of cells with headers and data rows}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}table sample = A1:D100;}
+	{\gnumericPB{\raggedright}table tab1;}
 \\
 \hhline{|---|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -233,7 +235,7 @@
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}Datatype that holds formula}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}formula f1 = SUM(A1:A10) / 10;}
+	{\gnumericPB{\raggedright}formula f1 = SUM(1,1:10:2) / 10;}
 \\
 \hhline{|---|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -242,9 +244,9 @@
 	{\gnumericPB{\raggedright}User-defined datatype combining multiple primitive and/or non-primitive data types}
 	&\multicolumn{1}{p{\gnumericColC}|}%
 	{\gnumericPB{\raggedright}class example \{
-int id;
-string name;
-double price;
+    int id;
+    string name;
+    double price;
 \};
 class example = \{id: 101, name: "widget", price: 19.99\}}
 \\

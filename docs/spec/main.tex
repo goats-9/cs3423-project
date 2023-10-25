@@ -410,9 +410,6 @@ spreadsheet processing efficiently.
 
 % no keywords
 
-
-
-
 % For peer review papers, you can put extra information on the cover
 % page as needed:
 % \ifCLASSOPTIONpeerreview
@@ -433,15 +430,16 @@ like Microsoft Excel and Google Sheets are \emph{What You See Is What You Get}
 (WYSIWYG) editors. These softwares do not offer a very good programming
 interface, which in most cases can automate jobs much faster.
 
-That's where Tabulate comes in. With high level programming constructs to abstract
-the implementation of seemingly complex operations, Tabulate makes it possible to
-\emph{program} your spreadsheet.
+That's where Tabulate comes in. With high level programming constructs to
+abstract the implementation of seemingly complex operations, Tabulate makes it
+possible to \emph{program} your spreadsheet.
 
 \subsection{Goals}
-Tabulate aims to be the go-to DSL for those who manage many spreadsheets in their
-everyday life. It aims to automate the tedious process of repetitive entries,
-updates, and formulae with high performance and efficiency. Built on top of C++,
-Tabulate aims to provide the programmer with more control over their spreadsheet.
+Tabulate aims to be the go-to DSL for those who manage many spreadsheets in
+their everyday life. It aims to automate the tedious process of repetitive
+entries, updates, and formulae with high performance and efficiency. Built on
+top of C++, Tabulate aims to provide the programmer with more control over their
+spreadsheet.
 
 \section{Lexical Conventions}
 
@@ -538,8 +536,8 @@ in Tabulate.
 \lstinputlisting[label={code:assignment}, caption={Assignment Statements in Tabulate}, captionpos={b}]{codes/assgn_stmt.tblt}
 
 \subsubsection{Function Calls}
-The syntax for function calls is given in \autoref{code:function-calls}. Note that nested function calls are
-allowed in Tabulate.
+The syntax for function calls is given in \autoref{code:function-calls}. Note
+that nested function calls are allowed in Tabulate.
 
 \lstinputlisting[label={code:function-calls}, caption={Function Calls in Tabulate}, captionpos={b}]{codes/func_call.tblt}
 
@@ -592,21 +590,7 @@ The syntax for definition of a function is given in \autoref{code:function-def}.
 Programs that can be executed must contain a \texttt{main} function, as
 illustrated in \autoref{code:function-main}.
 
-\lstinputlisting[label={code:function-main}, caption={Usage of Main Function in Tabulate}, captionpos={b}]{codes/import_main.tblt}
-
-\section{Importing Code}
-Tabulate offers a powerful feature in the form of importing source code for use
-in other codes through the \texttt{import} directive. The following points
-regarding its use should be noted.
-
-\begin{enumerate}
-  \item \texttt{import} directives occur at the top of the source code.
-  \item Source codes containing a \texttt{main} function cannot be imported in
-  other codes. 
-  \item Imports should not be circular, else the code will not compile.
-\end{enumerate}
-
-An example of the use of \texttt{import} is in \autoref{code:function-main}.
+\lstinputlisting[label={code:function-main}, caption={Usage of Main Function in Tabulate}, captionpos={b}]{codes/main.tblt}
 
 \section{Standard Library Functions}
 Tabulate contains an extensive standard library to handle your basic spreadsheet

@@ -123,12 +123,12 @@
 \setlongtables
 
 \setlength\gnumericTableWidth{%
-	73pt+%
-	73pt+%
-	73pt+%
-	73pt+%
-	73pt+%
-	73pt+%
+	90pt+%
+	90pt+%
+	90pt+%
+	90pt+%
+	90pt+%
+	90pt+%
 0pt}
 \def\gumericNumCols{6}
 \setlength\gnumericTableWidthComplete{\gnumericTableWidth+%
@@ -148,12 +148,12 @@
 %%                                                                  %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ifthenelse{\isundefined{\gnumericColA}}{\newlength{\gnumericColA}}{}\settowidth{\gnumericColA}{\begin{tabular}{@{}p{73pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{73pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{73pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColD}}{\newlength{\gnumericColD}}{}\settowidth{\gnumericColD}{\begin{tabular}{@{}p{73pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColE}}{\newlength{\gnumericColE}}{}\settowidth{\gnumericColE}{\begin{tabular}{@{}p{73pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColF}}{\newlength{\gnumericColF}}{}\settowidth{\gnumericColF}{\begin{tabular}{@{}p{73pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColA}}{\newlength{\gnumericColA}}{}\settowidth{\gnumericColA}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColD}}{\newlength{\gnumericColD}}{}\settowidth{\gnumericColD}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColE}}{\newlength{\gnumericColE}}{}\settowidth{\gnumericColE}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColF}}{\newlength{\gnumericColF}}{}\settowidth{\gnumericColF}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
 
 \begin{tabular}[c]{%
 	b{\gnumericColA}%
@@ -206,7 +206,7 @@
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{IF}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{PI}}
+	{\gnumericPB{\centering}\gnumbox{GET}}
 	&\multicolumn{1}{p{\gnumericColC}|}%
 	{\gnumericPB{\centering}\gnumbox{INT}}
 	&\multicolumn{1}{p{\gnumericColD}|}%
@@ -232,7 +232,7 @@
 \\
 \hhline{|------|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
-	{\gnumericPB{\centering}\gnumbox{IMPORT}}
+	{\gnumericPB{\centering}\gnumbox{VOID}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\centering}\gnumbox{FALSE}}
 	&\multicolumn{1}{p{\gnumericColC}|}%
@@ -242,7 +242,7 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{\gnumericPB{\centering}\gnumbox{BREAK}}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{NROWS}}
+	{\gnumericPB{\centering}\gnumbox{MUL}}
 \\
 \hhline{|------|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -256,7 +256,7 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{\gnumericPB{\centering}\gnumbox{CONTINUE}}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{NCOLS}}
+	{\gnumericPB{\centering}\gnumbox{DIV}}
 \\
 \hhline{|------|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -270,17 +270,17 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{\gnumericPB{\centering}\gnumbox{MAIN}}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{NCELLS}}
+	{\gnumericPB{\centering}\gnumbox{MOD}}
 \\
 \hhline{|------|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
-	{\gnumericPB{\centering}\gnumbox{VOID}}
-	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{GET}}
-	&\multicolumn{1}{p{\gnumericColC}|}%
 	{\gnumericPB{\centering}\gnumbox{FORMULA}}
+	&\multicolumn{1}{p{\gnumericColB}|}%
+	{\gnumericPB{\centering}\gnumbox{POW}}
+	&\multicolumn{1}{p{\gnumericColC}|}%
+	{\gnumericPB{\centering}\gnumbox{FLOOR}}
 	&\multicolumn{1}{p{\gnumericColD}|}%
-	{}
+	{\gnumericPB{\centering}\gnumbox{CEIL}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColF}|}%

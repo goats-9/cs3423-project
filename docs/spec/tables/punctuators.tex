@@ -124,10 +124,9 @@
 
 \setlength\gnumericTableWidth{%
 	73pt+%
-	149pt+%
-	73pt+%
+	110pt+%
 0pt}
-\def\gumericNumCols{3}
+\def\gumericNumCols{2}
 \setlength\gnumericTableWidthComplete{\gnumericTableWidth+%
          \tabcolsep*\gumericNumCols*2+\arrayrulewidth*\gumericNumCols}
 \ifthenelse{\lengthtest{\gnumericTableWidthComplete > \linewidth}}%
@@ -146,13 +145,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \ifthenelse{\isundefined{\gnumericColA}}{\newlength{\gnumericColA}}{}\settowidth{\gnumericColA}{\begin{tabular}{@{}p{73pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{149pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{73pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{110pt*\gnumericScale}@{}}x\end{tabular}}
 
 \begin{tabular}[c]{%
 	b{\gnumericColA}%
 	b{\gnumericColB}%
-	b{\gnumericColC}%
 	}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,115 +160,101 @@
 %%  the first, last or every page. Use \multicolumn if you want.    %%
 
 %%  Header for the first page.                                      %%
-%	\multicolumn{3}{c}{The First Header} \\ \hline 
+%	\multicolumn{2}{c}{The First Header} \\ \hline 
 %	\multicolumn{1}{c}{colTag}	%Column 1
-%	&\multicolumn{1}{c}{colTag}	%Column 2
 %	&\multicolumn{1}{c}{colTag}	\\ \hline %Last column
 %	\endfirsthead
 
 %%  The running header definition.                                  %%
 %	\hline
-%	\multicolumn{3}{l}{\ldots\small\slshape continued} \\ \hline
+%	\multicolumn{2}{l}{\ldots\small\slshape continued} \\ \hline
 %	\multicolumn{1}{c}{colTag}	%Column 1
-%	&\multicolumn{1}{c}{colTag}	%Column 2
 %	&\multicolumn{1}{c}{colTag}	\\ \hline %Last column
 %	\endhead
 
 %%  The running footer definition.                                  %%
 %	\hline
-%	\multicolumn{3}{r}{\small\slshape continued\ldots} \\
+%	\multicolumn{2}{r}{\small\slshape continued\ldots} \\
 %	\endfoot
 
 %%  The ending footer definition.                                   %%
-%	\multicolumn{3}{c}{That's all folks} \\ \hline 
+%	\multicolumn{2}{c}{That's all folks} \\ \hline 
 %	\endlastfoot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\hhline{|-|-~}
+\hhline{|-|-}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{\textbf{Punctuator}}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{\textbf{Description}}}
-	&
+	{\gnumericPB{\centering}\gnumbox{\textbf{Name}}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{;}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Statement terminator}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Semicolon}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{,}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Array separator}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Comma}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{.}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Member access}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Dot}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{:}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Range specifier}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Colon}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{\{}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Block start}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Left curly bracket}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{\}}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Block end}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Right curly bracket}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{(}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Open parenthesis}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Left parenthesis}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{)}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Close parenthesis}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Right parenthesis}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{[}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Open bracket (for arrays, etc.)}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Left square bracket}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{]}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\raggedright}\gnumbox[l]{Close bracket}}
-	&
+	{\gnumericPB{\raggedright}\gnumbox[l]{Right square bracket}}
 \\
-\hhline{|--|~}
+\hhline{|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{\gnumericPB{\centering}\gnumbox{"}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}\gnumbox[l]{String delimiter}}
-	&
 \\
-\hhline{|-|-|~}
+\hhline{|-|-|}
 \end{tabular}
 
 \ifthenelse{\isundefined{\languageshorthands}}{}{\languageshorthands{\languagename}}
