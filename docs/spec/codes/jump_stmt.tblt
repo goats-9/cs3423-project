@@ -2,22 +2,17 @@ fun firstPositive(range: Range) returns double {
     double positiveVal = -INF;
     int rangeLength = LENGTH(range);
     int currIdx = 0;
-
     while(currIdx < rangeLength) {
         double currentVal = GET(range, currIdx);
-
         if(currentVal > 0) {
             positiveVal = currentVal;
-            break; # Exit the loop as we found a positive value #
+            break; # Exit the loop #
         }
-
         if(currentVal == 0) {
             currIdx = currIdx + 1;
-            continue; # Skip this iteration and move to the next value #
+            continue; # Skip this iteration #
         }
-
         currIdx = currIdx + 1;
     }
-
     return positiveVal;
 }
