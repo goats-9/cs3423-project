@@ -1,3 +1,4 @@
+# Expressions in Tabulate #
 int a = ADD(5, cellA); # evaluates to 18 #
 double j = POW(2, 3); # evaluates to 8 #
 

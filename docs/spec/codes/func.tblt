@@ -1,3 +1,4 @@
+# Functions in Tabulate #
 fun addNumbers(a: int, b: int) returns int {
     int result = a + b;
     return result;

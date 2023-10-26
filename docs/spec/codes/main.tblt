@@ -1,3 +1,4 @@
+# Main function in Tabulate #
 fun main() returns void {
     # ... your main code here ... #
     return;

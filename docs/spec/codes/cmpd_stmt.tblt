@@ -1,5 +1,6 @@
-int val1 = GET(A1);
-int val2 = GET(A2);
+# Compound statements in Tabulate #
+int val1 = GET(cell1);
+int val2 = GET(cell2);
 double res;
 
 if(val1 > 50) {

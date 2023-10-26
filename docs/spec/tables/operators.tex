@@ -251,7 +251,7 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}SUB(myTable(1,2),5)}
+	{\gnumericPB{\centering}SUB(myTable[1,2],5)}
 \\
 \hhline{~|--|~~|-|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -265,7 +265,7 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}MUL(myTable(1:5:1),10)}
+	{\gnumericPB{\centering}MUL(myTable[1:5:1],10)}
 \\
 \hhline{~|--|~~|-|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -279,7 +279,7 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}DIV(myTable(1),myTable(2))}
+	{\gnumericPB{\centering}DIV(myTable[1],myTable[2])}
 \\
 \hhline{~|--|~~|-|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -307,7 +307,7 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}POW(myTable(3),4)}
+	{\gnumericPB{\centering}POW(myTable[3],4)}
 \\
 \hhline{|------|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -448,13 +448,106 @@
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\centering}NOT}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}Negation}
+	{\gnumericPB{\raggedright}Logical NOT}
 	&\multicolumn{1}{p{\gnumericColD}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}NOT(cond)}
+\\
+\hhline{|------|}
+	 \multicolumn{1}{|p{\gnumericColA}|}%
+	{\setlength{\gnumericMultiRowLength}{0pt}%
+	 \addtolength{\gnumericMultiRowLength}{\gnumericColA}%
+	 \multirow{6}[3]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
+	 \gnumericPB{\centering}\textbf{Bitwise}}}}
+	&\multicolumn{1}{p{\gnumericColB}|}%
+	{\gnumericPB{\centering}BOR}
+	&\multicolumn{1}{p{\gnumericColC}|}%
+	{\gnumericPB{\raggedright}Bitwise OR}
+	&\multicolumn{1}{p{\gnumericColD}|}%
+	{\setlength{\gnumericMultiRowLength}{0pt}%
+	 \addtolength{\gnumericMultiRowLength}{\gnumericColD}%
+	 \multirow{6}[3]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
+	 \gnumericPB{\centering}Left to Right}}}
+	&\multicolumn{1}{p{\gnumericColE}|}%
+	{\setlength{\gnumericMultiRowLength}{0pt}%
+	 \addtolength{\gnumericMultiRowLength}{\gnumericColE}%
+	 \multirow{6}[3]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
+	 \gnumericPB{\centering}cell, int, double, bool}}}
+	&\multicolumn{1}{p{\gnumericColF}|}%
+	{\gnumericPB{\centering}BOR(cell1, 2)}
+\\
+\hhline{~|--|~~|-|}
+	 \multicolumn{1}{|p{\gnumericColA}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColB}|}%
+	{\gnumericPB{\centering}BAND}
+	&\multicolumn{1}{p{\gnumericColC}|}%
+	{\gnumericPB{\raggedright}Bitwise AND}
+	&\multicolumn{1}{p{\gnumericColD}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColE}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColF}|}%
+	{\gnumericPB{\centering}BAND(cell1, 2)}
+\\
+\hhline{~|--|~~|-|}
+	 \multicolumn{1}{|p{\gnumericColA}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColB}|}%
+	{\gnumericPB{\centering}BXOR}
+	&\multicolumn{1}{p{\gnumericColC}|}%
+	{\gnumericPB{\raggedright}Bitwise XOR}
+	&\multicolumn{1}{p{\gnumericColD}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColE}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColF}|}%
+	{\gnumericPB{\centering}BXOR(cell1, 2)}
+\\
+\hhline{~|--|~~|-|}
+	 \multicolumn{1}{|p{\gnumericColA}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColB}|}%
+	{\gnumericPB{\centering}BNOT}
+	&\multicolumn{1}{p{\gnumericColC}|}%
+	{\gnumericPB{\raggedright}Bitwise NOT}
+	&\multicolumn{1}{p{\gnumericColD}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColE}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColF}|}%
+	{\gnumericPB{\centering}BNOT(cell1, 2)}
+\\
+\hhline{~|--|~~|-|}
+	 \multicolumn{1}{|p{\gnumericColA}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColB}|}%
+	{\gnumericPB{\centering}BLS}
+	&\multicolumn{1}{p{\gnumericColC}|}%
+	{\gnumericPB{\raggedright}Bitwise Left Shift}
+	&\multicolumn{1}{p{\gnumericColD}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColE}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColF}|}%
+	{\gnumericPB{\centering}BLS(cell1, 2)}
+\\
+\hhline{~|--|~~|-|}
+	 \multicolumn{1}{|p{\gnumericColA}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColB}|}%
+	{\gnumericPB{\centering}BRS}
+	&\multicolumn{1}{p{\gnumericColC}|}%
+	{\gnumericPB{\raggedright}Bitwise Right Shift}
+	&\multicolumn{1}{p{\gnumericColD}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColE}|}%
+	{}
+	&\multicolumn{1}{p{\gnumericColF}|}%
+	{\gnumericPB{\centering}BRS(cell1, 2)}
 \\
 \hhline{|------|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -542,7 +635,7 @@
 	 \multicolumn{1}{|p{\gnumericColA}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}( )}
+	{\gnumericPB{\centering}[ ]}
 	&\multicolumn{1}{p{\gnumericColC}|}%
 	{\gnumericPB{\raggedright}Table Reference}
 	&\multicolumn{1}{p{\gnumericColD}|}%
@@ -550,7 +643,7 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{\gnumericPB{\centering}table}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}myTable(1:5:1,1:5:1)}
+	{\gnumericPB{\centering}myTable[1:5:1,1:5:1]}
 \\
 \hhline{|------|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
