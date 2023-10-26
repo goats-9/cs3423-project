@@ -10,7 +10,6 @@ auxilary_C_file = auxilary.cc
 
 tabulate: ${objs}
 	g++ ${objs} -o ../Tabulate
-	rm ${objs} ${C_File} ${generated_header_file}
 
 parser.tab.o: ${parser_source} ${non_generated_header_file}
 	bison ${parser_source}
@@ -28,3 +27,6 @@ main.o: main.cc ${non_generated_header_file}
 
 auxilary.o: ${auxilary_C_file} ${header_File}
 	g++ ${auxilary_C_file} -c
+
+clean: ${objs} ${C_File} ${generated_header_file}
+	rm ${objs} ${C_File} ${generated_header_file}
