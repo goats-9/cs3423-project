@@ -12,9 +12,8 @@
 
 %option noyywrap nounput noinput batch debug
 
-%{
-    // Declare token defination as follow
-%}
+
+/* Declare token defination as follow */
 
 DIGIT [0-9]+
 COMMENTS #[^#]*#
@@ -34,6 +33,12 @@ open_square_brac "["
 close_square_brac "]"
 colon ":"
 dot "."
+semiColon ";"
+comma ","
+open_curly "{"
+close_curly "}"
+open_parenthesis "("
+close_parenthesis ")"
 
 %%
 %{
@@ -41,20 +46,25 @@ dot "."
     yy::location& loc = drv.location;
     // Code run each time yylex is called.
     loc.step ();
-    // Add token defination below
-    // Some tokens are added for reference
 %}
+    /*
+    Add token defination below
+    Some tokens are added for reference
+    */
 
+    /* reserved keywords */
 "struct" {
     auto token = yy::parser::make_STRUCT(loc);
     helper::handleToken(token);
     return token;
 }
+    /* datatype */
 {DATATYPE} {
     auto token = yy::parser::make_DATATYPE(yytext,loc);
     helper::handleToken(token);
     return token;
 }
+    /* operators */
 {ARITHMETIC} {
     auto token = yy::parser::make_ARITHMETIC(yytext,loc);
     helper::handleToken(token);
@@ -71,45 +81,82 @@ dot "."
     return token;
 }
 {EQUAL} {
-    auto token = yy::parser::make_EQUAL(yytext,loc);
+    auto token = yy::parser::make_EQUAL(loc);
     helper::handleToken(token);
     return token;
 }
+    /* Punctuator */
 {open_square_brac} {
-    auto token = yy::parser::make_OPEN_SQUARE_BRAC(yytext,loc);
+    auto token = yy::parser::make_OPEN_SQUARE_BRAC(loc);
     helper::handleToken(token);
     return token;
 }
 {close_square_brac} {
-    auto token = yy::parser::make_CLOSE_SQUARE_BRAC(yytext,loc);
+    auto token = yy::parser::make_CLOSE_SQUARE_BRAC(loc);
     helper::handleToken(token);
     return token;
 }
 {colon} {
-    auto token = yy::parser::make_COLON(yytext,loc);
+    auto token = yy::parser::make_COLON(loc);
     helper::handleToken(token);
     return token;
 }
 {dot} {
-    auto token = yy::parser::make_DOT(yytext,loc);
+    auto token = yy::parser::make_DOT(loc);
     helper::handleToken(token);
     return token;
 }
+{semiColon} {
+    auto token = yy::parser::make_SEMICOLON(loc);
+    helper::handleToken(token);
+    return token;
+}
+{comma} {
+    auto token = yy::parser::make_COMMA(loc);
+    helper::handleToken(token);
+    return token;
+}
+{open_curly} {
+    auto token = yy::parser::make_OPEN_CURLY(loc);
+    helper::handleToken(token);
+    return token;
+}
+{close_curly} {
+    auto token = yy::parser::make_CLOSE_CURLY(loc);
+    helper::handleToken(token);
+    return token;
+}
+{open_parenthesis} {
+    auto token = yy::parser::make_OPEN_PARENTHESIS(loc);
+    helper::handleToken(token);
+    return token;
+}
+{close_parenthesis} {
+    auto token = yy::parser::make_CLOSE_PARENTHESIS(loc);
+    helper::handleToken(token);
+    return token;
+}
+    /* constant */
 {DIGIT} {
     auto token = yy::parser::make_DIGIT(stoi(yytext), loc);
     helper::handleToken(token);
     return token;
 }
+    /* identifiers */
 {ID} {
     auto token = yy::parser::make_ID(yytext, loc);
     helper::handleToken(token);
     return token;
 }
+    /* comments and spaces */
 {IGNORE} {
     loc.step();
 }
+    /* newline */
 \n {loc.lines (yyleng); loc.step();}
+    /* error handling */
 . {throw yy::parser::syntax_error(loc, "invalid character: " + string(yytext));}
+    /* EOF */
 <<EOF>>    return yy::parser::make_YYEOF (loc);
 %%
 

@@ -31,7 +31,20 @@ class driver;
 
 %define api.token.prefix {TOK_}
 
-%token STRUCT "struct" EQUAL "=" COLON ":" DOT "." OPEN_SQUARE_BRAC "[" CLOSE_SQUARE_BRAC "]"
+%token 
+    STRUCT "struct" 
+    EQUAL "=" 
+    COLON ":" 
+    SEMICOLON ";"
+    DOT "." 
+    COMMA ","
+    OPEN_SQUARE_BRAC "[" 
+    CLOSE_SQUARE_BRAC "]"
+    OPEN_CURLY "{"
+    CLOSE_CURLY "}"
+    OPEN_PARENTHESIS "("
+    CLOSE_PARENTHESIS ")"
+
 %token
     <string> DATATYPE "datatype" 
     <string> ID "identifier"
