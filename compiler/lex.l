@@ -25,7 +25,7 @@ ID {char_id_start}{char_id}*
 DATATYPE1 "int"|"double"|"string"|"bool"|"date"|"time"
 DATATYPE2 "cell"|"range"|"array"|"table"|"formula"
 DATATYPE {DATATYPE1}|{DATATYPE2}
-ARITHMETIC "ADD"|"SUB"|"MUL"|"DIV"|"MOD"|"POW"
+ARITHMETIC "ADD"|"SUB"|"MUL"|"DIV"|"MOD"|"POW"|"BOR"|"BAND"|"BXOR"|"BNOT"|"BLS"|"BRS"
 bi_OP "=="|"!="|">"|"<"|">="|"<="|"AND"|"OR"|"XOR"
 uni_OP "NOT"|"-"|"~"|"TYPEOF"
 EQUAL "="
