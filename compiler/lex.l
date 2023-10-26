@@ -53,99 +53,149 @@ close_parenthesis ")"
     */
 
     /* reserved keywords */
-"struct" {
-    auto token = yy::parser::make_STRUCT(loc);
-    helper::handleToken(token);
+"class" {
+    auto token = yy::parser::make_CLASS(loc);
+    drv.handleToken(token);
+    return token;
+}
+"if" {
+    auto token = yy::parser::make_IF(loc);
+    drv.handleToken(token);
+    return token;
+}
+"else" {
+    auto token = yy::parser::make_ELSE(loc);
+    drv.handleToken(token);
+    return token;
+}
+"void" {
+    auto token = yy::parser::make_VOID(loc);
+    drv.handleToken(token);
+    return token;
+}
+"while" {
+    auto token = yy::parser::make_WHILE(loc);
+    drv.handleToken(token);
+    return token;
+}
+"fun" {
+    auto token = yy::parser::make_FUN(loc);
+    drv.handleToken(token);
+    return token;
+}
+"return" {
+    auto token = yy::parser::make_RETURN(loc);
+    drv.handleToken(token);
+    return token;
+}
+"returns" {
+    auto token = yy::parser::make_RETURNS(loc);
+    drv.handleToken(token);
+    return token;
+}
+"break" {
+    auto token = yy::parser::make_BREAK(loc);
+    drv.handleToken(token);
+    return token;
+}
+"continue" {
+    auto token = yy::parser::make_CONTINUE(loc);
+    drv.handleToken(token);
+    return token;
+}
+"main" {
+    auto token = yy::parser::make_MAIN(loc);
+    drv.handleToken(token);
     return token;
 }
     /* datatype */
 {DATATYPE} {
     auto token = yy::parser::make_DATATYPE(yytext,loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
     /* operators */
 {ARITHMETIC} {
     auto token = yy::parser::make_ARITHMETIC(yytext,loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {bi_OP} {
     auto token = yy::parser::make_BIOP(yytext,loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {uni_OP} {
     auto token = yy::parser::make_UNIOP(yytext,loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {EQUAL} {
     auto token = yy::parser::make_EQUAL(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
     /* Punctuator */
 {open_square_brac} {
     auto token = yy::parser::make_OPEN_SQUARE_BRAC(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {close_square_brac} {
     auto token = yy::parser::make_CLOSE_SQUARE_BRAC(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {colon} {
     auto token = yy::parser::make_COLON(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {dot} {
     auto token = yy::parser::make_DOT(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {semiColon} {
     auto token = yy::parser::make_SEMICOLON(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {comma} {
     auto token = yy::parser::make_COMMA(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {open_curly} {
     auto token = yy::parser::make_OPEN_CURLY(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {close_curly} {
     auto token = yy::parser::make_CLOSE_CURLY(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {open_parenthesis} {
     auto token = yy::parser::make_OPEN_PARENTHESIS(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
 {close_parenthesis} {
     auto token = yy::parser::make_CLOSE_PARENTHESIS(loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
     /* constant */
 {DIGIT} {
     auto token = yy::parser::make_DIGIT(stoi(yytext), loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
     /* identifiers */
 {ID} {
     auto token = yy::parser::make_ID(yytext, loc);
-    helper::handleToken(token);
+    drv.handleToken(token);
     return token;
 }
     /* comments and spaces */

@@ -304,3 +304,12 @@ TSWLatexianTemp*
 
 # executable
 Tabulate
+
+# object file
+*.o 
+
+# produced C/C++ and header files files
+parser.tab.cc 
+parser.tab.hh 
+location.hh 
+lex.yy.c
