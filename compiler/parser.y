@@ -16,7 +16,7 @@ using namespace std;
 class driver;
 }
 
-// The parsing context.
+// The parsing context
 %param { driver& drv }
 
 %locations
@@ -31,8 +31,22 @@ class driver;
 
 %define api.token.prefix {TOK_}
 
-%token 
-    STRUCT "struct" 
+// reserved keywords
+%token
+    CLASS "class"
+    IF "if"
+    ELSE "else"
+    VOID "void"
+    WHILE "while"
+    FUN "fun"
+    RETURN "return"
+    RETURNS "returns"
+    BREAK "break"
+    CONTINUE "continue"
+    MAIN "main"
+
+// punctuators
+%token  
     EQUAL "=" 
     COLON ":" 
     SEMICOLON ";"
@@ -45,13 +59,23 @@ class driver;
     OPEN_PARENTHESIS "("
     CLOSE_PARENTHESIS ")"
 
+// datatypes
 %token
     <string> DATATYPE "datatype" 
+
+// identifiers
+%token
     <string> ID "identifier"
-    <int> DIGIT "digit"
+
+// operators
+%token
     <string> ARITHMETIC "arithmetic"
     <string> BIOP "binary operator"
     <string> UNIOP "unary operator"
+
+// constant
+%token
+    <int> DIGIT "digit"
 
 %nterm <int> program
 

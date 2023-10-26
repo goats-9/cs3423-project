@@ -25,9 +25,21 @@ public:
     // Whether to generate parser debug traces.
     bool trace_parsing;
 
+    // Whether to generate lexer output
+    bool isLexOut;
+
     // Handling the scanner.
     void scan_begin();
     void scan_end();
+
+    // handles tokens here
+    inline void handleToken(yy::parser::symbol_type token)
+    {
+        if (isLexOut)
+        {
+            cout << token.name() << "\n";
+        }
+    }
 
     // The token's location used by the scanner.
     yy::location location;
