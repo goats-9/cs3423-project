@@ -29,7 +29,6 @@ class driver;
 # include "driver.hh"
 }
 
-%define api.token.prefix {TOK_}
 
 // reserved keywords
 %token
