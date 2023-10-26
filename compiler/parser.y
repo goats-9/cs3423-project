@@ -12,6 +12,7 @@
 
 %code requires{
 #include <iostream>
+using namespace std;
 class driver;
 }
 
@@ -30,7 +31,15 @@ class driver;
 
 %define api.token.prefix {TOK_}
 
-%token <int> DIGIT "digit"
+%token STRUCT "struct" EQUAL "=" COLON ":" DOT "." OPEN_SQUARE_BRAC "[" CLOSE_SQUARE_BRAC "]"
+%token
+    <string> DATATYPE "datatype" 
+    <string> ID "identifier"
+    <int> DIGIT "digit"
+    <string> ARITHMETIC "arithmetic"
+    <string> BIOP "binary operator"
+    <string> UNIOP "unary operator"
+
 %nterm <int> program
 
 %%
