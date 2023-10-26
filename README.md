@@ -2,6 +2,6 @@
 
 ## Instruction to run:
 ```shell
-make Tabulate
+make
 ./Tabulate source_program
 ```

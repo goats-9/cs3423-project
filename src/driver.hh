@@ -4,10 +4,13 @@
 #include <map>
 #include "parser.tab.hh"
 using namespace std;
+
+// Prototype of yylex given to Flex
 #define YY_DECL \
     yy::parser::symbol_type yylex(driver &drv)
-// Conducting the whole scanning and parsing of Calc++.
 YY_DECL;
+
+// Parser driver for Tabulate
 class driver
 {
 public:
@@ -47,6 +50,6 @@ public:
     // symbol table
 
     // other variable
-    int res;
+    int result;
 };
 #endif
