@@ -1,4 +1,4 @@
-all: ./src/*
+all: 
 	cd src/ && make
-clean: ./src/*
+clean: 
 	cd src/ && make clean

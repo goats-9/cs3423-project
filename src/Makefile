@@ -1,5 +1,5 @@
-lex_source = lex.ll
-parser_source = parser.yy
+lex_source = lex.l
+parser_source = parser.y
 C_File = lex.yy.c parser.tab.cc
 objs = parser.tab.o auxilary.o lex.yy.o driver.o main.o
 generated_header_file = parser.tab.hh location.hh
@@ -28,5 +28,5 @@ main.o: main.cc ${non_generated_header_file}
 auxilary.o: ${auxilary_C_file} ${header_File}
 	g++ ${auxilary_C_file} -c
 
-clean: ${objs} ${C_File} ${generated_header_file}
+clean: all
 	rm ${objs} ${C_File} ${generated_header_file}

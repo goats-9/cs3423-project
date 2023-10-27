@@ -12,6 +12,7 @@
 
 %code requires{
 #include <iostream>
+#include "auxilary.hh"
 using namespace std;
 class driver;
 }
@@ -29,7 +30,6 @@ class driver;
 # include "driver.hh"
 }
 
-
 // reserved keywords
 %token
     CLASS "class"
@@ -42,7 +42,6 @@ class driver;
     RETURNS "returns"
     BREAK "break"
     CONTINUE "continue"
-    MAIN "main"
 
 // punctuators
 %token  
@@ -58,23 +57,23 @@ class driver;
     OPEN_PARENTHESIS "("
     CLOSE_PARENTHESIS ")"
 
-// datatypes
-%token
-    <string> DATATYPE "datatype" 
-
 // identifiers
 %token
     <string> ID "identifier"
 
 // operators
 %token
-    <string> ARITHMETIC "arithmetic"
     <string> BIOP "binary operator"
     <string> UNIOP "unary operator"
 
 // constant
 %token
-    <int> DIGIT "digit"
+    <int> INT "integer"
+    <string> STRING "string"
+    <bool> BOOL "boolean"
+    <double> DOUBLE "double"
+    <helper::date> DATE "date"
+    <helper::time> TIME "time"
 
 %nterm <int> program
 
@@ -90,11 +89,11 @@ S:
     }
     ;
 program:
-    DIGIT program {
+    INT program {
         $$ = $1 + $2 ;
     }
     |
-    DIGIT {
+    INT {
         $$ = $1 ;
     }
 %%
