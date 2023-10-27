@@ -86,7 +86,7 @@ class driver;
 
 S: 
     program {
-        drv.res = $1 ;
+        drv.result = $1 ;
     }
     ;
 program:
