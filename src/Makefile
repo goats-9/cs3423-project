@@ -1,5 +1,5 @@
-lex_source = lex.l
-parser_source = parser.y
+lex_source = lex.ll
+parser_source = parser.yy
 C_File = lex.yy.c parser.tab.cc
 objs = parser.tab.o auxilary.o lex.yy.o driver.o main.o
 generated_header_file = parser.tab.hh location.hh
