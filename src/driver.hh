@@ -52,4 +52,4 @@ public:
     // other variable
     int result;
 };
-#endif
+#endif  // DRIVER_HH
