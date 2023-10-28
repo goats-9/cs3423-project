@@ -1,12 +1,11 @@
 #include "driver.hh"
-#include "parser.tab.hh"
 
-driver::driver() : trace_parsing (false), trace_scanning (false), isLexOut(false)
+tabulate::driver() : trace_parsing (false), trace_scanning (false), isLexOut(false)
 {
     // initilize variables
 }
 
-int driver::parse(const std::string &f)
+int tabulate::parse(const std::string &f)
 {
     // setting file name
     file = f;

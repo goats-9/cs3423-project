@@ -12,13 +12,11 @@
 
 %code requires{
 #include <iostream>
-#include "auxilary.hh"
-using namespace std;
-class driver;
+#include "tabulate.hh"
 }
 
 // The parsing context
-%param { driver& drv }
+%param { tabulate::driver& drv }
 
 %locations
 
@@ -59,21 +57,21 @@ class driver;
 
 // identifiers
 %token
-    <string> ID "identifier"
+    <std::string> ID "identifier"
 
 // operators
 %token
-    <string> BIOP "binary operator"
-    <string> UNIOP "unary operator"
+    <std::string> BIOP "binary operator"
+    <std::string> UNIOP "unary operator"
 
 // constant
 %token
     <int> INT "integer"
-    <string> STRING "string"
+    <std::string> std::string "std::string"
     <bool> BOOL "boolean"
     <double> DOUBLE "double"
-    <helper::date> DATE "date"
-    <helper::time> TIME "time"
+    <tabulate::date> DATE "date"
+    <tabulate::time> TIME "time"
 
 %nterm <int> program
 
