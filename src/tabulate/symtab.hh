@@ -1,7 +1,11 @@
 #ifndef SYMTAB_HH
 #define SYMTAB_HH
 
-#define N_SCOPES 127
+/* Macros used */
+#define ID_STREC 0
+#define FUNC_STREC 1
+#define DTYPE_STREC 2
+
 /**
  * Symbol Table API for Tabulate
  *
@@ -20,23 +24,21 @@
  * Depending on the data to be stored in the symbol table, the symbol table
  * records can be of various types, as shown below.
  *
- * ============================================================
+ * ===================================================
  * TOKEN      : SYMBOL TABLE RECORD CONTENTS
- * ============================================================
- * IDENTIFIER : NAME | RECTYPE | TYPE    | ELETYPE    | LEVEL | 
- * FUNCTION   : NAME | RECTYPE | RETTYPE | PARAMETERS | LEVEL | 
- * DATATYPE   : NAME | RECTYPE | LEVEL   | 
- * ============================================================
+ * ===================================================
+ * IDENTIFIER : NAME || TYPE    | ELETYPE    | LEVEL |
+ * FUNCTION   : NAME || RETTYPE | PARAMETERS | LEVEL |
+ * DATATYPE   : NAME || LEVEL   | 
+ * ===================================================
  *
 */
 
 /* Standard C++ includes */
 #include <iostream>
-#include <map>
 #include <stack>
 #include <vector>
 #include <string>
-#include <variant>
 #include <unordered_map>
 
 /**
@@ -48,8 +50,18 @@ namespace tabulate {
     /* Class definitions for tabulate symbol table records */
 
     struct id_symtrec {
-        /// @brief Type of token.
-        int rectype;
+        /// @brief Determines whether the identifier is simple or is an array,
+        /// taking values 0 or 1 respectively.
+        int type;
+        /// @brief Determine type of element of the identifier, meaningful for
+        /// array identifiers.
+        int eletype;
+        /// @brief Scope of declaration.
+        int level;
+    };
+
+    struct param_symtrec {
+        std::string name;
         /// @brief Determines whether the identifier is simple or is an array,
         /// taking values 0 or 1 respectively.
         int type;
@@ -61,30 +73,30 @@ namespace tabulate {
     };
 
     struct func_symtrec {
-        int rectype, rettype, level;
-        std::vector<id_symtrec> params;
+        int rettype, level;
+        std::vector<param_symtrec> paramlist;
     };
 
     struct dtype_symtrec {
-        int rectype, level;
+        int level;
     };
+
+    std::stack<std::string> active_func_stack;
+    int _level = 0;
 
     /**
      * Symbol Table clas template
     */
-    template<typename T>
+    template<typename K, typename V>
     class symtab {
     private:
-        std::unordered_map<std::string, std::stack<T>> tabulate_symtab;
-        int _level;
-        void delete_scope();
+        std::unordered_map<K, std::stack<V>> tabulate_symtab;
     public:
-        symtab() : _level(0) {}
+        symtab() {}
 
-        int insert(std::string &name, T &rec);
-        T find(std::string &name);
-        void begin_scope();
-        void end_scope();
+        int insert(K &name, V &rec);
+        V find(K &name);
+        void delete_scope();
     };
 }
 
