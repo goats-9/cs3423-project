@@ -34,6 +34,7 @@ namespace tabulate
 
 // reserved keywords
 %token
+    CLASS "class"
     IF "if"
     ELSE "else"
     VOID "void"
