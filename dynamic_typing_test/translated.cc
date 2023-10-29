@@ -31,7 +31,7 @@ public:
 class myclass_ptr : public custom_ptr
 {
 public:
-    myclass_ptr(myclass val)
+    myclass_ptr(const myclass &val)
     {
         type = "myclass";
         this->val = new myclass(val);
@@ -40,12 +40,12 @@ public:
     {
         return new myclass_ptr(*(myclass *)val);
     }
-    any &access(string id)
+    any &access(const string &id)
     {
         myclass *p = (myclass *)(this->val);
         ACCESS_CODE
     }
-    any run(string id, vector<any> params)
+    any run(const string &id, const vector<any> &params)
     {
         myclass *p = (myclass *)(this->val);
         RUN_CODE
@@ -62,13 +62,11 @@ int main()
     {
         any a(new int_ptr(67));
         any b(new string_ptr("90"));
-
         cout << a + a << "\n";
         cout << b + b << "\n";
         any c(new myclass_ptr(myclass()));
         c->access("at1") = any(new int_ptr(1));
         cout << c->run("add", {a, c->access("at1")}) << "\n";
-
         any arr(new array_ptr({
             any(new int_ptr(23))
             , 
@@ -78,8 +76,9 @@ int main()
                 any(new string_ptr("world"))
             }))
         }));
-
         cout << arr[1][0] + arr[1][1] << "\n";
+        arr->add_item(any(new int_ptr(9)));
+        cout << arr[2] << "\n";
     }
     catch (const runtime_error &e)
     {

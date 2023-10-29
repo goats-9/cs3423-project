@@ -24,3 +24,6 @@ arr = [
 ]
 
 print(arr[1][0] + arr[1][1]);
+
+arr.add_item(9);
+print(arr[2]);

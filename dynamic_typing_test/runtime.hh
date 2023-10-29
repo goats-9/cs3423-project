@@ -39,13 +39,17 @@ public:
     // gets deep copy
     virtual gen *deepCopy() = 0;
     // accessing a member
-    virtual any &access(string id) = 0;
+    virtual any &access(const string &id) = 0;
     // running a function with name id
-    virtual any run(string id, vector<any> params) = 0;
+    virtual any run(const string &id,const vector<any> &params) = 0;
     // accessing i indexed element of array
     virtual any &operator[](int i) = 0;
     // add operator
-    virtual gen *operator+(gen *&a) = 0;
+    virtual gen *operator+(gen *a) = 0;
+    // add item 
+    virtual void add_item(const any &item) = 0;
+    // size
+    virtual any size() = 0;
     // destructor
     virtual ~gen(){};
 };
@@ -89,7 +93,7 @@ public:
         ptr = a.ptr->deepCopy();
     }
     // add
-    any operator+(any &b)
+    any operator+(const any &b)
     {
         gen *res = *(this->ptr) + b.ptr;
         return any(res);
@@ -113,11 +117,11 @@ public:
     {
         return new int_ptr(*(int *)val);
     }
-    any &access(string id)
+    any &access(const string &id)
     {
         throw runtime_error("invalid access");
     }
-    any run(string id, vector<any> params)
+    any run(const string &id, const vector<any> &params)
     {
         throw runtime_error("invalid access");
     }
@@ -125,7 +129,7 @@ public:
     {
         throw runtime_error("Not an array");
     }
-    gen *operator+(gen *&a)
+    gen *operator+(gen *a)
     {
         if (a->type == "int")
         {
@@ -133,6 +137,14 @@ public:
             return new int_ptr(val);
         }
         throw runtime_error("+ operator does not support: (" + type + "," + a->type + ")");
+    }
+    void add_item(const any &item)
+    {
+        throw runtime_error("Not an array");
+    }
+    any size()
+    {
+        throw runtime_error("Not an array or string");
     }
     ~int_ptr()
     {
@@ -143,7 +155,7 @@ public:
 class string_ptr : public gen
 {
 public:
-    string_ptr(string val)
+    string_ptr(const string &val)
     {
         type = "string";
         this->val = new string(val);
@@ -152,11 +164,11 @@ public:
     {
         return new string_ptr(*(string *)val);
     }
-    any &access(string id)
+    any &access(const string &id)
     {
         throw runtime_error("invalid access");
     }
-    any run(string id, vector<any> params)
+    any run(const string &id, const vector<any> &params)
     {
         throw runtime_error("invalid access");
     }
@@ -164,7 +176,7 @@ public:
     {
         throw runtime_error("Not an array");
     }
-    gen *operator+(gen *&a)
+    gen *operator+(gen *a)
     {
         if (a->type == "string")
         {
@@ -172,6 +184,16 @@ public:
             return new string_ptr(val);
         }
         throw runtime_error("+ operator does not support: (" + type + "," + a->type + ")");
+    }
+    void add_item(const any &item)
+    {
+        throw runtime_error("Not an array");
+    }
+    any size()
+    {
+        string *ptr = (string *) val;
+        int sz = ptr->size();
+        return any(new int_ptr(sz));
     }
     ~string_ptr()
     {
@@ -191,11 +213,11 @@ public:
     {
         return new none_ptr();
     }
-    any &access(string id)
+    any &access(const string &id)
     {
         throw runtime_error("invalid access");
     }
-    any run(string id, vector<any> params)
+    any run(const string &id, const vector<any> &params)
     {
         throw runtime_error("invalid access");
     }
@@ -203,7 +225,15 @@ public:
     {
         throw runtime_error("Not an array");
     }
-    gen *operator+(gen *&a)
+    void add_item(const any &item)
+    {
+        throw runtime_error("Not an array");
+    }
+    any size()
+    {
+        throw runtime_error("Not an array or string");
+    }
+    gen *operator+(gen *a)
     {
         throw runtime_error("+ operator does not support: (" + type + "," + a->type + ")");
     }
@@ -212,20 +242,20 @@ public:
 class array_ptr : public gen
 {
 public:
-    array_ptr(vector<any> val)
+    array_ptr(const vector<any> &val)
     {
-        type = "none";
+        type = "array";
         this->val = new vector<any>(val);
     }
     array_ptr *deepCopy()
     {
         return new array_ptr(*(vector<any> *)val);
     }
-    any &access(string id)
+    any &access(const string &id)
     {
         throw runtime_error("invalid access");
     }
-    any run(string id, vector<any> params)
+    any run(const string &id, const vector<any> &params)
     {
         throw runtime_error("invalid access");
     }
@@ -238,9 +268,20 @@ public:
         }
         return (*arr)[i];
     }
-    gen *operator+(gen *&a)
+    gen *operator+(gen *a)
     {
         throw runtime_error("+ operator does not support: (" + type + "," + a->type + ")");
+    }
+    void add_item(const any &item)
+    {
+        vector<any> *arr = (vector<any> *)val;
+        arr->push_back(item);
+    }
+    any size()
+    {
+        vector<any> *ptr = (vector<any> *) val;
+        int sz = ptr->size();
+        return any(new int_ptr(sz));
     }
     ~array_ptr()
     {
@@ -255,9 +296,17 @@ public:
     {
         throw runtime_error("Not an array");
     }
-    gen *operator+(gen *&a)
+    gen *operator+(gen *a)
     {
         throw runtime_error("+ operator does not support: (" + type + "," + a->type + ")");
+    }
+    void add_item(const any &item)
+    {
+        throw runtime_error("Not an array");
+    }
+    any size()
+    {
+        throw runtime_error("Not an array or string");
     }
 };
 
