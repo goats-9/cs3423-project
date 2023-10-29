@@ -106,7 +106,8 @@ constant: INT | STRING | BOOL | DOUBLE | DATE | TIME ;
 
 //expressions & operators
 expression:
-    ID
+    constant
+    | ID
     | UNIOP expression
     | expression BIOP expression
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
@@ -114,7 +115,7 @@ expression:
 
 //declaration & assignment
 declaration_stmt: declaration SEMICOLON ;
-declaration: constant variable_list ;
+declaration: ID variable_list ;
 variable_list: ID
              | ID COMMA variable_list ;
 expression_stmt: variable_list EQUAL expression SEMICOLON ;
