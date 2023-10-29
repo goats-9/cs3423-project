@@ -137,12 +137,12 @@ statement_list: /* empty */
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
 //function declarations
-function_declaration: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS RETURNS constant SEMICOLON ;
+function_declaration: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS RETURNS ID SEMICOLON ;
 parameter_list: /* empty */
               | parameter
               | parameter COMMA parameter_list ;
-parameter: ID COLON constant ;
-function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS RETURNS constant compound_statement ;
+parameter: ID COLON ID ;
+function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS RETURNS ID compound_statement ;
 
 //function calls
 function_call: ID OPEN_PARENTHESIS argument_list CLOSE_PARENTHESIS ;
