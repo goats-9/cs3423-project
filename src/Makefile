@@ -1,3 +1,6 @@
+BISON = bison
+FLEX = flex
+CXX = g++
 lex_source = lex
 parser_source = parser
 helping_file = types.o driver.o
@@ -12,21 +15,21 @@ editable_file = ${parser_source}.y ${lex_source}.l main.cc tabulate.cc tabulate.
 all: ../Tabulate
 
 ../Tabulate: ${objs}
-	g++ ${objs} -o ../Tabulate
+	$(CXX) ${objs} -o ../Tabulate
 
-parser.tab.o: ${editable_file}
-	bison ${parser_source}.y
-	g++ parser.tab.cc -c
+parser.tab.o:
+	$(BISON) ${parser_source}.y
+	$(CXX) parser.tab.cc -c
 
-lex.yy.o: ${editable_file}
-	lex ${lex_source}.l
-	g++ lex.yy.c -c 
+lex.yy.o:
+	$(FLEX) ${lex_source}.l
+	$(CXX) lex.yy.c -c 
 
-${main_objs}: ${editable_file}
-	g++ $*.cc -c
+${main_objs}:
+	$(CXX) $*.cc -c
 
-${helping_file}: ${editable_file}
-	g++ tabulate/$*.cc -c
+${helping_file}:
+	$(CXX) tabulate/$*.cc -c
 
-clean: all
-	rm  ${generated_file} ${objs} 
+clean:
+	rm ${generated_file} ${objs} 
