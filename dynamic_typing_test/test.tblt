@@ -1,0 +1,26 @@
+class myclass
+{
+    fun add(a,b)
+    {
+        return a + b;
+    }
+};
+
+a = 67;
+b = "90";
+print(a+a);
+print(b+b);
+c = myclass();
+c.at1 = 1;
+print(c.add(a,c.at1));
+arr = [
+    23
+    ,
+    [
+        "hello"
+        ,
+        "world"
+    ]
+]
+
+print(arr[1][0] + arr[1][1]);

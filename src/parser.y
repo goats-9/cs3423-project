@@ -64,8 +64,9 @@ namespace tabulate
     <std::string> ID "identifier"
 
 // operators
-%token
+%left
     <std::string> BIOP "binary operator"
+%right
     <std::string> UNIOP "unary operator"
 
 // constant
@@ -106,8 +107,8 @@ constant: INT | STRING | BOOL | DOUBLE | DATE | TIME ;
 //expressions & operators
 expression:
     ID
-    | UNIOP OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
-    | BIOP OPEN_PARENTHESIS expression COMMA expression CLOSE_PARENTHESIS
+    | UNIOP expression
+    | expression BIOP expression
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
     ;
 
