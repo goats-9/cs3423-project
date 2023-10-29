@@ -1,9 +1,10 @@
 %{
     #include <fstream>
     #include <stdio.h>
-    #include "driver.hh"
-    #include "parser.tab.hh"
-    #include "auxilary.hh"
+    #include "tabulate.hh"
+    // #include "driver.hh"
+    // #include "parser.tab.hh"
+    // #include "auxilary.hh"
     using namespace std;
 
     // Code run each time a pattern is matched.
@@ -220,12 +221,12 @@ close_parenthesis ")"
     return token;
 }
 {TIME} {
-    auto token = yy::parser::make_TIME(helper::time(yytext), loc);
+    auto token = yy::parser::make_TIME(tabulate::time(yytext), loc);
     drv.handleToken(token);
     return token;
 }    
 {DATE} {
-    auto token = yy::parser::make_DATE(helper::date(yytext), loc);
+    auto token = yy::parser::make_DATE(tabulate::date(yytext), loc);
     drv.handleToken(token);
     return token;
 }
@@ -248,7 +249,7 @@ close_parenthesis ")"
 <<EOF>>    return yy::parser::make_YYEOF (loc);
 %%
 
-void driver::scan_begin ()
+void tabulate::driver::scan_begin ()
 {
     yy_flex_debug = trace_scanning;
     if (file.empty ())
@@ -261,7 +262,7 @@ void driver::scan_begin ()
 }
 
 
-void driver::scan_end ()
+void tabulate::driver::scan_end ()
 {
     fclose (yyin);
 }

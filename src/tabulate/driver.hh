@@ -7,7 +7,8 @@ using namespace std;
 
 // Prototype of yylex given to Flex
 #define YY_DECL \
-    yy::parser::symbol_type yylex(driver &drv)
+    yy::parser::symbol_type yylex(tabulate::driver &drv)
+// Declaring yylex for parser
 YY_DECL;
 
 namespace tabulate {

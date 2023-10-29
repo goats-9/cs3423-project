@@ -16,6 +16,7 @@ namespace tabulate {
     };
 
     class time {
+    public:
         int _hour, _min, _sec;
         time();
         time(std::string str);

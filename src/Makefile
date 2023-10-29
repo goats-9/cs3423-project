@@ -1,32 +1,27 @@
-lex_source = lex.l
-parser_source = parser.y
-C_File = lex.yy.c parser.tab.cc
-objs = parser.tab.o auxilary.o lex.yy.o driver.o main.o
-generated_header_file = parser.tab.hh location.hh
-non_generated_header_file = driver.hh auxilary.hh
-header_File = ${generated_header_file} ${non_generated_header_file}
-driver_C_file = driver.cc
-auxilary_C_file = auxilary.cc
+lex_source = lex
+parser_source = parser
+helping_file = types.o driver.o
+parsing_objs = parser.tab.o lex.yy.o
+main_objs = tabulate.o main.o
+objs = ${parsing_objs} ${helping_file} ${main_objs}
+generated_file = lex.yy.c ${parser_source}.tab.cc ${parser_source}.tab.hh location.hh
 
 all: ${objs}
 	g++ ${objs} -o ../Tabulate
 
-parser.tab.o: ${parser_source} ${non_generated_header_file}
-	bison ${parser_source}
+parser.tab.o: 
+	bison ${parser_source}.y
 	g++ parser.tab.cc -c
 
-lex.yy.o: ${lex_source} ${header_File}
-	lex ${lex_source}
+lex.yy.o: 
+	lex ${lex_source}.l
 	g++ lex.yy.c -c 
 
-driver.o: ${driver_C_file} ${header_File}
-	g++ ${driver_C_file} -c
+${main_objs}:
+	g++ $*.cc -c
 
-main.o: main.cc ${non_generated_header_file}
-	g++ main.cc -c
-
-auxilary.o: ${auxilary_C_file} ${header_File}
-	g++ ${auxilary_C_file} -c
+${helping_file}: 
+	g++ tabulate/$*.cc -c
 
 clean: all
-	rm ${objs} ${C_File} ${generated_header_file}
+	rm  ${generated_file} ${objs} 
