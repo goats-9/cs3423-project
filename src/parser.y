@@ -66,7 +66,7 @@
 // constant
 %token
     <int> INT "integer"
-    <std::string> std::string "std::string"
+    <std::string> STRING "string"
     <bool> BOOL "boolean"
     <double> DOUBLE "double"
     <tabulate::date> DATE "date"
