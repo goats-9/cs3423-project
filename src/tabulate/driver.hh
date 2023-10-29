@@ -2,7 +2,7 @@
 #define DRIVER_HH
 #include <fstream>
 #include <map>
-#include "parser.tab.hh"
+#include "../parser.tab.hh"
 using namespace std;
 
 // Prototype of yylex given to Flex

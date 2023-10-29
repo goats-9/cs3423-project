@@ -12,7 +12,6 @@
 
 %code requires{
 #include <iostream>
-#include "tabulate.hh"
 }
 
 // The parsing context
@@ -25,7 +24,7 @@
 %define parse.lac full
 
 %code {
-# include "driver.hh"
+#include "tabulate.hh"
 }
 
 // reserved keywords
