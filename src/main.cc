@@ -1,11 +1,11 @@
 #include <iostream>
-#include "driver.hh"
+#include "tabulate.hh"
 using namespace std;
 
 int main(int argc, char *argv[])
 {
     int res = 0;
-    driver drv;
+    tabulate::driver drv;
     for (int i = 1; i < argc; ++i)
     {
         if (argv[i] == string("-p"))

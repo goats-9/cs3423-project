@@ -12,6 +12,11 @@
 
 %code requires{
 #include <iostream>
+namespace tabulate
+{
+    class driver;
+}
+#include "tabulate/types.hh"
 }
 
 // The parsing context
@@ -29,6 +34,7 @@
 
 // reserved keywords
 %token
+    CLASS "class"
     IF "if"
     ELSE "else"
     VOID "void"
