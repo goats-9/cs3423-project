@@ -85,6 +85,7 @@ S:
         drv.result = $1 ;
     }
     ;
+
 program:
     INT program {
         $$ = $1 + $2 ;
@@ -93,6 +94,12 @@ program:
     INT {
         $$ = $1 ;
     }
+
+declaration: ID ';' ;
+
+ID: INT | STRING | BOOL | DOUBLE | DATE | TIME ;
+
+expression: ID | ADD '(' expression ',' expression ')' | SUB '(' expression ',' expression ')' | MUL '(' expression ',' expression ')' | DIV '(' expression ',' expression ')' | expression '==' expression | expression '!=' expression | expression '>' expression | expression '<' expression | expression '>=' expression | expression '<=' expression | expression 'AND' expression | expression 'OR' expression | expression 'NOT' expression | expression 'BOR' expression | expression 'BAND' expression | expression 'BXOR' expression | expression 'BNOT' expression | expression 'BLS' expression | expression 'BRS' expression ;
 %%
 
 void yy::parser::error (const location_type& l, const std::string& m)
