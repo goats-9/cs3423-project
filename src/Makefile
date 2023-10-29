@@ -9,7 +9,9 @@ editable_helping_file = driver.cc driver.hh symtab.cc symtab.hh types.cc types.h
 editable_file = ${parser_source}.y ${lex_source}.l main.cc tabulate.cc tabulate.hh \
  $(addprefix tabulate/,${editable_helping_file})
 
-all: ${objs}
+all: ../Tabulate
+
+../Tabulate: ${objs}
 	g++ ${objs} -o ../Tabulate
 
 parser.tab.o: ${editable_file}
