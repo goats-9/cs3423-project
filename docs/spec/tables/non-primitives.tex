@@ -125,7 +125,7 @@
 \setlength\gnumericTableWidth{%
 	82pt+%
 	210pt+%
-	179pt+%
+	165pt+%
 0pt}
 \def\gumericNumCols{3}
 \setlength\gnumericTableWidthComplete{\gnumericTableWidth+%
@@ -147,7 +147,7 @@
 
 \ifthenelse{\isundefined{\gnumericColA}}{\newlength{\gnumericColA}}{}\settowidth{\gnumericColA}{\begin{tabular}{@{}p{82pt*\gnumericScale}@{}}x\end{tabular}}
 \ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{210pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{179pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{165pt*\gnumericScale}@{}}x\end{tabular}}
 
 \begin{tabular}[c]{%
 	b{\gnumericColA}%
@@ -201,7 +201,7 @@
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}Single cell in the sheet}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}cell A1 = 5;}
+	{\gnumericPB{\raggedright}let A1 = CELL(5);}
 \\
 \hhline{|---|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -209,9 +209,7 @@
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}Range of cells}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}range data = (1:5:1, 1:5:1);
-range rng = (1:5:1);
-range col = (2, 1:5:1);}
+	{\gnumericPB{\raggedright}let rng = 1:5\~{ }1;}
 \\
 \hhline{|---|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -219,7 +217,7 @@ range col = (2, 1:5:1);}
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}List of values of same primitive data type}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}int[5] num = [1,2,3,4,5];}
+	{\gnumericPB{\raggedright}let num = [1,2,3,4,5];}
 \\
 \hhline{|---|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -227,7 +225,7 @@ range col = (2, 1:5:1);}
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}Represents structured range of cells with headers and data rows}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}table tab1;}
+	{\gnumericPB{\raggedright}let tab1 = TABLE();}
 \\
 \hhline{|---|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -235,7 +233,7 @@ range col = (2, 1:5:1);}
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}Datatype that holds formula}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}formula f1 = SUM(1,1:10:2) / 10;}
+	{\gnumericPB{\raggedright}let f1 = FORMULA([a, b], SUM);}
 \\
 \hhline{|---|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -243,12 +241,11 @@ range col = (2, 1:5:1);}
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\raggedright}User-defined datatype combining multiple primitive and/or non-primitive data types}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}class example \{
-    int id;
-    string name;
-    double price;
+	{\gnumericPB{\raggedright}struct example \{
+    let id = 1, speaker = "john";
+    let country = "au";
 \};
-class example = \{id: 101, name: "widget", price: 19.99\}}
+const exampleObj = example(101, "widget", 19.99);}
 \\
 \hhline{|-|-|-|}
 \end{tabular}

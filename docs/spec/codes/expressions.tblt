@@ -1,5 +1,5 @@
 # Expressions in Tabulate #
-let a = ADD(5, cellA); # evaluates to 18 #
+let a = ADD(5, 13); # evaluates to 18 #
 let j = POW(2, 3); # evaluates to 8 #
 
 bool l = (10.2 > 4); # evaluates to TRUE #
@@ -11,14 +11,14 @@ let a = -5; # Unary negation #
 let t1 = TYPEOF(5); # evaluates to "int" #
 let t2 = TYPEOF(10.5); # evaluates to "double" #
 
-let myRange = 1:5:1;
+let myRange = 1:5~1;
 
-let sumRange = SUM(myTable[myRange]); # Using a SUM function, evaluates to 15 #
+let myFormula = FORMULA([a,j], ADD) # Creating formulae with inbuilt functions #
 
 # Assuming there exists a table called SalesData #
-let myTable = SalesData;
+let myTable = TABLE(SalesData);
 
 # Assuming a struct Student with members name and grade #
-let s1 = {name: "hastar", grade: "A"}
+let s1 = Student("hastar", "A");
 let studentName = s1.name; # Accesses the name of the student, evaluates to "hastar" #
 let studentGrade = s1.grade; # Accesses the grade of the student, evaluates to "A" #

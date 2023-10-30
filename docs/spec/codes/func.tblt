@@ -1,11 +1,11 @@
 # Functions in Tabulate #
 fun addNumbers(a, b) {
-    let result = a + b;
+    let result = ADD(a, b);
     return result;
 }
 
 fun findMax(range) {
-    let maxVal = -INF;
+    let maxVal = -10000;
     let rangeLength = LENGTH(range);
     let currIdx = 0;
 
@@ -13,7 +13,7 @@ fun findMax(range) {
         if(GET(range, currIdx) > maxVal) {
             maxVal = GET(range, currIdx);
         }
-        currIdx = currIdx + 1;
+        currIdx = ADD(currIdx, 1);
     }
     
     return maxVal;

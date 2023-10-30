@@ -127,7 +127,7 @@
 	82pt+%
 	131pt+%
 	84pt+%
-	79pt+%
+	107pt+%
 	158pt+%
 0pt}
 \def\gumericNumCols{6}
@@ -152,7 +152,7 @@
 \ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{82pt*\gnumericScale}@{}}x\end{tabular}}
 \ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{131pt*\gnumericScale}@{}}x\end{tabular}}
 \ifthenelse{\isundefined{\gnumericColD}}{\newlength{\gnumericColD}}{}\settowidth{\gnumericColD}{\begin{tabular}{@{}p{84pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColE}}{\newlength{\gnumericColE}}{}\settowidth{\gnumericColE}{\begin{tabular}{@{}p{79pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColE}}{\newlength{\gnumericColE}}{}\settowidth{\gnumericColE}{\begin{tabular}{@{}p{107pt*\gnumericScale}@{}}x\end{tabular}}
 \ifthenelse{\isundefined{\gnumericColF}}{\newlength{\gnumericColF}}{}\settowidth{\gnumericColF}{\begin{tabular}{@{}p{158pt*\gnumericScale}@{}}x\end{tabular}}
 
 \begin{tabular}[c]{%
@@ -607,7 +607,7 @@
 	&\multicolumn{1}{p{\gnumericColD}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}bool}
+	{\gnumericPB{\centering}cell, int, double, bool}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}\~{ }cell3}
 \\
