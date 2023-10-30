@@ -5,6 +5,34 @@ using namespace std;
 class myclass
 {
 public:
+    // class_ptr
+    class myclass_ptr : public custom_ptr
+    {
+    public:
+        myclass_ptr(const myclass &val)
+        {
+            type = "myclass";
+            this->val = new myclass(val);
+        }
+        myclass_ptr *deepCopy()
+        {
+            return new myclass_ptr(*(myclass *)val);
+        }
+        any &access(const string &id)
+        {
+            myclass *p = (myclass *)(this->val);
+            ACCESS_CODE
+        }
+        any run(const string &id, const vector<any> &params)
+        {
+            myclass *p = (myclass *)(this->val);
+            RUN_CODE
+        }
+        ~myclass_ptr()
+        {
+            delete (myclass *)val;
+        }
+    };
     // members
     map<string, any> mem;
     // func params number
@@ -28,34 +56,6 @@ public:
     }
 };
 
-class myclass_ptr : public custom_ptr
-{
-public:
-    myclass_ptr(const myclass &val)
-    {
-        type = "myclass";
-        this->val = new myclass(val);
-    }
-    myclass_ptr *deepCopy()
-    {
-        return new myclass_ptr(*(myclass *)val);
-    }
-    any &access(const string &id)
-    {
-        myclass *p = (myclass *)(this->val);
-        ACCESS_CODE
-    }
-    any run(const string &id, const vector<any> &params)
-    {
-        myclass *p = (myclass *)(this->val);
-        RUN_CODE
-    }
-    ~myclass_ptr()
-    {
-        delete (myclass *)val;
-    }
-};
-
 int main()
 {
     try
@@ -64,7 +64,7 @@ int main()
         any b(new string_ptr("90"));
         cout << a + a << "\n";
         cout << b + b << "\n";
-        any c(new myclass_ptr(myclass()));
+        any c(new myclass::myclass_ptr(myclass()));
         c->access("at1") = any(new int_ptr(1));
         cout << c->run("add", {a, c->access("at1")}) << "\n";
         any arr(new array_ptr({
