@@ -1,5 +1,5 @@
 # Selection statements in Tabulate #
-bool fl1, fl2;
+let fl1, fl2;
 
 #...#
 

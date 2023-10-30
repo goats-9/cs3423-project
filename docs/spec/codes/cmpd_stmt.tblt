@@ -1,7 +1,7 @@
 # Compound statements in Tabulate #
-int val1 = GET(cell1);
-int val2 = GET(cell2);
-double res;
+let val1 = GET(cell1);
+let val2 = GET(cell2);
+let res;
 
 if(val1 > 50) {
     if(val2 > 20) {

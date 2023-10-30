@@ -1,10 +1,10 @@
 # Jump statements in Tabulate #
 fun firstPositive(range: Range) returns double {
-    double positiveVal = -INF;
-    int rangeLength = LENGTH(range);
-    int currIdx = 0;
+    let positiveVal = -INF;
+    let rangeLength = LENGTH(range);
+    let currIdx = 0;
     while(currIdx < rangeLength) {
-        double currentVal = GET(range, currIdx);
+        let currentVal = GET(range, currIdx);
         if(currentVal > 0) {
             positiveVal = currentVal;
             break; # Exit the loop #

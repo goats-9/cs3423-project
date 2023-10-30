@@ -1,22 +1,24 @@
 # Expressions in Tabulate #
-int a = ADD(5, cellA); # evaluates to 18 #
-double j = POW(2, 3); # evaluates to 8 #
+let a = ADD(5, cellA); # evaluates to 18 #
+let j = POW(2, 3); # evaluates to 8 #
 
 bool l = (10.2 > 4); # evaluates to TRUE #
 bool p = (5 < 3 OR 4 > 2); # evaluates to TRUE #
 bool q = NOT(5 == 6); # evaluates to TRUE #
 
-int a = -5; # Unary negation #
+let a = -5; # Unary negation #
 
-string t1 = TYPEOF(5); # evaluates to "int" #
-string t2 = TYPEOF(10.5); # evaluates to "double" #
+let t1 = TYPEOF(5); # evaluates to "int" #
+let t2 = TYPEOF(10.5); # evaluates to "double" #
 
-Range myRange = 1:5:1;
+let myRange = 1:5:1;
 
-double sumRange = SUM(myTable[myRange]); # Using a SUM function, evaluates to 15 #
+let sumRange = SUM(myTable[myRange]); # Using a SUM function, evaluates to 15 #
 
-Table myTable = SalesData;
+# Assuming there exists a table called SalesData #
+let myTable = SalesData;
 
-Student s1 = {name: "hastar", grade: "A"}
-string studentName = s1.name; # Accesses the name of the student, evaluates to "John" #
-string studentGrade = s1.grade; # Accesses the grade of the student, evaluates to "A" #
+# Assuming a struct Student with members name and grade #
+let s1 = {name: "hastar", grade: "A"}
+let studentName = s1.name; # Accesses the name of the student, evaluates to "hastar" #
+let studentGrade = s1.grade; # Accesses the grade of the student, evaluates to "A" #

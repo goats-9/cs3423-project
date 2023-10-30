@@ -1,13 +1,13 @@
 # Functions in Tabulate #
-fun addNumbers(a: int, b: int) returns int {
-    int result = a + b;
+fun addNumbers(a, b) {
+    let result = a + b;
     return result;
 }
 
-fun findMax(range: Range) returns double {
-    double maxVal = -INF;
-    int rangeLength = LENGTH(range);
-    int currIdx = 0;
+fun findMax(range) {
+    let maxVal = -INF;
+    let rangeLength = LENGTH(range);
+    let currIdx = 0;
 
     while(currIdx < rangeLength) {
         if(GET(range, currIdx) > maxVal) {

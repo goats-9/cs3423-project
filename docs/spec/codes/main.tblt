@@ -1,5 +1,5 @@
 # Main function in Tabulate #
-fun main() returns void {
+fun main() {
     # ... your main code here ... #
     return;
 }
