@@ -23,6 +23,7 @@ STRING \"([^"]*\\\")*[^"]*\"
 BOOL "true"|"false"
 DATE {DIGIT}{1,4}-{DIGIT}{1,2}-{DIGIT}{1,2}
 TIME {DIGIT}{1,2}{colon}{DIGIT}{1,2}{colon}{DIGIT}{1,2}
+RANGE {DIGIT}+{colon}{DIGIT}+(~{DIGIT}*)?
 COMMENTS #[^#]*#
 SPACE [ \t]
 IGNORE ({SPACE}|{COMMENTS})
@@ -60,8 +61,18 @@ close_parenthesis ")"
     */
 
     /* reserved keywords */
-"class" {
-    auto token = yy::parser::make_CLASS(loc);
+"let" {
+    auto token = yy::parser::make_LET(loc);
+    drv.handleToken(token);
+    return token;
+}
+"const" {
+    auto token = yy::parser::make_CONST(loc);
+    drv.handleToken(token);
+    return token;
+}
+"struct" {
+    auto token = yy::parser::make_STRUCT(loc);
     drv.handleToken(token);
     return token;
 }
@@ -227,6 +238,12 @@ close_parenthesis ")"
 }    
 {DATE} {
     auto token = yy::parser::make_DATE(tabulate::date(yytext), loc);
+    drv.handleToken(token);
+    return token;
+}
+{RANGE} {
+    // TODO: make a class range in tabulate/types.hh
+    auto token = yy::parser::make_RANGE(yytext, loc);
     drv.handleToken(token);
     return token;
 }

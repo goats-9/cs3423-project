@@ -86,6 +86,12 @@ namespace tabulate
 
 // Write grammar rules below
 
+
+// lexer needs:(COMPLETED)
+// 1) RANGE token : DONE
+// 2) LET and CONST token : DONE
+// 3) changed CLASS token to STRUCT token :
+
 S: 
     program {
         drv.result = $1 ;
