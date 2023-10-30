@@ -5,34 +5,6 @@ using namespace std;
 class myclass
 {
 public:
-    // class_ptr
-    class myclass_ptr : public custom_ptr
-    {
-    public:
-        myclass_ptr(const myclass &val)
-        {
-            type = "myclass";
-            this->val = new myclass(val);
-        }
-        myclass_ptr *deepCopy()
-        {
-            return new myclass_ptr(*(myclass *)val);
-        }
-        any &access(const string &id)
-        {
-            myclass *p = (myclass *)(this->val);
-            ACCESS_CODE
-        }
-        any run(const string &id, const vector<any> &params)
-        {
-            myclass *p = (myclass *)(this->val);
-            RUN_CODE
-        }
-        ~myclass_ptr()
-        {
-            delete (myclass *)val;
-        }
-    };
     // members
     map<string, any> mem;
     // func params number
@@ -42,7 +14,7 @@ public:
     // function declaration (as given in user input file)
     any add(vector<any> params)
     {
-        return params[0] + params[1];
+        return params[0]->ADD(params[1]);
     }
     // put all functions in a map
     void func_decl()
@@ -56,33 +28,64 @@ public:
     }
 };
 
+// class_ptr
+class ptr_myclass : public ptr_custom
+{
+public:
+    ptr_myclass(const myclass &val)
+    {
+        type = "myclass";
+        this->val = new myclass(val);
+    }
+    ptr_myclass *deepCopy()
+    {
+        return new ptr_myclass(*(myclass *)val);
+    }
+    any &access(const string &id)
+    {
+        myclass *p = (myclass *)(this->val);
+        ACCESS_CODE
+    }
+    any run(const string &id, const vector<any> &params)
+    {
+        myclass *p = (myclass *)(this->val);
+        RUN_CODE
+    }
+    ~ptr_myclass()
+    {
+        delete (myclass *)val;
+    }
+};
+
 int main()
 {
+    state st("test.tlbt");
     try
     {
-        any a(new int_ptr(67));
-        any b(new string_ptr("90"));
-        cout << a + a << "\n";
-        cout << b + b << "\n";
-        any c(new myclass::myclass_ptr(myclass()));
-        c->access("at1") = any(new int_ptr(1));
-        cout << c->run("add", {a, c->access("at1")}) << "\n";
-        any arr(new array_ptr({
-            any(new int_ptr(23))
-            , 
-            any(new array_ptr({
-                any(new string_ptr("hello"))
-                , 
-                any(new string_ptr("world"))
-            }))
-        }));
-        cout << arr[1][0] + arr[1][1] << "\n";
-        arr->add_item(any(new int_ptr(9)));
+        any a(new ptr_int(67));
+        any b(new ptr_string("90"));
+        // st.infunc();
+        cout << a->ADD(a) << "\n";
+        cout << b->ADD(b) << "\n";
+        any c(new ptr_myclass(myclass()));
+        c->access("at1") = any(new ptr_int(1));
+        cout << c->run("add", {a, c->access("at1"), a}) << "\n";
+        any arr(new ptr_array({any(new ptr_int(23)),
+                               any(new ptr_array({any(new ptr_string("hello")),
+                                                  any(new ptr_string("world"))}))}));
+        cout << arr[1][0]->CONCAT(arr[1][1]) << "\n";
+        arr->add_item(any(new ptr_int(9)));
         cout << arr[2] << "\n";
     }
     catch (const runtime_error &e)
     {
-        std::cerr << e.what() << '\n';
+        cerr << st.loc.top() << ": runtime error, " << e.what() << "\n";
+        while (!st.loc.empty())
+        {
+            cerr << "\tFrom " << st.loc.top() << ": " << st.func_call.top() << '\n';
+            st.func_call.pop();
+            st.loc.pop();
+        }
         return 1;
     }
 
