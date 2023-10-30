@@ -77,8 +77,10 @@ namespace tabulate
     <double> DOUBLE "double"
     <tabulate::date> DATE "date"
     <tabulate::time> TIME "time"
-
 %nterm <int> program
+//pass me these guys
+//LET, CELL, FORMULA
+
 
 %%
 // start symbol
@@ -102,7 +104,20 @@ program:
     }
 
 //type constants
-constant: INT | STRING | BOOL | DOUBLE | DATE | TIME ;
+constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
+
+//non-primitive datatypes
+cell_declaration: CELL ID EQUAL expression SEMICOLON ;
+
+
+range_declaration: RANGE ID EQUAL OPEN_PARENTHESIS range_expression CLOSE_PARENTHESIS SEMICOLON ;
+range_expression: range_specifier COMMA range_specifier COMMA range_specifier ;
+range_specifier: expression COLON expression COLON expression ;
+
+array_declaration: ID OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC ID EQUAL array_initializer SEMICOLON ;
+array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC ;
+expression_list: expression
+               | expression COMMA expression_list ;
 
 //expressions & operators
 expression:

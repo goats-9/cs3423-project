@@ -1,0 +1,76 @@
+let f = FORMULA([i, j, k], {
+    if (i) return j[k][k];
+});
+=> dynamic typing <=
+fun func1(a,b){
+    return a*b;
+}
+let f = FORMULA([a,b],func1); // f denotes a non-primitive datatype formula (*shallow copying*)
+// pass cell or range to formula:
+
+// FORMULA is a beautiful constructor in tabulate which takes an array of arguments & user defined function to support user ....
+f -> arguments, function
+let a = f(1,table,k); // BEAUTY!!!
+
+fun func1(a,b){
+    return a*b;
+}
+let a = func1(2,3); // 6
+let b = 5;
+let f = FORMULA([a,b], func1);
+=> f = 30;
+a = func1(3,4); => a = 12;
+=> f = 60
+
+=> now expand this to cells & ranges:
+let a = cell(a);
+let b = cell(b);
+fun func1(a, b){// is this how we pass cell as arguments to a function?
+    return a*b;
+}
+let f = FORMULA([a, b], func1); //shallow (always)
+=> f = a*b; //on cell operations do cell.val arithmetics!!
+now have fun!
+let c = cell(f); cool!!
+
+=> one issue is when to check for conflicts in the formula itself?
+fun func1(a, b){
+    return a / b;
+}
+
+let a = 3, b = 2;
+let f = FORMULA([a, b], func1); // a & b should be defined data-types... ow throw error
+=> f = 1.5; (number this time)
+b = 0; (note: f is fucked-up..) => lazy-implementation in the backend
+=> conclusion: when you call or use f somewhere it throws an error, until then it's all okay..
+let g = 2*f; runtime: 403 teri maa ka bhosda
+
+NaN (a/b, where b is 0)? or leave this? // runtime error: 404 tmkc
+
+lexer job:
+//constant
+dynamic typing for range [a:b~c] // no token for RANGE
+FORMULA
+CELL 
+
+
+//table-creation?
+let tab1 = ; //2d matrix
+// collection of ranges
+
+// table is a struct
+// rows are always integer, and column_name are string (column access via integer access)
+TABLE products
+number[3] arr = {1,2,3}; //error!!
+let arr = {1,2,3};
+tab tab1 = [1,2,3];
+tab tab2;
+// here now the thing table is collection of similar data-types, infact it is a struct!!
+
+//decide kaise-kaise declaration dene hai?
+1. directly through RHS
+2. through ranges
+3. through cells
+4. through another tables
+
+1. let tab1 = TABLE();
