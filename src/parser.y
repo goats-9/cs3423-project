@@ -104,6 +104,8 @@ program:
 constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 
 //declaration & assignment:
+variable_list: ID
+             | ID COMMA variable_list ;
 declaration: LET variable_list
            | LET variable_list EQUAL expression_list
            | CONST variable_list
@@ -115,33 +117,31 @@ declaration_stmt: declaration SEMICOLON
                 | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON // formula
                 ;
 
+//array
+array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC;
+
+//struct
 struct_declaration: STRUCT ID EQUAL OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
 struct_member_list: /* empty */
                   | struct_member_list declaration_stmt SEMICOLON ;
                   | struct_member_list function_definition SEMICOLON ;
 
-//array
-array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC;
-
-// table declaration below:
-
 //expressions & operators:
-expression:
-    constant
-    | ID
-    | UNIOP expression
-    | expression BIOP expression
-    | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
-    | ID DOT ID // member access expression
-    ;
+expression: constant
+            | ID
+            | UNIOP expression
+            | expression BIOP expression
+            | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+            | ID DOT ID // member access expression
+            | ID table_expression
+            | ID table_expression table_expression
+            ;
+table_expression: OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC
+                | OPEN_SQUARE_BRAC RANGE CLOSE_SQUARE_BRAC
 
 expression_list: expression
                | expression COMMA expression_list
                ;
-
-variable_list: ID
-             | ID COMMA variable_list ;
-
 expression_stmt: variable_list EQUAL expression SEMICOLON ;
 
 //general statements
