@@ -4,6 +4,6 @@ fun main(){
     # We can declare and assign too #
     let s = "string"; let s1 = "string1"; const c1 = 20;
     # const modifiers require assignment #
-    const b = 2; let b1 = 21.12; let b2 = "22";
-    return ;
+    const b = 2, b1 = 21.12, b2 = "22";
+    return 0;
 }
