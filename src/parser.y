@@ -121,8 +121,8 @@ declaration_stmt: declaration SEMICOLON
 array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC ;
 struct_declaration: STRUCT ID OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
 struct_member_list: /* empty */
-                  | struct_member_list declaration_stmt SEMICOLON
-                  | struct_member_list function_definition SEMICOLON
+                  | struct_member_list declaration_stmt
+                  | struct_member_list function_definition
                   ;
 
 expression: constant
