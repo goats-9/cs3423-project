@@ -108,7 +108,8 @@ declaration: LET variable_list
            | CONST variable_list
            ;
 declaration_stmt: declaration SEMICOLON
-                | declaration EQUAL expression_list
+                | declaration EQUAL expression_list SEMICOLON
+                | declaration EQUAL ID OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS SEMICOLON
                 | declaration EQUAL array_initializer SEMICOLON
                 | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON
                 ;
