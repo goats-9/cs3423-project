@@ -6,6 +6,7 @@
     {                                               \
         p->mem[id].ptr = (ptr_gen *)new ptr_none(); \
     }                                               \
+    st.outfunc();                                   \
     return p->mem[id];
 #define RUN_CODE                                                                \
     func_ptr = p->func[id];                                                     \
@@ -28,6 +29,7 @@
 using namespace std;
 
 class ptr_gen;
+state st;
 
 // smart pointer
 class any
@@ -55,8 +57,6 @@ public:
     {
         return ptr;
     }
-    // accessing i indexed element of array
-    any &operator[](int i);
     // destructor
     ~any();
 };
@@ -72,63 +72,75 @@ public:
     // gets deep copy
     virtual ptr_gen *deepCopy() = 0;
     // accessing a member
-    virtual any &access(const string &id)
+    virtual any &access(const string &id, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error(id + " is not a member of " + type);
     }
     // running a function with name id
-    virtual any run(const string &id, const vector<any> &params)
+    virtual any run(const string &id, const vector<any> &params, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error(id + " is not a method of " + type);
     }
     // accessing i indexed element of array
-    virtual any &operator[](int i)
+    virtual any &at(const any &i, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("Not an array");
     }
     // add item
-    virtual void add_item(const any &item)
+    virtual void add_item(const any &item, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("Not an array");
     }
     // size
-    virtual int size()
+    virtual int size(const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("Not an array or string");
     }
     // ADD
-    virtual any ADD(const any &a)
+    virtual any ADD(const any &a, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("ADD does not support: (" + type + "," + a.ptr->type + ")");
     }
     // SUB
-    virtual any SUB(const any &a)
+    virtual any SUB(const any &a, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("SUB does not support: (" + type + "," + a.ptr->type + ")");
     }
     // MUL
-    virtual any MUL(const any &a)
+    virtual any MUL(const any &a, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("MUL does not support: (" + type + "," + a.ptr->type + ")");
     }
     // DIV
-    virtual any DIV(const any &a)
+    virtual any DIV(const any &a, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("DIV does not support: (" + type + "," + a.ptr->type + ")");
     }
     // POW
-    virtual any POW(const any &a)
+    virtual any POW(const any &a, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("POW does not support: (" + type + "," + a.ptr->type + ")");
     }
     // MOD
-    virtual any MOD(const any &a)
+    virtual any MOD(const any &a, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("MOD does not support: (" + type + "," + a.ptr->type + ")");
     }
     // CONCAT
-    virtual any CONCAT(const any &a)
+    virtual any CONCAT(const any &a, const pos &p)
     {
+        st.infunc(p);
         throw runtime_error("CONCAT does not support: (" + type + "," + a.ptr->type + ")");
     }
     // destructor
@@ -161,18 +173,22 @@ public:
     {
         return new ptr_string(*(string *)val);
     }
-    int size()
+    int size(const pos &p)
     {
+        st.infunc(p);
         string *ptr = (string *)val;
         int sz = ptr->size();
+        st.outfunc();
         return sz;
         // return any(new ptr_int(sz));
     }
-    any CONCAT(const any &a)
+    any CONCAT(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "string")
         {
             string val = *(string *)(this->val) + *((string *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_string(val));
         }
         throw runtime_error("CONCAT does not support: (" + type + "," + a.ptr->type + ")");
@@ -195,35 +211,42 @@ public:
     {
         return new ptr_double(*(double *)val);
     }
-    any ADD(const any &a)
+    any ADD(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "double" || a.ptr->type == "int")
         {
             double val = *(double *)(this->val) + *((double *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("ADD does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any SUB(const any &a)
+    any SUB(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "double" || a.ptr->type == "int")
         {
             double val = *(double *)(this->val) - *((double *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("SUB does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any MUL(const any &a)
+    any MUL(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "double" || a.ptr->type == "int")
         {
             double val = *(double *)(this->val) * (*((double *)a.ptr->val));
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("MUL does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any DIV(const any &a)
+    any DIV(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "double" || a.ptr->type == "int")
         {
             if ((*(double *)a.ptr->val) == 0)
@@ -231,15 +254,18 @@ public:
                 throw runtime_error("Division by zero");
             }
             double val = *(double *)(this->val) / *((double *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("DIV does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any POW(const any &a)
+    any POW(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "double" || a.ptr->type == "int")
         {
             double val = pow(*(double *)(this->val), *((double *)a.ptr->val));
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("POW does not support: (" + type + "," + a.ptr->type + ")");
@@ -262,50 +288,60 @@ public:
     {
         return new ptr_int(*(int *)val);
     }
-    any ADD(const any &a)
+    any ADD(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "int")
         {
             int val = *(int *)(this->val) + *((int *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_int(val));
         }
         if (a.ptr->type == "double")
         {
             double val = *(double *)(this->val) + *((double *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("ADD does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any SUB(const any &a)
+    any SUB(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "int")
         {
             int val = *(int *)(this->val) - *((int *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_int(val));
         }
         if (a.ptr->type == "double")
         {
             double val = *(double *)(this->val) - *((double *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("SUB does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any MUL(const any &a)
+    any MUL(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "int")
         {
             int val = *(int *)(this->val) * (*((int *)a.ptr->val));
+            st.outfunc();
             return any(new ptr_int(val));
         }
         if (a.ptr->type == "double")
         {
             double val = *(double *)(this->val) * (*((double *)a.ptr->val));
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("MUL does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any DIV(const any &a)
+    any DIV(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "double" || a.ptr->type == "int")
         {
             if ((*(double *)a.ptr->val) == 0)
@@ -313,29 +349,35 @@ public:
                 throw runtime_error("Division by zero");
             }
             double val = *(double *)(this->val) / *((double *)a.ptr->val);
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("DIV does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any MOD(const any &a)
+    any MOD(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "int")
         {
             int val = *(int *)(this->val) % (*((int *)a.ptr->val));
+            st.outfunc();
             return any(new ptr_int(val));
         }
         throw runtime_error("MOD does not support: (" + type + "," + a.ptr->type + ")");
     }
-    any POW(const any &a)
+    any POW(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "int")
         {
             int val = pow(*(int *)(this->val), (*((int *)a.ptr->val)));
+            st.outfunc();
             return any(new ptr_int(val));
         }
         if (a.ptr->type == "double")
         {
             double val = pow(*(double *)(this->val), (*((double *)a.ptr->val)));
+            st.outfunc();
             return any(new ptr_double(val));
         }
         throw runtime_error("POW does not support: (" + type + "," + a.ptr->type + ")");
@@ -358,30 +400,42 @@ public:
     {
         return new ptr_array(*(vector<any> *)val);
     }
-    any &operator[](int i)
+    any &at(const any &i, const pos &p)
     {
+        st.infunc(p);
         vector<any> *arr = (vector<any> *)val;
-        if (i >= arr->size())
+        if (i.ptr->type != "int")
+        {
+            throw runtime_error("index should be an integer (given index was " + i.ptr->type + ")");
+        }
+        int idx = *(int *)i.ptr->val;
+        if (idx >= arr->size())
         {
             throw runtime_error("out of index");
         }
-        return (*arr)[i];
+        st.outfunc();
+        return (*arr)[idx];
     }
-    void add_item(const any &item)
+    void add_item(const any &item, const pos &p)
     {
+        st.infunc(p);
         vector<any> *arr = (vector<any> *)val;
         arr->push_back(item);
+        st.outfunc();
     }
-    int size()
+    int size(const pos &p)
     {
+        st.infunc(p);
         vector<any> *ptr = (vector<any> *)val;
         int sz = ptr->size();
+        st.outfunc();
         return sz;
         // return any(new ptr_int(sz));
     }
 
-    any CONCAT(const any &a)
+    any CONCAT(const any &a, const pos &p)
     {
+        st.infunc(p);
         if (a.ptr->type == "array")
         {
             vector<any> *arr1 = (vector<any> *)val;
@@ -391,6 +445,7 @@ public:
             {
                 arr.push_back(item);
             }
+            st.outfunc();
             return any(new ptr_array(arr));
         }
         throw runtime_error("CONCAT does not support: (" + type + "," + a.ptr->type + ")");
@@ -410,10 +465,6 @@ inline void any::operator=(const any &a)
 {
     delete ptr;
     ptr = a.ptr->deepCopy();
-}
-inline any &any::operator[](int i)
-{
-    return (*ptr)[i];
 }
 inline any::~any()
 {
