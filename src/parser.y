@@ -32,7 +32,7 @@ namespace tabulate
 #include "tabulate.hh"
 }
 
-// reserved keywords
+// Reserved keywords
 %token
     LET "let_token"
     CONST "const_token"
@@ -47,7 +47,7 @@ namespace tabulate
     BREAK "break_token"
     CONTINUE "continue_token"
 
-// punctuators
+// Punctuators
 %token  
     EQUAL "equal_token" 
     COLON "colon_token" 
@@ -61,17 +61,17 @@ namespace tabulate
     OPEN_PARENTHESIS "open_parenthesis_token"
     CLOSE_PARENTHESIS "close_parenthesis_token"
 
-// identifiers
+// Identifiers
 %token
     <std::string> ID "identifier_token"
 
-// operators
+// Operators
 %left
     <std::string> UNIOP "unary operator"
 %right
     <std::string> BIOP "binary operator"
 
-// constant
+// Constants
 %token
     <int> INT "integer"
     <std::string> STRING "string"
@@ -99,19 +99,20 @@ constant: INT
         | RANGE
         ;
 
-variable_list: ID
-             | ID COMMA variable_list
-             ;
-declaration: LET variable_list
-           | CONST variable_list
-           ;
-declaration_stmt: declaration SEMICOLON
-                | declaration EQUAL expression_list SEMICOLON
-                | declaration EQUAL array_initializer SEMICOLON
-                | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON
-                | struct_declaration
+declare: LET
+       | CONST
+       ;
+declaration_stmt: declare variable_list SEMICOLON 
+                | declare assignment_stmt
                 ;
-array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC ;
+assignment_stmt: ID EQUAL assignment_target SEMICOLON
+               | ID EQUAL assignment_target COMMA assignment_stmt
+               ;
+assignment_target: expression
+                 | array_initializer
+                 | ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS
+                 ;
+array_initializer: OPEN_SQUARE_BRAC variable_list CLOSE_SQUARE_BRAC ;
 struct_declaration: STRUCT ID OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
 struct_member_list: /* empty */
                   | struct_member_list declaration_stmt
@@ -128,16 +129,15 @@ expression: constant
             | ID table_expression
             | ID table_expression table_expression
             ;
-table_expression: OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC
-                | OPEN_SQUARE_BRAC RANGE CLOSE_SQUARE_BRAC
-                ;
 expression_list: expression
                | expression COMMA expression_list
                ;
-expression_stmt: variable_list EQUAL expression_list SEMICOLON ;
+table_expression: OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC
+                | OPEN_SQUARE_BRAC RANGE CLOSE_SQUARE_BRAC
+                ;
 
-statement: expression_stmt
-         | declaration_stmt
+statement: declaration_stmt
+         | assignment_stmt
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement ELSE compound_statement
          | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
@@ -153,6 +153,9 @@ statement_list: /* empty */
               ; 
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
+variable_list: ID
+             | ID COMMA variable_list
+             ;
 parameter_list: /* empty */
               | variable_list
               ;
