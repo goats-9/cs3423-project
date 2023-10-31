@@ -100,28 +100,25 @@ program:
         $$ = $1 ;
     }
 
-//type constants
+//type constants:
 constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 
-//declaration & assignment
-declaration_stmt: declaration SEMICOLON ;
-declaration: LET variable_list ;
-variable_list: ID
-             | ID COMMA variable_list ;
-expression_stmt: variable_list EQUAL expression SEMICOLON ;
+//declaration & assignment:
+declaration: LET variable_list | CONST variable_list;
+declaration_stmt: declaration SEMICOLON // declaration
+                | declaration EQUAL constant SEMICOLON // declaration with values
+                | declaration EQUAL ID OPEN_PARENTHESIS expression CLOSE_PARENTHESIS SEMICOLON // cell
+                | declaration EQUAL array_initializer SEMICOLON // array
+                | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON // formula
+                | STRUCT ID EQUAL OPEN_CURLY declaration_stmt CLOSE_CURLY SEMICOLON // struct
+                ;
 
-//non-primitive datatypes
-cell_declaration: CELL ID EQUAL expression SEMICOLON ;
-range_declaration: RANGE ID EQUAL OPEN_PARENTHESIS range_expression CLOSE_PARENTHESIS SEMICOLON ;
-range_expression: range_specifier COMMA range_specifier COMMA range_specifier ;
-range_specifier: expression COLON expression COLON expression ;
+//array
+array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC;
 
-array_declaration: ID OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC ID EQUAL array_initializer SEMICOLON ;
-array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC ;
-expression_list: expression
-               | expression COMMA expression_list ;
+// table declaration below:
 
-//expressions & operators
+//expressions & operators:
 expression:
     constant
     | ID
@@ -130,19 +127,28 @@ expression:
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
     ;
 
+expression_list: expression
+               | expression COMMA expression_list
+               ;
+
+variable_list: ID
+             | ID COMMA variable_list ;
+
+expression_stmt: variable_list EQUAL expression SEMICOLON ;
+
 //general statements
 statement: expression_stmt
-         | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS statement
-         | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS statement ELSE statement
-         | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS statement
+         | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statementstatement
+         | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement ELSE compound_statement
+         | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
          | BREAK SEMICOLON
          | CONTINUE SEMICOLON
-         | return_stmt
+         | RETURN expression SEMICOLON
          | OPEN_CURLY program CLOSE_CURLY
          ;
-return_stmt: RETURN ID SEMICOLON ;
+
 statement_list: /* empty */
-              | statement_list statement
+              | statement_list statement SEMICOLON
               ; 
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
