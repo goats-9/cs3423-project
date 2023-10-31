@@ -14,7 +14,7 @@ public:
     // function declaration (as given in user input file)
     any add(vector<any> params)
     {
-        return params[0]->ADD(params[1]);
+        return params[0]->ADD(params[1],pos(1,1,1,1,"ADD(a,b)"));
     }
     // put all functions in a map
     class yy_inner
@@ -29,7 +29,7 @@ public:
         // function declaration (as given in user input file)
         any twice(vector<any> params)
         {
-            return params[0]->ADD(params[0]);
+            return params[0]->ADD(params[0],pos(1,1,1,1,"ADD(a,a)"));
         }
         void func_decl()
         {
@@ -98,13 +98,15 @@ public:
     {
         return new ptr_myclass(*(yy_myclass *)val);
     }
-    any &access(const string &id)
+    any &access(const string &id, const pos &ps)
     {
+        st.infunc(ps);
         yy_myclass *p = (yy_myclass *)(this->val);
         ACCESS_CODE
     }
-    any run(const string &id, const vector<any> &params)
+    any run(const string &id, const vector<any> &params,const pos &ps)
     {
+        st.infunc(ps);
         yy_myclass *p = (yy_myclass *)(this->val);
         any (yy_myclass::*func_ptr)(vector<any>);
         RUN_CODE
@@ -117,38 +119,34 @@ public:
 
 int main()
 {
-    state st("test.tlbt");
+    st = state("test.tlbt");
     any temp;
     try
     {
-        // a = 67;
+        // let a = 67;
         any a(new ptr_int(67));
-        // b = "90";
+        // let b = "90";
         any b(new ptr_string("90"));
         // DISP(DIV(a,0));
-        st.infunc(18, 7, 18, 14, "DIV(a,0)");
-        temp = a->DIV(any(new ptr_int(2)));
-        st.outfunc();
-        st.infunc(18, 1, 18, 15, "print(DIV(a,0))");
-        cout << temp << "\n";
-        st.outfunc();
-        temp = a->ADD(a);
-        // st.outfunc();
-        // st.infunc(18,1,18,16,"print(ADD(a,a))");
-        cout << temp << "\n";
-        // st.outfunc();
-        cout << b->CONCAT(b) << "\n";
+        cout << a->DIV(any(new ptr_int(2)),pos(18,7,18,14,"DIV(a,0)")) << "\n";
+        // DISP(ADD(a,a));
+        cout << a->ADD(a,pos(18,6,18,13,"ADD(a,a)")) << "\n";
+        // DISP(CONCAT(b,b));
+        cout << b->CONCAT(b,pos(18,5,18,15,"CONCAT(b,b)")) << "\n";
+        // let c = myclass();
         any c(new ptr_myclass(yy_myclass()));
-        c->access("at1") = any(new ptr_int(1));
-        cout << c->access("a") << "\n";
-        cout << c->run("add", {a, c->access("at1")}) << "\n";
+        // c.at1 = 1;
+        c->access("at1",pos(1,1,1,1,"c.at1")) = any(new ptr_int(1));
+        // DISP(c.at1);
+        cout << c->access("at1",pos(1,1,1,1,"c.at1")) << "\n";
+        cout << c->run("add", {a, c->access("at1",pos(1,1,1,1,"c.at1"))},pos(1,1,1,1,"c.add(a,c.at1)")) << "\n";
         any arr(new ptr_array({any(new ptr_int(23)),
                                any(new ptr_array({any(new ptr_string("hello")),
                                                   any(new ptr_string("world"))}))}));
-        cout << arr[1][0]->CONCAT(arr[1][1]) << "\n";
-        arr->add_item(any(new ptr_int(9)));
-        cout << arr[2] << "\n";
-        any sz = any(new ptr_int(arr->size()));
+        cout << arr->at(any(new ptr_int(1)),pos(1,1,1,1,"arr[1]"))->at(any(new ptr_int(0)),pos(1,1,1,1,"arr[1][0]"))->CONCAT(arr->at(any(new ptr_int(1)),pos(1,1,1,1,"arr[1]"))->at(any(new ptr_int(1)),pos(1,1,1,1,"arr[1][1]")),pos(1,1,1,1,"CONCAT(arr[1][0],arr[1][1])")) << "\n";
+        arr->add_item(any(new ptr_int(9)),pos(1,1,1,1,"arr.add_item(9)"));
+        cout << arr->at(any(new ptr_int(2)),pos(1,1,1,1,"arr[2]")) << "\n";
+        any sz = any(new ptr_int(arr->size(pos(1,1,1,1,"arr.size()"))));
         cout << sz << "\n";
     }
     catch (const runtime_error &e)
