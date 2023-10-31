@@ -84,7 +84,7 @@ namespace tabulate
 %%
 %start program;
 
-program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURLY statement_list RETURN SEMICOLON CLOSE_CURLY ;
+program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS function_body;
 
 constant: INT
         | STRING
@@ -150,9 +150,9 @@ compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 parameter_list: /* empty */
               | variable_list
               ;
-function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS compound_statement ;
+function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS function_body ;
+function_body: OPEN_CURLY statement_list RETURN expression_stmt CLOSE_CURLY
 %%
-
 void yy::parser::error (const location_type& l, const std::string& m)
 {
     std::cerr << l << ": " << m << '\n';
