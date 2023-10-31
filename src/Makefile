@@ -28,7 +28,7 @@ lex.yy.o: $(editable_file)
 ${main_objs}: $(editable_file)
 	$(CXX) $*.cc -c
 
-${helping_file}: $(addprefix tabulate/,${editable_helping_file})
+${helping_file}: $(editable_file)
 	$(CXX) tabulate/$*.cc -c
 
 clean:
