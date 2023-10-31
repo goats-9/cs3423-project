@@ -139,7 +139,9 @@ statement: expression_stmt
          | BREAK SEMICOLON
          | CONTINUE SEMICOLON
          ;
-return_stmt: RETURN expression SEMICOLON ;
+return_stmt: RETURN expression SEMICOLON
+           | RETURN SEMICOLON
+           ;
 statement_list: /* empty */
               | statement_list statement
               ; 
