@@ -105,11 +105,10 @@ constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 variable_list: ID
              | ID COMMA variable_list ;
 declaration: LET variable_list
-           | LET variable_list EQUAL expression_list
            | CONST variable_list
-           | CONST variable_list EQUAL expression_list
            ;
 declaration_stmt: declaration SEMICOLON
+                | declaration EQUAL expression_list
                 | declaration EQUAL array_initializer SEMICOLON
                 | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON
                 ;
