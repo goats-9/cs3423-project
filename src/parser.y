@@ -90,12 +90,6 @@ program_element_list: /* empty */
 program_element: function_definition
               | struct_declaration
               ;
-function_list: /* empty */
-              | function_list function_definition
-              ; 
-struct_list: /* empty */
-            | struct_list struct_declaration
-            ;
 
 constant: INT
         | STRING
