@@ -137,13 +137,14 @@ statement: expression_stmt
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement ELSE compound_statement
          | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
-         | function_definition
          | BREAK SEMICOLON
          | CONTINUE SEMICOLON
+         | function_definition
          | RETURN expression SEMICOLON
          ;
 statement_list: /* empty */
-              | statement_list SEMICOLON
+              | statement
+              | statement_list
               ; 
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
