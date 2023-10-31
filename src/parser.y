@@ -145,7 +145,10 @@ statement_list: /* empty */
               ; 
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
-function_definition: FUN ID OPEN_PARENTHESIS variable_list CLOSE_PARENTHESIS compound_statement ;
+parameter_list: /* empty */
+              | variable_list
+              ;
+function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS compound_statement ;
 %%
 
 void yy::parser::error (const location_type& l, const std::string& m)
