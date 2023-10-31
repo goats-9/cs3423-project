@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
             drv.trace_scanning = true;
         else if (!drv.parse(argv[i]))
         {
-            cout << drv.result << endl;
+            cout << "parsed successfully\n";
         }
         else
         {
