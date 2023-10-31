@@ -103,7 +103,8 @@ program:
 constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 
 variable_list: ID
-             | ID COMMA variable_list ;
+             | ID COMMA variable_list
+             ;
 declaration: LET variable_list
            | CONST variable_list
            ;
@@ -135,7 +136,8 @@ table_expression: OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC
 expression_list: expression
                | expression COMMA expression_list
                ;
-expression_stmt: variable_list EQUAL expression SEMICOLON ;
+
+expression_stmt: variable_list EQUAL expression_list SEMICOLON ;
 
 statement: expression_stmt
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
