@@ -118,6 +118,7 @@ expression: constant
             | UNIOP expression
             | expression BIOP expression
             | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+            | ID OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS
             | ID DOT ID
             | ID table_expression
             | ID table_expression table_expression
@@ -141,7 +142,6 @@ statement: expression_stmt
          ;
 return_stmt: RETURN expression SEMICOLON
            | RETURN SEMICOLON
-           | RETURN ID OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS SEMICOLON
            ;
 statement_list: /* empty */
               | statement_list statement
