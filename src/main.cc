@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
             drv.trace_parsing = true;
         else if (argv[i] == string("-s"))
             drv.trace_scanning = true;
+        else if (argv[i] == string("-l"))
+            drv.isLexOut = true;
         else if (!drv.parse(argv[i]))
         {
             cout << "parsed successfully\n";

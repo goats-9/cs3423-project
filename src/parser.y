@@ -34,36 +34,36 @@ namespace tabulate
 
 // Reserved keywords
 %token
-    LET "let"
-    CONST "const"
-    STRUCT "struct"
-    IF "if"
-    ELSE "else"
-    VOID "void"
-    WHILE "while"
-    FUN "fun"
-    RETURN "return"
-    RETURNS "returns"
-    BREAK "break"
-    CONTINUE "continue"
+    LET "let_token"
+    CONST "const_token"
+    STRUCT "struct_token"
+    IF "if_token"
+    ELSE "else_token"
+    VOID "void_token"
+    WHILE "while_token"
+    FUN "function_token"
+    RETURN "return_token"
+    RETURNS "returns_token"
+    BREAK "break_token"
+    CONTINUE "continue_token"
 
 // Punctuators
 %token  
-    EQUAL "=" 
-    COLON ":" 
-    SEMICOLON ";"
-    DOT "." 
-    COMMA ","
-    OPEN_SQUARE_BRAC "[" 
-    CLOSE_SQUARE_BRAC "]"
-    OPEN_CURLY "{"
-    CLOSE_CURLY "}"
-    OPEN_PARENTHESIS "("
-    CLOSE_PARENTHESIS ")"
+    EQUAL "equal_token" 
+    COLON "colon_token" 
+    SEMICOLON "semcolon_token"
+    DOT "dot_token" 
+    COMMA "comma_token"
+    OPEN_SQUARE_BRAC "open_square_bracket_token" 
+    CLOSE_SQUARE_BRAC "close_square_bracket_token"
+    OPEN_CURLY "open_curly_bracket_token"
+    CLOSE_CURLY "close_curly_bracket_token"
+    OPEN_PARENTHESIS "open_parenthesis_token"
+    CLOSE_PARENTHESIS "close_parenthesis_token"
 
 // Identifiers
 %token
-    <std::string> ID "identifier"
+    <std::string> ID "identifier_token"
 
 // Operators
 %left
