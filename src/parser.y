@@ -146,7 +146,7 @@ expression_stmt: variable_list EQUAL expression SEMICOLON ;
 
 //general statements
 statement: expression_stmt
-         | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statementstatement
+         | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement ELSE compound_statement
          | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
          | BREAK SEMICOLON
