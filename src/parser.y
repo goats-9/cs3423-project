@@ -82,10 +82,7 @@ namespace tabulate
     <std::string> RANGE "range"
 
 %%
-%start program;
-
-// program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS function_body;
-program: statement_list
+%start statement_list;
 
 constant: INT
         | STRING
@@ -141,8 +138,8 @@ statement: expression_stmt
          | function_definition
          | BREAK SEMICOLON
          | CONTINUE SEMICOLON
-         | RETURN expression SEMICOLON
          ;
+return_stmt: RETURN expression SEMICOLON ;
 statement_list: /* empty */
               | statement_list statement
               ; 
@@ -152,7 +149,7 @@ parameter_list: /* empty */
               | variable_list
               ;
 function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS function_body ;
-function_body: OPEN_CURLY statement_list RETURN expression SEMICOLON CLOSE_CURLY ;
+function_body: OPEN_CURLY statement_list return_stmt CLOSE_CURLY ;
 %%
 void yy::parser::error (const location_type& l, const std::string& m)
 {
