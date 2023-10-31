@@ -1,2 +1,4 @@
-int a = 3;
-int b = ADD(2, 3);
+fun main() {
+    int a = 3;
+    int b = ADD(2, 3);
+}

@@ -84,7 +84,7 @@ namespace tabulate
 %%
 %start program;
 
-program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURLY statement_list RETURN SEMICOLON CLOSE_CURLY ;
+program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURLY statement_list RETURN expression SEMICOLON CLOSE_CURLY ;
 
 constant: INT
         | STRING
