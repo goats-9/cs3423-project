@@ -87,7 +87,14 @@ namespace tabulate
 
 program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURLY statement_list RETURN SEMICOLON CLOSE_CURLY ;
 
-constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
+constant: INT
+        | STRING
+        | BOOL
+        | DOUBLE
+        | DATE
+        | TIME
+        | RANGE
+        ;
 
 variable_list: ID
              | ID COMMA variable_list
@@ -101,11 +108,12 @@ declaration_stmt: declaration SEMICOLON
                 | declaration EQUAL array_initializer SEMICOLON
                 | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON
                 ;
-array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC;
+array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC ;
 struct_declaration: STRUCT ID EQUAL OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
 struct_member_list: /* empty */
-                  | struct_member_list declaration_stmt SEMICOLON ;
-                  | struct_member_list function_definition SEMICOLON ;
+                  | struct_member_list declaration_stmt SEMICOLON
+                  | struct_member_list function_definition SEMICOLON
+                  ;
 
 expression: constant
             | ID
@@ -118,6 +126,7 @@ expression: constant
             ;
 table_expression: OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC
                 | OPEN_SQUARE_BRAC RANGE CLOSE_SQUARE_BRAC
+                ;
 expression_list: expression
                | expression COMMA expression_list
                ;
