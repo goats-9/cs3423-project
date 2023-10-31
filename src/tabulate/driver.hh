@@ -42,7 +42,7 @@ namespace tabulate {
         {
             if (isLexOut)
             {
-                cout << "Symbol type: " << token.name() << "->" << "original text: " << text << "\n";
+                cout << token.name() << ": " << text << "\n";
             }
         }
 
