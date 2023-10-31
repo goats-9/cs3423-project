@@ -81,21 +81,9 @@ namespace tabulate
     <tabulate::time> TIME "time"
     <std::string> RANGE "range"
 %nterm <int> program
-//pass me these guys
-//LET, CELL, FORMULA
-
 
 %%
-// start symbol
 %start S;
-
-// Write grammar rules below
-
-
-// Changes made:
-// 1) added RANGE token : DONE
-// 2) added LET and CONST token : DONE
-// 3) changed CLASS token to STRUCT token :
 
 S: 
     program {
@@ -115,10 +103,15 @@ program:
 //type constants
 constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 
+//declaration & assignment
+declaration_stmt: declaration SEMICOLON ;
+declaration: LET variable_list ;
+variable_list: ID
+             | ID COMMA variable_list ;
+expression_stmt: variable_list EQUAL expression SEMICOLON ;
+
 //non-primitive datatypes
-// cell_declaration: CELL ID EQUAL expression SEMICOLON ;
-
-
+cell_declaration: CELL ID EQUAL expression SEMICOLON ;
 range_declaration: RANGE ID EQUAL OPEN_PARENTHESIS range_expression CLOSE_PARENTHESIS SEMICOLON ;
 range_expression: range_specifier COMMA range_specifier COMMA range_specifier ;
 range_specifier: expression COLON expression COLON expression ;
@@ -136,13 +129,6 @@ expression:
     | expression BIOP expression
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
     ;
-
-//declaration & assignment
-declaration_stmt: declaration SEMICOLON ;
-declaration: ID variable_list ;
-variable_list: ID
-             | ID COMMA variable_list ;
-expression_stmt: variable_list EQUAL expression SEMICOLON ;
 
 //general statements
 statement: expression_stmt
