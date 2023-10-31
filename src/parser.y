@@ -83,13 +83,16 @@ namespace tabulate
 
 %%
 %start program;
-
-program: function_list struct_list ;
-
+program: program_element_list ;
+program_element_list: /* empty */
+                   | program_element_list program_element
+                   ; 
+program_element: function_definition
+              | struct_declaration
+              ;
 function_list: /* empty */
               | function_list function_definition
               ; 
-
 struct_list: /* empty */
             | struct_list struct_declaration
             ;
