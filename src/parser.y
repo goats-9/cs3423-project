@@ -84,6 +84,14 @@ namespace tabulate
 %%
 %start statement_list;
 
+// program: function_list struct_list | struct_list;
+// function_list: /* empty */
+//               | function_list function_definition
+//               ; 
+// struct_list: /* empty */
+//               | struct_list struct_declaration
+//               ; 
+
 constant: INT
         | STRING
         | BOOL
@@ -101,7 +109,6 @@ declaration: LET variable_list
            ;
 declaration_stmt: declaration SEMICOLON
                 | declaration EQUAL expression_list SEMICOLON
-                | declaration EQUAL ID OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS SEMICOLON
                 | declaration EQUAL array_initializer SEMICOLON
                 | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON
                 | struct_declaration
