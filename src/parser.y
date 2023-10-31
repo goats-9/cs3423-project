@@ -67,9 +67,9 @@ namespace tabulate
 
 // operators
 %left
-    <std::string> BIOP "binary operator"
-%right
     <std::string> UNIOP "unary operator"
+%right
+    <std::string> BIOP "binary operator"
 
 // constant
 %token
@@ -118,6 +118,7 @@ declaration_stmt: declaration SEMICOLON
 struct_declaration: STRUCT ID EQUAL OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
 struct_member_list: /* empty */
                   | struct_member_list declaration_stmt SEMICOLON ;
+                  | struct_member_list function_definition SEMICOLON ;
 
 //array
 array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC;
@@ -131,6 +132,7 @@ expression:
     | UNIOP expression
     | expression BIOP expression
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+    | ID DOT ID // member access expression
     ;
 
 expression_list: expression
