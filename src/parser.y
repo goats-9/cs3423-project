@@ -152,7 +152,7 @@ parameter_list: /* empty */
               | variable_list
               ;
 function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS function_body ;
-function_body: OPEN_CURLY statement_list RETURN expression_stmt CLOSE_CURLY
+function_body: OPEN_CURLY statement_list RETURN expression_stmt CLOSE_CURLY ;
 %%
 void yy::parser::error (const location_type& l, const std::string& m)
 {
