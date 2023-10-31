@@ -1,2 +1,12 @@
-int a = 3;
-int b = ADD(2, 3);
+fun f(a,b)
+{
+    return ADD(a,b);
+}
+
+fun main()
+{
+    let a = 3 ;
+    let b = ADD(2, 3) ;
+
+    return;
+}
