@@ -1,16 +1,25 @@
 class myclass
 {
+    class inner
+    {
+        fun twice(a)
+        {
+            return ADD(a,a);
+        }
+    };
+    let a = inner();
     fun add(a,b)
     {
-        return a + b;
+        return ADD(a,b);
     }
 };
 
-a = 67;
-b = "90";
+let a = 67;
+const b = "90";
+print(DIV(a,2));
 print(a+a);
 print(b+b);
-c = myclass();
+let c = myclass();
 c.at1 = 1;
 print(c.add(a,c.at1));
 arr = [
@@ -27,3 +36,4 @@ print(arr[1][0] + arr[1][1]);
 
 arr.add_item(9);
 print(arr[2]);
+print(arr::)

@@ -309,10 +309,10 @@ Tabulate
 *.o 
 
 # produced C/C++ and header files files
-parser.tab.cc 
-parser.tab.hh 
-location.hh 
-lex.yy.c
+src/parser.tab.cc 
+src/parser.tab.hh 
+src/location.hh 
+src/lex.yy.c
 
 # vscode file
 .vscode
