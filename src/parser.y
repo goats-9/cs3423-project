@@ -143,7 +143,7 @@ statement: expression_stmt
          | RETURN expression SEMICOLON
          ;
 statement_list: /* empty */
-              | statement_list statement SEMICOLON
+              | statement_list statement
               ; 
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
