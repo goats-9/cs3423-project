@@ -82,15 +82,17 @@ namespace tabulate
     <std::string> RANGE "range"
 
 %%
-%start statement_list;
+%start program;
 
-// program: function_list struct_list | struct_list;
-// function_list: /* empty */
-//               | function_list function_definition
-//               ; 
-// struct_list: /* empty */
-//               | struct_list struct_declaration
-//               ; 
+program: function_list struct_list ;
+
+function_list: /* empty */
+              | function_list function_definition
+              ; 
+
+struct_list: /* empty */
+            | struct_list struct_declaration
+            ;
 
 constant: INT
         | STRING
@@ -114,7 +116,7 @@ declaration_stmt: declaration SEMICOLON
                 | struct_declaration
                 ;
 array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC ;
-struct_declaration: STRUCT ID EQUAL OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
+struct_declaration: STRUCT ID OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
 struct_member_list: /* empty */
                   | struct_member_list declaration_stmt SEMICOLON
                   | struct_member_list function_definition SEMICOLON
