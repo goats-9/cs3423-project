@@ -17,18 +17,18 @@ all: ../Tabulate
 ../Tabulate: ${objs}
 	$(CXX) ${objs} -o ../Tabulate
 
-parser.tab.o:
+parser.tab.o: ${parser_source}.y
 	$(BISON) ${parser_source}.y
 	$(CXX) parser.tab.cc -c
 
-lex.yy.o:
+lex.yy.o: ${lex_source}.l
 	$(FLEX) ${lex_source}.l
 	$(CXX) lex.yy.c -c 
 
-${main_objs}:
+${main_objs}: main.cc
 	$(CXX) $*.cc -c
 
-${helping_file}:
+${helping_file}: $(addprefix tabulate/,${editable_helping_file})
 	$(CXX) tabulate/$*.cc -c
 
 clean:

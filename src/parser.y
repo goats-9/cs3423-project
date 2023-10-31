@@ -34,7 +34,9 @@ namespace tabulate
 
 // reserved keywords
 %token
-    CLASS "class"
+    LET "let"
+    CONST "const"
+    STRUCT "struct"
     IF "if"
     ELSE "else"
     VOID "void"
@@ -77,6 +79,7 @@ namespace tabulate
     <double> DOUBLE "double"
     <tabulate::date> DATE "date"
     <tabulate::time> TIME "time"
+    <std::string> RANGE "range"
 %nterm <int> program
 //pass me these guys
 //LET, CELL, FORMULA
@@ -89,9 +92,9 @@ namespace tabulate
 // Write grammar rules below
 
 
-// lexer needs:(COMPLETED)
-// 1) RANGE token : DONE
-// 2) LET and CONST token : DONE
+// Changes made:
+// 1) added RANGE token : DONE
+// 2) added LET and CONST token : DONE
 // 3) changed CLASS token to STRUCT token :
 
 S: 
@@ -113,7 +116,7 @@ program:
 constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 
 //non-primitive datatypes
-cell_declaration: CELL ID EQUAL expression SEMICOLON ;
+// cell_declaration: CELL ID EQUAL expression SEMICOLON ;
 
 
 range_declaration: RANGE ID EQUAL OPEN_PARENTHESIS range_expression CLOSE_PARENTHESIS SEMICOLON ;
