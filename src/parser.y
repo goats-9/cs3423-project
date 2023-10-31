@@ -141,6 +141,7 @@ statement: expression_stmt
          ;
 return_stmt: RETURN expression SEMICOLON
            | RETURN SEMICOLON
+           | RETURN OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS SEMICOLON
            ;
 statement_list: /* empty */
               | statement_list statement
