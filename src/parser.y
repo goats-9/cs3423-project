@@ -84,7 +84,8 @@ namespace tabulate
 %%
 %start program;
 
-program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS function_body;
+// program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS function_body;
+program: statement_list
 
 constant: INT
         | STRING
