@@ -104,14 +104,20 @@ program:
 constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 
 //declaration & assignment:
-declaration: LET variable_list | CONST variable_list;
-declaration_stmt: declaration SEMICOLON // declaration
-                | declaration EQUAL constant SEMICOLON // declaration with values
-                | declaration EQUAL ID OPEN_PARENTHESIS expression CLOSE_PARENTHESIS SEMICOLON // cell
+declaration: LET variable_list
+           | LET variable_list EQUAL expression_list
+           | CONST variable_list
+           | CONST variable_list EQUAL expression_list
+           ;
+
+declaration_stmt: declaration SEMICOLON
                 | declaration EQUAL array_initializer SEMICOLON // array
                 | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON // formula
-                | STRUCT ID EQUAL OPEN_CURLY declaration_stmt CLOSE_CURLY SEMICOLON // struct
                 ;
+
+struct_declaration: STRUCT ID EQUAL OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
+struct_member_list: /* empty */
+                  | struct_member_list declaration_stmt SEMICOLON ;
 
 //array
 array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC;
@@ -153,18 +159,8 @@ statement_list: /* empty */
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
 //function declarations
-function_declaration: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS RETURNS ID SEMICOLON ;
-parameter_list: /* empty */
-              | parameter
-              | parameter COMMA parameter_list ;
-parameter: ID COLON ID ;
-function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS RETURNS ID compound_statement ;
-
-//function calls
-function_call: ID OPEN_PARENTHESIS argument_list CLOSE_PARENTHESIS ;
-argument_list: /* empty */
-             | expression
-             | expression COMMA argument_list ;
+function_definition: FUN ID OPEN_PARENTHESIS variable_list CLOSE_PARENTHESIS compound_statement ;
+// function call just same as declarations
 %%
 
 void yy::parser::error (const location_type& l, const std::string& m)
