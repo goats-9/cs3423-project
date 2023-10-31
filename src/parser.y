@@ -32,7 +32,7 @@ namespace tabulate
 #include "tabulate.hh"
 }
 
-// reserved keywords
+// Reserved keywords
 %token
     LET "let"
     CONST "const"
@@ -47,7 +47,7 @@ namespace tabulate
     BREAK "break"
     CONTINUE "continue"
 
-// punctuators
+// Punctuators
 %token  
     EQUAL "=" 
     COLON ":" 
@@ -61,17 +61,17 @@ namespace tabulate
     OPEN_PARENTHESIS "("
     CLOSE_PARENTHESIS ")"
 
-// identifiers
+// Identifiers
 %token
     <std::string> ID "identifier"
 
-// operators
+// Operators
 %left
     <std::string> UNIOP "unary operator"
 %right
     <std::string> BIOP "binary operator"
 
-// constant
+// Constants
 %token
     <int> INT "integer"
     <std::string> STRING "string"
@@ -99,20 +99,19 @@ constant: INT
         | RANGE
         ;
 
-declaration: LET
-           | CONST
-           ;
-declaration_stmt: declaration variable_list SEMICOLON 
-                | declaration assignment_stmt
+declare: LET
+       | CONST
+       ;
+declaration_stmt: declare variable_list SEMICOLON 
+                | declare assignment_stmt
                 ;
-assignment_stmt: ID EQUAL assigns_to SEMICOLON
-               | ID EQUAL assigns_to COMMA assignment_stmt
+assignment_stmt: ID EQUAL assignment_target SEMICOLON
+               | ID EQUAL assignment_target COMMA assignment_stmt
                ;
-assigns_to: expression
-          | array_initializer
-          | ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS
-          ;
-
+assignment_target: expression
+                 | array_initializer
+                 | ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS
+                 ;
 array_initializer: OPEN_SQUARE_BRAC variable_list CLOSE_SQUARE_BRAC ;
 struct_declaration: STRUCT ID OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
 struct_member_list: /* empty */

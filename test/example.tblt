@@ -5,4 +5,5 @@ fun main(){
     let s = "string", s1 = "string1", c1 = 20;
     # const modifiers require assignment #
     const b = 2, b1 = 21.12, b2 = "22";
+    return 0;
 }
