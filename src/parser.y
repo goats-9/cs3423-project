@@ -100,10 +100,8 @@ program:
         $$ = $1 ;
     }
 
-//type constants:
 constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 
-//declaration & assignment:
 variable_list: ID
              | ID COMMA variable_list ;
 declaration: LET variable_list
@@ -111,31 +109,26 @@ declaration: LET variable_list
            | CONST variable_list
            | CONST variable_list EQUAL expression_list
            ;
-
 declaration_stmt: declaration SEMICOLON
-                | declaration EQUAL array_initializer SEMICOLON // array
-                | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON // formula
+                | declaration EQUAL array_initializer SEMICOLON
+                | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON
                 ;
-
-//array
 array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC;
-
-//struct
 struct_declaration: STRUCT ID EQUAL OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
 struct_member_list: /* empty */
                   | struct_member_list declaration_stmt SEMICOLON ;
                   | struct_member_list function_definition SEMICOLON ;
 
-//expressions & operators:
 expression: constant
             | ID
             | UNIOP expression
             | expression BIOP expression
             | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
-            | ID DOT ID // member access expression
+            | ID DOT ID
             | ID table_expression
             | ID table_expression table_expression
             ;
+
 table_expression: OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC
                 | OPEN_SQUARE_BRAC RANGE CLOSE_SQUARE_BRAC
 
@@ -144,7 +137,6 @@ expression_list: expression
                ;
 expression_stmt: variable_list EQUAL expression SEMICOLON ;
 
-//general statements
 statement: expression_stmt
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement ELSE compound_statement
@@ -160,9 +152,7 @@ statement_list: /* empty */
               ; 
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
-//function declarations
 function_definition: FUN ID OPEN_PARENTHESIS variable_list CLOSE_PARENTHESIS compound_statement ;
-// function call just same as declarations
 %%
 
 void yy::parser::error (const location_type& l, const std::string& m)
