@@ -105,9 +105,13 @@ declare: LET
 declaration_stmt: declare variable_list SEMICOLON 
                 | declare assignment_stmt
                 ;
-assignment_stmt: ID EQUAL assignment_target SEMICOLON
-               | ID EQUAL assignment_target COMMA assignment_stmt
+assignment_stmt: variable EQUAL assignment_target SEMICOLON
+               | variable EQUAL assignment_target COMMA assignment_stmt
                ;
+variable: ID
+        | ID table_expression
+        | ID table_expression table_expression
+        ;
 assignment_target: expression
                  | array_initializer
                  | ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS
