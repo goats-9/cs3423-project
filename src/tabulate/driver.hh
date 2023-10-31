@@ -38,11 +38,11 @@ namespace tabulate {
         void scan_end();
 
         // handles tokens here
-        inline void handleToken(yy::parser::symbol_type token)
+        inline void handleToken(yy::parser::symbol_type token, const string & text)
         {
             if (isLexOut)
             {
-                cout << token.name() << "\n";
+                cout << "Symbol type: " << token.name() << "->" << "original text: " << text << "\n";
             }
         }
 
