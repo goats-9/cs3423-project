@@ -63,69 +63,69 @@ close_parenthesis ")"
     /* reserved keywords */
 "let" {
     auto token = yy::parser::make_LET(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "const" {
     auto token = yy::parser::make_CONST(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "struct" {
     auto token = yy::parser::make_STRUCT(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "if" {
     auto token = yy::parser::make_IF(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "else" {
     auto token = yy::parser::make_ELSE(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "void" {
     auto token = yy::parser::make_VOID(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "while" {
     auto token = yy::parser::make_WHILE(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "fun" {
     auto token = yy::parser::make_FUN(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "return" {
     auto token = yy::parser::make_RETURN(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "returns" {
     auto token = yy::parser::make_RETURNS(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "break" {
     auto token = yy::parser::make_BREAK(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 "continue" {
     auto token = yy::parser::make_CONTINUE(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
     /* datatype */
     /* 
     {DATATYPE} {
         auto token = yy::parser::make_DATATYPE(yytext,loc);
-        drv.handleToken(token);
+        drv.handleToken(token,yytext);
         return token;
     } 
     */
@@ -134,86 +134,86 @@ close_parenthesis ")"
     /*
     {ARITHMETIC} {
         auto token = yy::parser::make_ARITHMETIC(yytext,loc);
-        drv.handleToken(token);
+        drv.handleToken(token,yytext);
         return token;
     } 
     */
 {bi_OP} {
     auto token = yy::parser::make_BIOP(yytext,loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {uni_OP} {
     auto token = yy::parser::make_UNIOP(yytext,loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {EQUAL} {
     auto token = yy::parser::make_EQUAL(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 
     /* Punctuator */
 {open_square_brac} {
     auto token = yy::parser::make_OPEN_SQUARE_BRAC(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {close_square_brac} {
     auto token = yy::parser::make_CLOSE_SQUARE_BRAC(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {colon} {
     auto token = yy::parser::make_COLON(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {dot} {
     auto token = yy::parser::make_DOT(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {semiColon} {
     auto token = yy::parser::make_SEMICOLON(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {comma} {
     auto token = yy::parser::make_COMMA(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {open_curly} {
     auto token = yy::parser::make_OPEN_CURLY(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {close_curly} {
     auto token = yy::parser::make_CLOSE_CURLY(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {open_parenthesis} {
     auto token = yy::parser::make_OPEN_PARENTHESIS(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {close_parenthesis} {
     auto token = yy::parser::make_CLOSE_PARENTHESIS(loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
     /* constant */
 {INT} {
     auto token = yy::parser::make_INT(stoi(yytext), loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {STRING} {
     auto token = yy::parser::make_STRING(yytext, loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {BOOL} {
@@ -223,35 +223,35 @@ close_parenthesis ")"
         val = true;
     }
     auto token = yy::parser::make_BOOL(val, loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {DOUBLE} {
     auto token = yy::parser::make_DOUBLE(stod(yytext), loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {TIME} {
     auto token = yy::parser::make_TIME(tabulate::time(yytext), loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }    
 {DATE} {
     auto token = yy::parser::make_DATE(tabulate::date(yytext), loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 {RANGE} {
     // TODO: make a class range in tabulate/types.hh
     auto token = yy::parser::make_RANGE(yytext, loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
 
     /* identifiers */
 {ID} {
     auto token = yy::parser::make_ID(yytext, loc);
-    drv.handleToken(token);
+    drv.handleToken(token,yytext);
     return token;
 }
     /* comments and spaces */
