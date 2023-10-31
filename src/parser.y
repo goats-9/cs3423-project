@@ -80,7 +80,6 @@ namespace tabulate
     <tabulate::date> DATE "date"
     <tabulate::time> TIME "time"
     <std::string> RANGE "range"
-%nterm <int> program
 
 %%
 %start program;
@@ -107,6 +106,7 @@ declaration_stmt: declaration SEMICOLON
                 | declaration EQUAL ID OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS SEMICOLON
                 | declaration EQUAL array_initializer SEMICOLON
                 | declaration EQUAL ID OPEN_PARENTHESIS array_initializer COMMA ID CLOSE_PARENTHESIS SEMICOLON
+                | struct_declaration
                 ;
 array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC ;
 struct_declaration: STRUCT ID EQUAL OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
@@ -133,9 +133,11 @@ expression_list: expression
 expression_stmt: variable_list EQUAL expression_list SEMICOLON ;
 
 statement: expression_stmt
+         | declaration_stmt
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
          | IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement ELSE compound_statement
          | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
+         | function_definition
          | BREAK SEMICOLON
          | CONTINUE SEMICOLON
          | RETURN expression SEMICOLON
