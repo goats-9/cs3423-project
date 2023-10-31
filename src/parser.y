@@ -83,22 +83,9 @@ namespace tabulate
 %nterm <int> program
 
 %%
-%start S;
+%start program;
 
-S: 
-    program {
-        drv.result = $1 ;
-    }
-    ;
-
-program:
-    INT program {
-        $$ = $1 + $2 ;
-    }
-    |
-    INT {
-        $$ = $1 ;
-    }
+program: FUN ID OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURLY statement_list RETURN SEMICOLON CLOSE_CURLY 
 
 constant: INT | STRING | BOOL | DOUBLE | DATE | TIME | RANGE;
 
@@ -129,14 +116,11 @@ expression: constant
             | ID table_expression
             | ID table_expression table_expression
             ;
-
 table_expression: OPEN_SQUARE_BRAC INT CLOSE_SQUARE_BRAC
                 | OPEN_SQUARE_BRAC RANGE CLOSE_SQUARE_BRAC
-
 expression_list: expression
                | expression COMMA expression_list
                ;
-
 expression_stmt: variable_list EQUAL expression_list SEMICOLON ;
 
 statement: expression_stmt
@@ -146,9 +130,7 @@ statement: expression_stmt
          | BREAK SEMICOLON
          | CONTINUE SEMICOLON
          | RETURN expression SEMICOLON
-         | OPEN_CURLY program CLOSE_CURLY
          ;
-
 statement_list: /* empty */
               | statement_list statement SEMICOLON
               ; 
