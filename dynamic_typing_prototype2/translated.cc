@@ -105,7 +105,7 @@ int main()
                 any(new string("world"), "string")
             },"array")
         },"array");
-        cout << arr.at(any(new int(2),"int")) << "\n";
+        cout << arr << "\n";
     }
     catch (const runtime_error &e)
     {

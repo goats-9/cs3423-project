@@ -1,11 +1,20 @@
+struct myclass
+{
+    fun test(a)
+    {
+        return a;
+    }
+}
+
 let a = 67;
 const b = "90";
 let arr = [
-    23
+    [9]
     ,
     [
         "hello"
         ,
         "world"
     ]
-]
+];
+DISP(arr);
