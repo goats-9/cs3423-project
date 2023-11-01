@@ -1,9 +1,13 @@
 #include "symtab.hh"
 
 template <typename K, typename V>
-int tabulate::symtab<K, V>::insert(K &name, V &rec) {
+int tabulate::symtab<K, V>::insert(
+    K &name, 
+    V &rec, 
+    std::stack<std::string> &active_func_stack
+) {
     if (tabulate_symtab.find(name) == tabulate_symtab.end()) {
-        if (std::is_same<V, func_symtrec>) {
+        if (std::is_same<V, func_symtrec>::value) {
             active_func_stack.push(name);
         } else {
             std::string active_func_name = active_func_stack.top();
@@ -18,18 +22,18 @@ int tabulate::symtab<K, V>::insert(K &name, V &rec) {
 }
 
 template <typename K, typename V>
-V tabulate::symtab<K, V>::find(K &name) {
+V tabulate::symtab<K, V>::find(K &name, int level) {
     if (tabulate_symtab.find(name) == tabulate_symtab.end()) return NULL;
     else {
-        if (tabulate_symtab[name].top().level > _level) return NULL;
+        if (tabulate_symtab[name].top().level > level) return NULL;
         return tabulate_symtab[name].top();
     }
 }
 
 template <typename K, typename V>
-void tabulate::symtab<K, V>::delete_scope() {
+void tabulate::symtab<K, V>::delete_scope(int level) {
     for (auto &[name, stk] : tabulate_symtab) {
-        while (!stk.empty() && stk.top().level == _level) {
+        while (!stk.empty() && stk.top().level >= level) {
             if (active_func_stack.top() == name) active_func_stack.pop();
             stk.pop();
         }

@@ -1,5 +1,4 @@
-#ifndef TYPES_HH
-#define TYPES_HH
+#pragma once
 
 #include <string>
 #include <vector>
@@ -22,5 +21,3 @@ namespace tabulate {
         time(std::string str);
     };
 }
-
-#endif // TYPES_HH

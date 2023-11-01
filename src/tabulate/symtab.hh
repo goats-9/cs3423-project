@@ -1,10 +1,4 @@
-#ifndef SYMTAB_HH
-#define SYMTAB_HH
-
-/* Macros used */
-#define ID_STREC 0
-#define FUNC_STREC 1
-#define DTYPE_STREC 2
+#pragma once
 
 /**
  * Symbol Table API for Tabulate
@@ -81,7 +75,6 @@ namespace tabulate {
         int level;
     };
 
-    std::stack<std::string> active_func_stack;
     int _level = 0;
 
     /**
@@ -94,10 +87,8 @@ namespace tabulate {
     public:
         symtab() {}
 
-        int insert(K &name, V &rec);
-        V find(K &name);
-        void delete_scope();
+        int insert(K &name, V &rec, std::stack<std::string> &active_func_stack);
+        V find(K &name, int level);
+        void delete_scope(int level);
     };
 }
-
-#endif  // SYMTAB_HH

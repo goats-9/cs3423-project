@@ -1,9 +1,10 @@
-#ifndef DRIVER_HH
-#define DRIVER_HH
+#pragma once
+
 #include <fstream>
 #include <map>
+#include <stack>
+#include <string>
 #include "../parser.tab.hh"
-using namespace std;
 
 // Prototype of yylex given to Flex
 #define YY_DECL \
@@ -19,10 +20,10 @@ namespace tabulate {
         driver();
 
         // The name of the file being parsed
-        string file;
+        std::string file;
 
         // Run the parser on file F.  Return 0 on success.
-        int parse(const string &f);
+        int parse(const std::string &f);
 
         // Whether to generate scanner debug traces.
         bool trace_scanning;
@@ -38,11 +39,11 @@ namespace tabulate {
         void scan_end();
 
         // handles tokens here
-        inline void handleToken(yy::parser::symbol_type token, const string & text)
+        inline void handleToken(yy::parser::symbol_type token, const std::string & text)
         {
             if (isLexOut)
             {
-                cout << token.name() << ": " << text << "\n";
+                std::cout << token.name() << ": " << text << "\n";
             }
         }
 
@@ -50,10 +51,10 @@ namespace tabulate {
         yy::location location;
 
         // symbol table
+        std::stack<std::string> active_func_stack;
+        int level;
 
         // other variable
         int result;
     };
 }
-
-#endif  // DRIVER_HH
