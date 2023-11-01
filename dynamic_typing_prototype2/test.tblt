@@ -1,0 +1,11 @@
+let a = 67;
+const b = "90";
+let arr = [
+    23
+    ,
+    [
+        "hello"
+        ,
+        "world"
+    ]
+]
