@@ -3,15 +3,15 @@
 
 #include "location.hh"
 #include <stack>
-using namespace std;
+#include <string>
 
 class pos
 {
 public:
     int s_line,s_col,e_line,e_col;
-    string func_call;
+    std::string func_call;
     
-    pos(int start_line, int start_col, int end_line, int end_col, const string &function_call)
+    pos(int start_line, int start_col, int end_line, int end_col, const std::string &function_call)
     {
         s_line = start_line;
         s_col = start_col;
@@ -24,11 +24,11 @@ public:
 class state
 {
 public:
-    stack<yy::location> loc;
-    stack<string> func_call;
-    string file;
+    std::stack<yy::location> loc;
+    std::stack<std::string> func_call;
+    std::string file;
     state (){}
-    state(const string &file_name)
+    state(const std::string &file_name)
     {
         this->file = file_name;
     }

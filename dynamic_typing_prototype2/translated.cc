@@ -51,7 +51,7 @@ public:
     // Constructor_defination ends
 };
 
-inline void any::Constructor(const any &a)
+void any::Constructor(const any &a)
 {
     if (a.type == "myclass")
     {
@@ -59,14 +59,14 @@ inline void any::Constructor(const any &a)
         type = "myclass";
     }
 }
-inline void any::Destructor()
+void any::Destructor()
 {
     if (type == "myclass")
     {
         delete (myclass *)data;
     }
 }
-inline any &any::Accessor(const string &id)
+any &any::Accessor(const string &id)
 {
     if (type == "myclass")
     {
@@ -74,8 +74,9 @@ inline any &any::Accessor(const string &id)
 
         return ptr->mem[id];
     }
+    throw runtime_error("dot(.) does not support (" + type + ")");
 }
-inline any any::Runner(const string &id,const vector<any> &params)
+any any::Runner(const string &id,const vector<any> &params)
 {
     if (type == "myclass")
     {
@@ -88,6 +89,7 @@ inline any any::Runner(const string &id,const vector<any> &params)
         }
         return (ptr->*f)(params);
     }
+    throw runtime_error("dot(.) does not support (" + type + ")");
 }
 
 int main()
@@ -106,6 +108,8 @@ int main()
             },"array")
         },"array");
         cout << arr << "\n";
+        cout << ADD(a,arr.at(any(new int(0),"int")).at(any(new int(0),"int")),pos(1,1,1,1,"ADD(a,arr[0])")) << "\n";
+        DISP(arr);
     }
     catch (const runtime_error &e)
     {
