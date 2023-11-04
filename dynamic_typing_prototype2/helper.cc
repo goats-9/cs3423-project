@@ -4,7 +4,7 @@
 using namespace std;
 
 // unary function error message
-std::runtime_error uni_err(const std::string &func, const any &a)
+runtime_error uni_err(const std::string &func, const any &a)
 {
     return runtime_error(func + " does not support (" + a.type + ")" );
 }
