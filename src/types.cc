@@ -1,4 +1,4 @@
-#include "types.hh"
+#include "../include/types.hh"
 
 std::vector<std::string> tabulate::split(std::string s, std::string del)
 {

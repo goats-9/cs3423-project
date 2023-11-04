@@ -316,3 +316,6 @@ src/lex.yy.c
 
 # vscode file
 .vscode
+
+# CMake build files
+build

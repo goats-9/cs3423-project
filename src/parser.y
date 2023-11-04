@@ -7,6 +7,7 @@
 %define api.token.constructor
 %define api.value.type variant
 %define parse.assert
+%define api.location.file "../include/location.hh"
 
 %language "C++" 
 
@@ -16,7 +17,7 @@ namespace tabulate
 {
     class driver;
 }
-#include "tabulate/types.hh"
+#include "../include/types.hh"
 }
 
 // The parsing context
@@ -29,7 +30,7 @@ namespace tabulate
 %define parse.lac full
 
 %code {
-#include "tabulate.hh"
+#include "../include/tabulate.hh"
 }
 
 // Reserved keywords

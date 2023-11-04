@@ -1,14 +1,12 @@
 %{
-    #include <fstream>
-    #include <stdio.h>
-    #include "tabulate.hh"
-    // #include "driver.hh"
-    // #include "parser.tab.hh"
-    // #include "auxilary.hh"
-    using namespace std;
+#include <fstream>
+#include <stdio.h>
+#include "../include/tabulate.hh"
+#include "../include/parser.tab.hh"
+using namespace std;
 
-    // Code run each time a pattern is matched.
-    # define YY_USER_ACTION  loc.columns (yyleng);
+// Code run each time a pattern is matched.
+# define YY_USER_ACTION  loc.columns (yyleng);
 %}
 
 %option noyywrap nounput noinput batch debug
@@ -283,5 +281,4 @@ void tabulate::driver::scan_end ()
 {
     fclose (yyin);
 }
-
 

@@ -75,8 +75,6 @@ namespace tabulate {
         int level;
     };
 
-    int _level = 0;
-
     /**
      * Symbol Table clas template
     */
@@ -89,6 +87,6 @@ namespace tabulate {
 
         int insert(K &name, V &rec, std::stack<std::string> &active_func_stack);
         V find(K &name, int level);
-        void delete_scope(int level);
+        void delete_scope(std::stack<std::string> &active_func_stack, int level);
     };
 }

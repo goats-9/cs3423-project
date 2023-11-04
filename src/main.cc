@@ -1,5 +1,5 @@
 #include <iostream>
-#include "tabulate.hh"
+#include "../include/tabulate.hh"
 using namespace std;
 
 int main(int argc, char *argv[])

@@ -1,4 +1,4 @@
-#include "symtab.hh"
+#include "../include/symtab.hh"
 
 template <typename K, typename V>
 int tabulate::symtab<K, V>::insert(
@@ -31,7 +31,7 @@ V tabulate::symtab<K, V>::find(K &name, int level) {
 }
 
 template <typename K, typename V>
-void tabulate::symtab<K, V>::delete_scope(int level) {
+void tabulate::symtab<K, V>::delete_scope(std::stack<std::string> &active_func_stack, int level) {
     for (auto &[name, stk] : tabulate_symtab) {
         while (!stk.empty() && stk.top().level >= level) {
             if (active_func_stack.top() == name) active_func_stack.pop();

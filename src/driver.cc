@@ -1,8 +1,11 @@
-#include "driver.hh"
+#include "../include/driver.hh"
 
-tabulate::driver::driver() : trace_parsing (false), trace_scanning (false), isLexOut(false)
+tabulate::driver::driver()
 {
     // initilize variables
+    trace_parsing = false;
+    trace_scanning = false;
+    isLexOut = false;
 }
 
 int tabulate::driver::parse(const std::string &f)

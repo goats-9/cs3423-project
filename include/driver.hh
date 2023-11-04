@@ -4,11 +4,11 @@
 #include <map>
 #include <stack>
 #include <string>
-#include "../parser.tab.hh"
+#include "parser.tab.hh"
+#include "symtab.hh"
 
 // Prototype of yylex given to Flex
-#define YY_DECL \
-    yy::parser::symbol_type yylex(tabulate::driver &drv)
+#define YY_DECL yy::parser::symbol_type yylex(tabulate::driver &drv)
 // Declaring yylex for parser
 YY_DECL;
 
@@ -17,8 +17,6 @@ namespace tabulate {
     class driver
     {
     public:
-        driver();
-
         // The name of the file being parsed
         std::string file;
 
@@ -53,8 +51,13 @@ namespace tabulate {
         // symbol table
         std::stack<std::string> active_func_stack;
         int level;
+        tabulate::symtab<std::string, tabulate::id_symtrec> symtab_id;
+        tabulate::symtab<std::string, tabulate::func_symtrec> symtab_func;
+        tabulate::symtab<std::string, tabulate::dtype_symtrec> symtab_dtype;
 
         // other variable
         int result;
+
+        driver();
     };
 }
