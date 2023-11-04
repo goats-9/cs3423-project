@@ -2,6 +2,9 @@
 
 ## Instruction to run:
 ```shell
-make
-./Tabulate source_program
+mkdir build
+cd build
+cmake ..
+cmake --build . --target install
+./tabulate /path/to/source.tblt
 ```
