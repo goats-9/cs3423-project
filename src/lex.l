@@ -1,8 +1,8 @@
 %{
 #include <fstream>
 #include <stdio.h>
-#include "../include/tabulate.hh"
-#include "../include/parser.tab.hh"
+#include "tabulate.hh"
+#include "parser.tab.hh"
 using namespace std;
 
 // Code run each time a pattern is matched.

@@ -1,8 +1,8 @@
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
 
-FLEX_TARGET(tabulateScanner lex.l lex.yy.cc)
-BISON_TARGET(tabulateParser parser.y parser.tab.cc DEFINES_FILE ../include/parser.tab.hh)
+FLEX_TARGET(tabulateScanner lex.l ${CMAKE_CURRENT_BINARY_DIR}/lex.yy.cc)
+BISON_TARGET(tabulateParser parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cc DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.hh)
 add_flex_bison_dependency(tabulateScanner tabulateParser)
 
 # specify the C++ standard
@@ -18,19 +18,18 @@ target_compile_options(tabulate_compiler_flags INTERFACE
   "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3;-O2>>"
 )
 
-file(GLOB 
-  link_files
-  *.cc
-)
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/include)
+
+set(src_files main.cc driver.cc symtab.cc types.cc)
 
 # add the executable
-add_executable(tabulate main.cc ${link_files})
+add_executable(tabulate ${src_files} ${FLEX_tabulateScanner_OUTPUTS} ${BISON_tabulateParser_OUTPUTS})
 
 target_link_libraries(tabulate PUBLIC tabulate_compiler_flags)
 
 # add the binary tree to the search path for include files
-target_include_directories(tabulate PUBLIC
-                           ${CMAKE_SOURCE_DIR}/include
+target_include_directories(tabulate 
+                            PUBLIC ${CMAKE_SOURCE_DIR}/include
                            )
 
 # Install tabulate in the bin directory
