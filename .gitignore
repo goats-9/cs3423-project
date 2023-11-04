@@ -300,21 +300,7 @@ TSWLatexianTemp*
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
 
-/ref.pdf
-
-# executable
-Tabulate
-
-# object file
-*.o 
-
-# produced C/C++ and header files files
-# src/parser.tab.cc 
-# src/parser.tab.hh 
-# src/location.hh 
-# src/lex.yy.c
-
-# vscode file
+# vscode config files
 .vscode
 
 # CMake build files
