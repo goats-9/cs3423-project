@@ -4,19 +4,17 @@ fun addNumbers(a, b) {
     return result;
 }
 
-fun findMax(range) {
+fun findMax(rng) {
     let maxVal = -10000;
-    let rangeLength = LENGTH(range);
+    let rangeLength = LENGTH(rng);
     let currIdx = 0;
 
     while(currIdx < rangeLength) {
         if(GET(range, currIdx) > maxVal) {
-            maxVal = GET(range, currIdx);
+            maxVal = GET(rng, currIdx);
         }
         currIdx = ADD(currIdx, 1);
     }
     
     return maxVal;
 }
-
-

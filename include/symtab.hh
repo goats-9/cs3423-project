@@ -44,24 +44,12 @@ namespace tabulate {
     /* Class definitions for tabulate symbol table records */
 
     struct id_symtrec {
-        /// @brief Determines whether the identifier is simple or is an array,
-        /// taking values 0 or 1 respectively.
-        int type;
-        /// @brief Determine type of element of the identifier, meaningful for
-        /// array identifiers.
-        int eletype;
         /// @brief Scope of declaration.
         int level;
     };
 
     struct param_symtrec {
         std::string name;
-        /// @brief Determines whether the identifier is simple or is an array,
-        /// taking values 0 or 1 respectively.
-        int type;
-        /// @brief Determine type of element of the identifier, meaningful for
-        /// array identifiers.
-        int eletype;
         /// @brief Scope of declaration.
         int level;
     };
@@ -76,7 +64,7 @@ namespace tabulate {
     };
 
     /**
-     * Symbol Table clas template
+     * Symbol Table class template
     */
     template<typename K, typename V>
     class symtab {

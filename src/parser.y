@@ -7,7 +7,6 @@
 %define api.token.constructor
 %define api.value.type variant
 %define parse.assert
-/* %define api.location.file "../include/location.hh" */
 
 %language "C++" 
 
@@ -63,7 +62,7 @@ namespace tabulate
     CLOSE_PARENTHESIS "close_parenthesis_token"
 
 // Identifiers
-%token
+%token 
     <std::string> ID "identifier_token"
 
 // Operators
@@ -158,7 +157,14 @@ statement_list: /* empty */
               ; 
 compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
-variable_list: ID
+variable_list: ID 
+                {
+                    // Create ST record
+                    tabulate::id_symtrec id_rec;
+                    id_rec.level = drv.level;
+                    // Add to ST
+                    drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
+                }
              | ID COMMA variable_list
              ;
 parameter_list: /* empty */
