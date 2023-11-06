@@ -4,6 +4,11 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+    if (argc == 1)
+    {
+        cout << "Enter source file name\n";
+        return 1;
+    }
     int res = 0;
     tabulate::driver drv;
     for (int i = 1; i < argc; ++i)
