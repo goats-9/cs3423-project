@@ -221,7 +221,7 @@ ID_list: ID
                     // Add to ST
                     drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
                 }
-             | ID COMMA variable_list
+             | ID COMMA ID_list
              {
                 // Create ST record for the first ID in the list
                 tabulate::id_symtrec id_rec;
@@ -232,7 +232,7 @@ ID_list: ID
              }
              ;
 parameter_list: /* empty */ { }
-              | variable_list {$$ = $1}
+              | ID_list {$$ = $1}
               ;
 
 /* function defination starts */
