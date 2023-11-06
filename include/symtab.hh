@@ -21,7 +21,7 @@
  * ===================================================
  * TOKEN      : SYMBOL TABLE RECORD CONTENTS
  * ===================================================
- * IDENTIFIER : NAME || TYPE    | ELETYPE    | LEVEL |
+ * IDENTIFIER : NAME || LEVEL   | MODIFIER   |
  * FUNCTION   : NAME || RETTYPE | PARAMETERS | LEVEL |
  * DATATYPE   : NAME || LEVEL   | 
  * ===================================================
@@ -35,6 +35,10 @@
 #include <string>
 #include <unordered_map>
 
+/* Header defines */
+#define TABULATE_LET 0
+#define TABULATE_CONST 1
+
 /**
  * Define symbol table and record types in a namespace to prevent clashes with
  * other namespaces 
@@ -46,6 +50,7 @@ namespace tabulate {
     struct id_symtrec {
         /// @brief Scope of declaration.
         int level;
+        int modifier;
     };
 
     struct param_symtrec {
