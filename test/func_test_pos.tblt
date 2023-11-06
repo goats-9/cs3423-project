@@ -1,0 +1,13 @@
+fun main() {
+    return 0;
+}
+
+fun check(a,b,c) {
+    a = 1:5~1;
+    {
+        let a = 2;
+        let b = 3;
+        let c = 4;
+    }
+    const f = "hastar";
+}
