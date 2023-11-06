@@ -1,9 +1,117 @@
+# Functions in Tabulate #
+fun addNumbers(a, b) {
+    let result = ADD(a, b);
+    return result;
+}
+
+fun findMax(rng) {
+    let maxVal = -10000;
+    let rangeLength = LENGTH(rng);
+    let currIdx = 0;
+
+    while(currIdx < rangeLength) {
+        if(GET(range, currIdx) > maxVal) {
+            maxVal = GET(rng, currIdx);
+        }
+        currIdx = ADD(currIdx, 1);
+    }
+    
+    return maxVal;
+}
+
+struct myclass
+{
+    fun myfunc()
+    {
+        return 1;
+    }
+};
+
 fun main(){
     # Assignment statements in Tabluate #
-    let a = 3;
+    a = 3;
     # We can declare and assign too #
-    let s = "string"; let s1 = "string1"; const c1 = 20;
+    let s = "string", s1 = "string1", c1 = 20;
     # const modifiers require assignment #
     const b = 2, b1 = 21.12, b2 = "22";
-    return 0;
+
+    # Compound statements in Tabulate #
+    let val1 = GET(cell1);
+    let val2 = GET(cell2);
+    let res;
+
+    if(val1 > 50) {
+        if(val2 > 20) {
+            res = ADD(MUL(val1,0.8),val2);
+        } else {
+            res = MUL(val1,0.9);
+        }
+    } else {
+        if(val2 < 10) {
+            res = MUL(ADD(val1,val2), 1.2);
+        } else {
+            res = ADD(val1,val2);
+        }
+    }
+
+    # Declarations in Tabulate #
+    let x, y, z;        # Multiple declarations #
+    let c = "string";   # Single declaration #
+
+    # Expressions in Tabulate #
+    let a = ADD(5, 13); # evaluates to 18 #
+    let j = POW(2, 3); # evaluates to 8 #
+
+    let l = (10.2 > 4); # evaluates to TRUE #
+    let p = (5 < 3 OR 4 > 2); # evaluates to TRUE #
+    let q = NOT(5 == 6); # evaluates to TRUE #
+
+    let a = -5; # Unary negation #
+
+    let t1 = TYPEOF(5); # evaluates to "int" #
+    let t2 = TYPEOF(10.5); # evaluates to "double" #
+
+    let myRange = 1:5~1;
+
+    let myFormula = FORMULA([a,j], ADD); # Creating formulae with inbuilt functions #
+
+    # Assuming there exists a table called SalesData #
+    let myTable = TABLE(SalesData);
+
+    # Assuming a struct Student with members name and grade #
+    let s1 = Student("hastar", "A");
+    let studentName = s1.name.str.get_str(); # Accesses the name of the student, evaluates to "hastar" #
+    let studentGrade = s1.grade.str; # Accesses the grade of the student, evaluates to "A" #
+    # Compound statement #
+    {
+        let a = 1 ;
+        return;
+    }
+    # Iteration statements in Tabulate #
+    let fl = TRUE;
+
+    #...#
+
+    while (fl) {
+        let currentVal = GET(range, currIdx);
+        if(currentVal > 0) {
+            positiveVal = currentVal;
+            break; # Exit the loop #
+        }
+        if(currentVal == 0) {
+            currIdx = ADD(currIdx, 1);
+            continue; # Skip this iteration #
+        }
+        currIdx = ADD(currIdx, 1);
+    }
+
+    if (fl1) {
+    # CODE #
+    } else if (fl2) {
+        # MORE CODE #
+    } else if (fl2) {
+        # MORE CODE #
+    } else {
+        # SOME MORE CODE #
+    }
 }
