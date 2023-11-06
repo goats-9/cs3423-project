@@ -215,7 +215,7 @@ compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 // variable list
 ID_list: ID 
                 {
-                    Create ST record
+                    // Create ST record
                     tabulate::id_symtrec id_rec;
                     id_rec.level = drv.level;
                     // Add to ST
