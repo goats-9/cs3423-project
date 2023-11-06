@@ -85,7 +85,7 @@ namespace tabulate
 
 %%
 %start S;
-// last rule to get reduced
+// last rule to get reduced (for translation purpose)
 S : program ;
 
 // list of program elements
