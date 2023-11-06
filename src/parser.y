@@ -166,9 +166,17 @@ variable_list: ID
                     drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
                 }
              | ID COMMA variable_list
+             {
+                // Create ST record for the first ID in the list
+                tabulate::id_symtrec id_rec;
+                id_rec.level = drv.level;
+                // Add the first ID to ST
+                drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
+                // No explicit action for variable_list as it's handled in the recursive call
+             }
              ;
-parameter_list: /* empty */
-              | variable_list
+parameter_list: /* empty */ { }
+              | variable_list {$$ = $1}
               ;
 function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS function_body ;
 function_body: OPEN_CURLY statement_list return_stmt CLOSE_CURLY ;
