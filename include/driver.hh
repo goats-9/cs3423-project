@@ -45,10 +45,11 @@ namespace tabulate {
 
         // symbol table
         std::stack<std::string> active_func_stack;
-        int level;
-        tabulate::symtab<std::string, tabulate::id_symtrec> symtab_id;
-        tabulate::symtab<std::string, tabulate::func_symtrec> symtab_func;
-        tabulate::symtab<std::string, tabulate::dtype_symtrec> symtab_dtype;
+        int scope_level;
+        int while_level;
+        symtab<std::string, id_symtrec> symtab_id;
+        symtab<std::string, func_symtrec> symtab_func;
+        symtab<std::string, dtype_symtrec> symtab_dtype;
 
         // other variable
         int result;

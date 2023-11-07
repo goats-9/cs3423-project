@@ -13,6 +13,8 @@ namespace tabulate
         trace_parsing = false;
         trace_scanning = false;
         isLexOut = false;
+        scope_level = 0;
+        while_level = 0;
     }
     int driver::parse(const std::string &f)
     {

@@ -14,13 +14,13 @@ target_compile_features(tabulate_compiler_flags INTERFACE cxx_std_17)
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 target_compile_options(tabulate_compiler_flags INTERFACE
-  "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused;-O2>>"
+  "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused;-O2;-g>>"
   "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3;-O2>>"
 )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/include)
 
-set(src_files main.cc driver.cc symtab.cc types.cc)
+set(src_files main.cc driver.cc types.cc)
 
 # add the executable
 add_executable(tabulate ${src_files} ${FLEX_tabulateScanner_OUTPUTS} ${BISON_tabulateParser_OUTPUTS})

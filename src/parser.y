@@ -214,25 +214,25 @@ compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
 // variable list
 ID_list: ID 
-                {
-                    // Create ST record
-                    tabulate::id_symtrec id_rec;
-                    id_rec.level = drv.level;
-                    // Add to ST
-                    drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
-                }
-             | ID COMMA ID_list
-             {
-                // Create ST record for the first ID in the list
-                tabulate::id_symtrec id_rec;
-                id_rec.level = drv.level;
-                // Add the first ID to ST
-                drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
-                // No explicit action for variable_list as it's handled in the recursive call
-             }
-             ;
-parameter_list: /* empty */ { }
-              | ID_list {$$ = $1}
+        {
+            // Create ST record
+            tabulate::id_symtrec id_rec;
+            id_rec.level = drv.scope_level;
+            // Add to ST
+            drv.symtab_id.insert($1, id_rec, drv.symtab_func, drv.active_func_stack);
+        }
+        | ID COMMA ID_list
+        {
+           // Create ST record for the first ID in the list
+           tabulate::id_symtrec id_rec;
+           id_rec.level = drv.scope_level;
+           // Add the first ID to ST
+           drv.symtab_id.insert($1, id_rec, drv.symtab_func, drv.active_func_stack);
+           // No explicit action for variable_list as it's handled in the recursive call
+        }
+        ;
+parameter_list: /* empty */
+              | ID_list
               ;
 
 /* function defination starts */
