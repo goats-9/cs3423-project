@@ -1,8 +1,5 @@
 #pragma once
 
-#include <fstream>
-#include <map>
-#include <stack>
 #include <string>
 #include "parser.tab.hh"
 #include "symtab.hh"
@@ -20,6 +17,9 @@ namespace tabulate {
         // The name of the file being parsed
         std::string file;
 
+        // check file name
+        bool check_extension();
+
         // Run the parser on file F.  Return 0 on success.
         int parse(const std::string &f);
 
@@ -33,17 +33,12 @@ namespace tabulate {
         bool isLexOut;
 
         // Handling the scanner.
-        void scan_begin();
+        // Return 0 on success
+        int scan_begin();
         void scan_end();
 
         // handles tokens here
-        inline void handleToken(yy::parser::symbol_type token, const std::string & text)
-        {
-            if (isLexOut)
-            {
-                std::cout << token.name() << ": " << text << "\n";
-            }
-        }
+        void handleToken(yy::parser::symbol_type token, const std::string & text);
 
         // The token's location used by the scanner.
         yy::location location;

@@ -263,22 +263,3 @@ close_parenthesis ")"
     /* EOF */
 <<EOF>>    return yy::parser::make_YYEOF (loc);
 %%
-
-void tabulate::driver::scan_begin ()
-{
-    yy_flex_debug = trace_scanning;
-    if (file.empty ())
-        yyin = stdin;
-    else if (!(yyin = fopen (file.c_str (), "r")))
-    {
-        std::cerr << "cannot open " << file << ": " << strerror (errno) << '\n';
-        exit (EXIT_FAILURE);
-    }
-}
-
-
-void tabulate::driver::scan_end ()
-{
-    fclose (yyin);
-}
-
