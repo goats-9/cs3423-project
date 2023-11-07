@@ -194,7 +194,8 @@ statement: declaration_stmt
          | return_stmt
          | conditional_stmt
          | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
-         | function_definition
+         /* We will have to use C++ lambdas for this, and idk how the code gen will be, so idk if we should allow nested funcs*/
+         /* | function_definition */
          | BREAK SEMICOLON
          | CONTINUE SEMICOLON
          ;
@@ -214,30 +215,43 @@ compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
 // variable list
 ID_list: ID 
-        {
-            // Create ST record
+         {
+             // Create ST record
+             tabulate::id_symtrec id_rec;
+             id_rec.level = drv.scope_level;
+             // Add to ST
+             drv.symtab_id.insert($1, id_rec, drv.symtab_func, drv.active_func_stack);
+         }
+       | ID COMMA ID_list
+         {
+            // Create ST record for the first ID in the list
             tabulate::id_symtrec id_rec;
             id_rec.level = drv.scope_level;
-            // Add to ST
+            // Add the first ID to ST
             drv.symtab_id.insert($1, id_rec, drv.symtab_func, drv.active_func_stack);
-        }
-        | ID COMMA ID_list
-        {
-           // Create ST record for the first ID in the list
-           tabulate::id_symtrec id_rec;
-           id_rec.level = drv.scope_level;
-           // Add the first ID to ST
-           drv.symtab_id.insert($1, id_rec, drv.symtab_func, drv.active_func_stack);
-           // No explicit action for variable_list as it's handled in the recursive call
-        }
-        ;
+            // No explicit action for variable_list as it's handled in the recursive call
+         }
+       ;
 parameter_list: /* empty */
               | ID_list
               ;
 
 /* function defination starts */
-function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS function_body ;
-function_body: OPEN_CURLY statement_list CLOSE_CURLY ;
+function_definition: function_head OPEN_CURLY statement_list CLOSE_CURLY
+                     {
+                          /* level reduced by 2, since it was increased for parameter_list and function body */
+                          drv.scope_level -= 2;     
+                          /* delete ST entries */
+                          drv.symtab_id.delete_scope();
+                          drv.symtab
+                     }
+                   ;
+function_head: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
+               {
+                    /* insert function into ST */
+                    int res = drv.symtab_func.insert()
+               }
+             ;
 /* function defination ends */
 
 %%
