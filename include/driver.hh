@@ -44,9 +44,8 @@ namespace tabulate {
         yy::location location;
 
         // symbol table
-        std::stack<std::string> active_func_stack;
-        int scope_level;
-        int while_level;
+        func_symtrec active_func_ptr;
+        int scope_level, while_level;
         symtab<std::string, id_symtrec> symtab_id;
         symtab<std::string, func_symtrec> symtab_func;
         symtab<std::string, dtype_symtrec> symtab_dtype;
