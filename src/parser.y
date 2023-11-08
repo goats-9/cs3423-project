@@ -101,6 +101,13 @@ program: /* empty */
 // program element
 program_element: function_definition
               | struct_declaration
+                {
+                    drv.scope_level--;
+                    tabulate::dtype_symtrec struc;
+                    struc.level = drv.scope_level;
+                    int res = drv.symtab_dtype.insert($1, struc, drv.symtab_func, drv.active_func_stack);
+                    if (res == -1) {exit(res);}
+                }
               ;
 
 // array initializer
@@ -172,7 +179,21 @@ function_call: instance OPEN_PARENTHESIS args CLOSE_PARENTHESIS
 /* function call ends */
 
 /* struct defination starts */
-struct_declaration: STRUCT ID OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON ;
+struct_declaration: STRUCT ID OPEN_CURLY struct_member_list CLOSE_CURLY SEMICOLON
+                {
+                    drv.scope_level--;
+                    
+                    tabulate::dtype_symtrec struc;
+                    struc.level = drv.scope_level;
+
+                    int res = drv.symtab_dtype.insert($2, struc, drv.symtab_func, drv.active_func_stack);
+                    if (res == -1) {
+                        std::cerr << "Error: Failed to insert struct into symbol table." << std::endl;
+                        exit(res);
+                    }
+                    $$ = $2;
+                }
+                ;
 struct_member_list: /* empty */
                   | struct_member_list declaration_stmt
                   | struct_member_list function_definition
@@ -180,13 +201,31 @@ struct_member_list: /* empty */
 /* struct defination ends */
 
 // expression
-expression: constant
-          | variable
-          | UNIOP expression
-          | expression BIOP expression
-          | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
-          | function_call
-          ;
+expression
+    : constant
+    | variable
+        {
+            tabulate::id_symtrec &var_record = drv.symtab_id.find($1, drv.scope_level);
+            if (var_record == NULL) {
+                std::cerr << "Error: Undefined variable '" << $1 << "'." << std::endl;
+                exit(EXIT_FAILURE);
+            }
+            $$ = var_record;
+        }
+    | UNIOP expression
+    | expression BIOP expression
+    | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+    | function_call
+        {
+            tabulate::func_symtrec &func_record = drv.symtab_func.find($1.name, drv.scope_level);
+            if (func_record == NULL) {
+                std::cerr << "Error: Undefined function '" << $1.name << "'." << std::endl;
+                exit(EXIT_FAILURE);
+            }
+            $$ = func_record;
+        }
+    ;
+
 
 // expression list
 expression_list: expression
@@ -215,7 +254,7 @@ statement_list: /* empty */ { $$ = false; }
               ; 
 
 // compound statement
-compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
+compound_statement: OPEN_CURLY statement_list CLOSE_CURLY;
 
 // variable list
 ID_list: ID 
@@ -247,10 +286,14 @@ parameter_list: /* empty */ { drv.scope_level++; }
 /* function definition starts */
 function_definition: function_head OPEN_CURLY statement_list CLOSE_CURLY
                      {
-                          /* level reduced by 2, since it was increased for parameter_list and function body */
-                          drv.scope_level -= 2;     
-                          /* delete ST entries */
-                          drv.symtab_id.delete_scope(drv.active_func_stack, drv.scope_level);
+                        if (!$3){
+                            std::cerr << "Error: No return statement '" << $3.name << "'." << std::endl;
+                            exit(EXIT_FAILURE);
+                        }
+                        /* level reduced by 2, since it was increased for parameter_list and function body */
+                        drv.scope_level -= 2;     
+                        /* delete ST entries */
+                        drv.symtab_id.delete_scope(drv.active_func_stack, drv.scope_level);
                      }
                    ;
 function_head: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
@@ -261,7 +304,10 @@ function_head: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
                     frec.level = drv.scope_level - 1;
                     frec.paramlist = $4;
                     int res = drv.symtab_func.insert($2, frec, drv.symtab_func, drv.active_func_stack);
-                    if (res == -1) {exit(res);}
+                    if (res == -1) {
+                        error(yyloc, "Function '" + $2 + "' already exists in the symbol table");
+                        exit(EXIT_FAILURE);
+                    }
                     /* increment scope_level for function body */
                     drv.scope_level++;
                }
