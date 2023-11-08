@@ -1,4 +1,15 @@
-#include "../include/types.hh"
+#include "types.hh"
+
+std::string &yy::operator<<(std::string &s,const std::string &c)
+{
+    s = s + c;
+    return s;
+}
+std::string &yy::operator<<(std::string &s,const char *c)
+{
+    s = s + c;
+    return s;
+}
 
 std::vector<std::string> tabulate::split(std::string s, std::string del)
 {
@@ -33,3 +44,8 @@ tabulate::time::time(std::string str)
     _min = stoi(temp[1]);
     _sec = stoi(temp[2]);
 }
+
+tabulate::constant::constant() : value("") , type("")
+{}
+tabulate::constant::constant(std::string _type,std::string _value): value(_value), type(_type)
+{}

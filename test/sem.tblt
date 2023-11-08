@@ -1,5 +1,21 @@
 fun main() {
     let a = 2;
-    const a = 3;
+    const a = "hello";
+    let arr = [
+        [9]
+    ,
+        [
+            "hello"
+            ,
+            "world"
+        ]
+    ];
+    let a = test();
+    a.mull(); # this is a runtime error becoz to find whether mull is a attribute of a we need to know type of a #
     return 0;
+}
+
+fun test()
+{
+    return ADD(a,b);
 }

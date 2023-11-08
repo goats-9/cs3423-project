@@ -18,7 +18,7 @@ target_compile_options(tabulate_compiler_flags INTERFACE
   "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3;-O2>>"
 )
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/include)
+# include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/include)
 
 set(src_files main.cc driver.cc symtab.cc types.cc)
 
@@ -28,8 +28,9 @@ add_executable(tabulate ${src_files} ${FLEX_tabulateScanner_OUTPUTS} ${BISON_tab
 target_link_libraries(tabulate PUBLIC tabulate_compiler_flags)
 
 # add the binary tree to the search path for include files
-target_include_directories(tabulate 
-                            PUBLIC ${CMAKE_SOURCE_DIR}/include
+target_include_directories(tabulate PUBLIC 
+                            ${CMAKE_SOURCE_DIR}/include
+                            ${CMAKE_CURRENT_BINARY_DIR}
                            )
 
 # Install tabulate in the bin directory

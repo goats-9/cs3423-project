@@ -1,4 +1,4 @@
-#include "../include/symtab.hh"
+#include "symtab.hh"
 
 template <typename K, typename V>
 int tabulate::symtab<K, V>::insert(

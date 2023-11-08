@@ -1,4 +1,4 @@
-#include "../include/driver.hh"
+#include "driver.hh"
 #include <iostream>
 #include <cstring>
 
@@ -13,6 +13,7 @@ namespace tabulate
         trace_parsing = false;
         trace_scanning = false;
         isLexOut = false;
+        isMain = false;
     }
     int driver::parse(const std::string &f)
     {

@@ -49,6 +49,7 @@ namespace tabulate {
         tabulate::symtab<std::string, tabulate::id_symtrec> symtab_id;
         tabulate::symtab<std::string, tabulate::func_symtrec> symtab_func;
         tabulate::symtab<std::string, tabulate::dtype_symtrec> symtab_dtype;
+        bool isMain;
 
         // other variable
         int result;

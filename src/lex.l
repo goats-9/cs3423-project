@@ -205,43 +205,38 @@ close_parenthesis ")"
 }
     /* constant */
 {INT} {
-    auto token = yy::parser::make_INT(stoi(yytext), loc);
+    auto token = yy::parser::make_INT(tabulate::constant("int",yytext), loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {STRING} {
-    auto token = yy::parser::make_STRING(yytext, loc);
+    auto token = yy::parser::make_STRING(tabulate::constant("string",yytext), loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {BOOL} {
-    bool val = false;
-    if (string(yytext) == "true")
-    { 
-        val = true;
-    }
-    auto token = yy::parser::make_BOOL(val, loc);
+    auto token = yy::parser::make_BOOL(tabulate::constant("bool",yytext), loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {DOUBLE} {
-    auto token = yy::parser::make_DOUBLE(stod(yytext), loc);
+    auto token = yy::parser::make_DOUBLE(tabulate::constant("double",yytext), loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {TIME} {
-    auto token = yy::parser::make_TIME(tabulate::time(yytext), loc);
+    auto token = yy::parser::make_TIME(tabulate::constant("time",yytext), loc);
     drv.handleToken(token,yytext);
     return token;
 }    
 {DATE} {
-    auto token = yy::parser::make_DATE(tabulate::date(yytext), loc);
+    auto token = yy::parser::make_DATE(tabulate::constant("date",yytext), loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {RANGE} {
     // TODO: make a class range in tabulate/types.hh
-    auto token = yy::parser::make_RANGE(yytext, loc);
+    auto token = yy::parser::make_RANGE(tabulate::constant("range",yytext), loc);
     drv.handleToken(token,yytext);
     return token;
 }

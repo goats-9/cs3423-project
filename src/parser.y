@@ -16,7 +16,7 @@ namespace tabulate
 {
     class driver;
 }
-#include "../include/types.hh"
+#include "types.hh"
 }
 
 // The parsing context
@@ -29,7 +29,7 @@ namespace tabulate
 %define parse.lac full
 
 %code {
-#include "../include/tabulate.hh"
+#include "tabulate.hh"
 }
 
 // Reserved keywords
@@ -75,22 +75,59 @@ namespace tabulate
 
 // Constants
 %token
-    <int> INT "integer"
-    <std::string> STRING "string"
-    <bool> BOOL "boolean"
-    <double> DOUBLE "double"
-    <tabulate::date> DATE "date"
-    <tabulate::time> TIME "time"
-    <std::string> RANGE "range"
+    <tabulate::constant> INT "integer"
+    <tabulate::constant> STRING "string"
+    <tabulate::constant> BOOL "boolean"
+    <tabulate::constant> DOUBLE "double"
+    <tabulate::constant> DATE "date"
+    <tabulate::constant> TIME "time"
+    <tabulate::constant> RANGE "range"
+
+%nterm 
+    <tabulate::constant> 
+    constant
+    array_initializer
+    <std::string> 
+    expression
+    accessor
+    accessors
+    variable
+    instance
+    declare
+    decl_item
+    decl_list
+    declaration_stmt
+    expression_list
+    statement
+    statement_list
+    function_definition
+    function_decl
+    ID_list
+    parameter_list
+    program_element
+    program
+    function_call
+    args
+    return_stmt
+    assignment_stmt
+    compound_statement
 
 %%
 %start S;
 // last rule to get reduced (for translation purpose)
-S : program ;
+S : program {std::cout << $1 << "\n";};
 
 // list of program elements
-program: /* empty */
-        | program program_element
+program: /* empty */ 
+        {
+            // translation
+            $$ << "";
+        }
+        | program program_element 
+        {
+            // translation
+            $$ << $1 << "\n" << $2;
+        }
         ; 
 
 // program element
@@ -99,10 +136,15 @@ program_element: function_definition
               ;
 
 // array initializer
-array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC ;
+array_initializer: OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC 
+                 { 
+                    // translation
+                    $$.value << "{" << $2 << "}"; 
+                    $$.type = "array";
+                 };
 
 // all constants
-constant: INT
+constant: INT 
         | STRING
         | BOOL
         | DOUBLE
@@ -113,22 +155,39 @@ constant: INT
         ;
 
 // declaring tokens
-declare: LET
-       | CONST
+declare: LET {$$ << "any";}
+       | CONST {$$ << "const any";}
        ;
 
 /* declaration statement starts */
-declaration_stmt: declare decl_list SEMICOLON ;
+declaration_stmt: declare decl_list SEMICOLON 
+                {
+                    // translation
+                    $$ << $1 << " " << $2 << ";";
+                };
 decl_item: ID
-         | ID EQUAL expression
+         | ID EQUAL expression 
+         {
+            // translation
+            $$ << $1 << " = " << $3;
+         }
+         ;
 decl_list: decl_item
-         | decl_list COMMA decl_item
+         | decl_list COMMA decl_item 
+         {
+            // translation
+            $$ << $1 << "," << $3;
+         }
+         ;
 /* declaration statement ends */
 
 // assignment statement
-assignment_stmt: variable EQUAL expression SEMICOLON
-               | variable EQUAL expression COMMA assignment_stmt
-               ;
+assignment_stmt: 
+    variable EQUAL expression SEMICOLON
+    {
+        // translation
+        $$ << $1 << " = " << $3 << ";";
+    } ;
 
 /* conditional statement starts */
 if_stmt: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement ;
@@ -142,27 +201,48 @@ conditional_stmt: if_stmt list_of_elif
 /* conditional statement ends */
 
 // instances
-instance: expression DOT ID ;
+instance: expression DOT ID 
+        {
+            // translation
+            $$ << $1 << "." << $3;
+        };
 
 /* accessing arrays and table expressions starts */
 accessors : accessor
-         | accessors accessor
+         | accessors accessor 
+         {
+            // translation
+            $$ << $1 << $2;
+         }
          ;
-accessor: OPEN_SQUARE_BRAC expression CLOSE_SQUARE_BRAC ;
+accessor: OPEN_SQUARE_BRAC expression CLOSE_SQUARE_BRAC { $$ << "[" << $2 << "]"; };
 /* accessing arrays and table expressions ends */
 
 // variables
-variable: ID
-        | ID accessors
+variable: ID 
+        | ID accessors {$$ << $1 << $2;}
         | instance
         ;
 
 /* function call starts */
-args : 
+args : /* empty */ 
+     {
+        // translation
+        $$ << "";
+     }
      | expression_list
-function_call: instance OPEN_PARENTHESIS args CLOSE_PARENTHESIS  
-             | ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS 
-             ;
+function_call: 
+    instance OPEN_PARENTHESIS args CLOSE_PARENTHESIS 
+    {
+        // translation
+        $$ << $1 << "(" << $3 << ")"; 
+    } | 
+    ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS 
+    { 
+        // translation
+        $$ << $1 << "(" << $3 << ")"; 
+    }
+    ;
 /* function call ends */
 
 /* struct defination starts */
@@ -174,17 +254,29 @@ struct_member_list: /* empty */
 /* struct defination ends */
 
 // expression
-expression: constant
-          | variable
+expression: constant 
+            {
+                // translation
+                $$ << "any(" << "new " << $1.type << "(" << $1.value << ")" << "," << "\"" << $1.type << "\"" << ")";
+            }
+          | variable 
           | UNIOP expression
           | expression BIOP expression
           | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+          {
+                // translation
+                $$ << "(" << $2 << ")";
+          }
           | function_call
           ;
 
 // expression list
 expression_list: expression
-               | expression COMMA expression_list
+               | expression COMMA expression_list 
+               {
+                    // translation
+                    $$ << $1 << "," << $3;
+               }
                ;
 
 // statement
@@ -197,47 +289,130 @@ statement: declaration_stmt
          | function_definition
          | BREAK SEMICOLON
          | CONTINUE SEMICOLON
+         | expression SEMICOLON
          ;
 
 // return statement
-return_stmt: RETURN expression SEMICOLON
-           | RETURN SEMICOLON
-           ;
+return_stmt: 
+    RETURN expression SEMICOLON 
+    {
+        // translation
+        if (!drv.isMain)
+        {
+            $$ << "return " << $2 << ";"; 
+
+        }
+    } 
+    | 
+    RETURN SEMICOLON 
+    {
+        // translation
+        if (!drv.isMain)
+        {
+            $$ << "return any();";
+        }
+    }
+    ;
 
 // list of statement list
-statement_list: /* empty */
-              | statement_list statement
+statement_list: /* empty */ 
+              {
+                // translation
+                $$ = "";
+              }
+              | statement_list statement 
+              {
+                // translation
+                $$ << $1 << "\n" << $2 ;
+              }
               ; 
 
 // compound statement
-compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
+compound_statement: 
+    OPEN_CURLY statement_list CLOSE_CURLY 
+    {
+        // translation
+        $$ << "{" << $2 << "}";
+    };
 
 // variable list
 ID_list: ID 
-                {
-                    // Create ST record
-                    tabulate::id_symtrec id_rec;
-                    id_rec.level = drv.level;
-                    // Add to ST
-                    drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
-                }
-             | ID COMMA ID_list
-             {
-                // Create ST record for the first ID in the list
-                tabulate::id_symtrec id_rec;
-                id_rec.level = drv.level;
-                // Add the first ID to ST
-                drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
-                // No explicit action for variable_list as it's handled in the recursive call
-             }
-             ;
-parameter_list: /* empty */ { }
-              | ID_list {$$ = $1}
+        {
+            Create ST record
+            tabulate::id_symtrec id_rec;
+            id_rec.level = drv.level;
+            // Add to ST
+            drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
+            // translation
+            $$ << "any " <<  $1 ;
+        }
+        | ID COMMA ID_list
+        {
+            Create ST record for the first ID in the list
+            tabulate::id_symtrec id_rec;
+            id_rec.level = drv.level;
+            // Add the first ID to ST
+            drv.symtab_id.insert($1, id_rec, drv.active_func_stack);
+            // No explicit action for variable_list as it's handled in the recursive call
+            // translation
+            $$ << "any " <<  $1 << "," << $3 ;
+        }
+        ;
+parameter_list: /* empty */ 
+              {
+                // translation 
+                $$ << ""; 
+              }
+              | ID_list 
               ;
 
 /* function defination starts */
-function_definition: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS function_body ;
-function_body: OPEN_CURLY statement_list CLOSE_CURLY ;
+function_definition: 
+    function_decl OPEN_CURLY statement_list CLOSE_CURLY 
+    {
+        // translation of function body
+        if (drv.isMain)
+        {
+            $$ 
+                << $1 << "{\n"
+                << "try{"
+                << $3
+                << "}\n"
+                << "catch{\n"
+                << "cerr << e.what() << \"\\n\";\n"
+                << "return 1;\n"
+                << "}\n"
+                << "return 0;\n" 
+                << "}"
+            ;
+        }
+        else 
+        {
+            $$ 
+                << $1
+                << "{" 
+                << $3
+                << "\n}"
+            ;
+        }
+    };
+function_decl:
+    FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
+    {
+        // translation of function declaration
+        if($2 == "main") 
+        {
+            drv.isMain = true;
+            $$ 
+                << "int " << $2 << "(" << $4 << ")";
+        }
+        else
+        {
+            drv.isMain = false;
+            $$ 
+                << "any " << $2 << "(" << $4 << ")" ;
+        }
+    }
 /* function defination ends */
 
 %%
