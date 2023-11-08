@@ -178,8 +178,9 @@ assignment_stmt: variable EQUAL expression SEMICOLON
 /* conditional statement starts */
 if_stmt: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement ;
 elif_stmt: ELSE IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
-list_of_elif: 
+list_of_elif: /* empty */
             | list_of_elif elif_stmt
+            ;
 else_stmt: ELSE compound_statement ;
 conditional_stmt: if_stmt list_of_elif
                 | if_stmt list_of_elif else_stmt
@@ -251,31 +252,29 @@ struct_member_list: /* empty */
 /* struct defination ends */
 
 // expression
-expression
-    : constant
-    | variable
-        {
-            tabulate::id_symtrec &var_record = drv.symtab_id.find($1, drv.scope_level);
-            if (var_record == NULL) {
-                std::cerr << "Error: Undefined variable '" << $1 << "'." << std::endl;
-                exit(EXIT_FAILURE);
-            }
-            $$ = var_record;
-        }
-    | UNIOP expression
-    | expression BIOP expression
-    | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
-    | function_call
-        {
-            tabulate::func_symtrec &func_record = drv.symtab_func.find($1.name, drv.scope_level);
-            if (func_record == NULL) {
-                std::cerr << "Error: Undefined function '" << $1.name << "'." << std::endl;
-                exit(EXIT_FAILURE);
-            }
-            $$ = func_record;
-        }
-    ;
-
+expression : constant
+            | variable
+                {
+                    tabulate::id_symtrec &var_record = drv.symtab_id.find($1, drv.scope_level);
+                    if (var_record == NULL) {
+                        std::cerr << "Error: Undefined variable '" << $1 << "'." << std::endl;
+                        exit(EXIT_FAILURE);
+                    }
+                    $$ = var_record;
+                }
+            | UNIOP expression
+            | expression BIOP expression
+            | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+            | function_call
+                {
+                    tabulate::func_symtrec &func_record = drv.symtab_func.find($1.name, drv.scope_level);
+                    if (func_record == NULL) {
+                        std::cerr << "Error: Undefined function '" << $1.name << "'." << std::endl;
+                        exit(EXIT_FAILURE);
+                    }
+                    $$ = func_record;
+                }
+            ;
 
 // expression list
 expression_list: expression
@@ -347,7 +346,7 @@ function_definition: function_head OPEN_CURLY statement_list CLOSE_CURLY
                      }
                    ;
 function_head: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
-               {
+                {
                     /* insert function into ST */
                     tabulate::func_symtrec frec;
                     /* scope_level was incremented in parameter_list */
@@ -360,8 +359,8 @@ function_head: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
                     }
                     /* increment scope_level for function body */
                     drv.scope_level++;
-               }
-             ;
+                }
+                ;
 /* function definition ends */
 
 %%
