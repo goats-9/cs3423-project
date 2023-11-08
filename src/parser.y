@@ -163,8 +163,9 @@ variable: ID
         ;
 
 /* function call starts */
-args : 
+args : /* empty */
      | expression_list
+     ;
 function_call: instance OPEN_PARENTHESIS args CLOSE_PARENTHESIS  
              | ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS 
              ;
