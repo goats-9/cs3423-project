@@ -47,6 +47,7 @@ namespace tabulate
     RETURNS "returns_token"
     BREAK "break_token"
     CONTINUE "continue_token"
+    NEW "new_token"
 
 // Punctuators
 %token  
@@ -88,7 +89,7 @@ namespace tabulate
 %nterm 
     <std::vector<std::string>> decl_list parameter_list ID_list
     <bool> statement statement_list
-    <int> declare
+    <int> declare expression_list args
     <std::string> decl_item variable
 
 %%
@@ -250,18 +251,31 @@ variable:
 
 /* function call starts */
 args:
-    /* empty */
-    | expression_list
+    /* empty */ {$$ = 0;}
+    | expression_list {$$ = $1;}
     ;
 function_call: 
     instance OPEN_PARENTHESIS args CLOSE_PARENTHESIS  
-    | ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS 
+    | ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS
+    {
+        auto frec = drv.symtab_func.find($1, drv.scope_level);
+        if (!frec) {
+            error(yyloc, "error: couldn't find function " + $1);
+        }
+        if ((int)frec.paramlist.size() != $2) {
+            error(yyloc, "error: incorrect number of arguments for function " + $1);
+        }
+    }
     ;
 /* function call ends */
 
 /* struct definition starts */
 struct_declaration: 
-    STRUCT ID OPEN_CURLY {drv.scope_level++;} struct_member_list CLOSE_CURLY SEMICOLON
+    STRUCT ID OPEN_CURLY 
+    {
+        drv.scope_level++;
+    }
+    struct_member_list CLOSE_CURLY SEMICOLON
     {
         drv.scope_level--;
         
@@ -276,7 +290,7 @@ struct_declaration:
         $$ = $2;
     }
     ;
-struct_member_list: 
+struct_member_list:
     /* empty */
     | struct_member_list declaration_stmt
     | struct_member_list function_definition
@@ -288,7 +302,7 @@ expression:
     constant
     | variable
     {
-        tabulate::id_symtrec &var_record = drv.symtab_id.find($1, drv.scope_level);
+        tabulate::id_symtrec var_record = drv.symtab_id.find($1, drv.scope_level);
         if (var_record == NULL) {
             std::cerr << "Error: Undefined variable '" << $1 << "'." << std::endl;
             exit(EXIT_FAILURE);
@@ -300,19 +314,19 @@ expression:
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
     | function_call
     {
-        tabulate::func_symtrec &func_record = drv.symtab_func.find($1.name, drv.scope_level);
+        tabulate::func_symtrec func_record = drv.symtab_func.find($1.name, drv.scope_level);
         if (func_record == NULL) {
             std::cerr << "Error: Undefined function '" << $1.name << "'." << std::endl;
             exit(EXIT_FAILURE);
         }
-        $$ = func_record;
     }
+    | NEW ID OPEN_PARENTHESIS CLOSE_PARENTHESIS
     ;
 
 // expression list
 expression_list: 
-    expression
-    | expression COMMA expression_list
+    expression { $$ = 1; }
+    | expression COMMA expression_list {$$ = 1 + $3; }
     ;
 
 // statement

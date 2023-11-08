@@ -60,6 +60,7 @@ namespace tabulate {
 
     struct dtype_symtrec {
         int level;
+        std::vector<int> constr_args;
     };
 
     /**
