@@ -170,7 +170,7 @@ variable:
         auto record = id_symtab.find($1, current_level);
         if (record == NULL) {
             error(yyloc, "Error: Identifier '" << $1 << "' not found.");
-            YYERROR;
+            exit(EXIT_FAILURE);
         }
         $$ = $1;
     }
@@ -179,7 +179,7 @@ variable:
         auto record = id_symtab.find($1, current_level);
         if (record == NULL) {
             error(yyloc, "Error: Identifier '" << $1 << "' not found.");
-            YYERROR;
+            exit(EXIT_FAILURE);
         }
         $$ = $1;
     }
@@ -225,7 +225,7 @@ expression
             tabulate::id_symtrec &var_record = drv.symtab_id.find($1, drv.scope_level);
             if (var_record == NULL) {
                 std::cerr << "Error: Undefined variable '" << $1 << "'." << std::endl;
-                YYERROR;
+                exit(EXIT_FAILURE);
             }
             $$ = var_record;
         }
@@ -237,7 +237,7 @@ expression
             tabulate::func_symtrec &func_record = drv.symtab_func.find($1.name, drv.scope_level);
             if (func_record == NULL) {
                 std::cerr << "Error: Undefined function '" << $1.name << "'." << std::endl;
-                YYERROR;
+                exit(EXIT_FAILURE);
             }
             $$ = func_record;
         }
@@ -305,7 +305,7 @@ function_definition: function_head OPEN_CURLY statement_list CLOSE_CURLY
                      {
                         if (!$3){
                             std::cerr << "Error: No return statement '" << $3.name << "'." << std::endl;
-                            YYERROR;
+                            exit(EXIT_FAILURE);
                         }
                         /* level reduced by 2, since it was increased for parameter_list and function body */
                         drv.scope_level -= 2;     
@@ -323,7 +323,7 @@ function_head: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
                     int res = drv.symtab_func.insert($2, frec, drv.symtab_func, drv.active_func_stack);
                     if (res == -1) {
                         error(yyloc, "Function '" + $2 + "' already exists in the symbol table");
-                        YYERROR;
+                        exit(EXIT_FAILURE);
                     }
                     /* increment scope_level for function body */
                     drv.scope_level++;
