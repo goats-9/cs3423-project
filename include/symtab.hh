@@ -82,7 +82,7 @@ namespace tabulate {
                     int func_level = active_func_rec.level;
                     std::vector<std::string> active_func_params = active_func_rec.paramlist;
                     for (auto param : active_func_params) {
-                        if (func_level + 1 == rec.level && param.name == name) return -1;
+                        if (func_level + 1 == rec.level && param == name) return -1;
                     }
                 }
                 tabulate_symtab[name].push(rec);
@@ -91,9 +91,11 @@ namespace tabulate {
         }
         
         V find(K &name, int level) {
-            if (tabulate_symtab.find(name) == tabulate_symtab.end()) return NULL;
+            V err;
+            V.level = -1;
+            if (tabulate_symtab.find(name) == tabulate_symtab.end()) return err;
             else {
-                if (tabulate_symtab[name].top().level > level) return NULL;
+                if (tabulate_symtab[name].top().level > level) return err;
                 return tabulate_symtab[name].top();
             }
         }

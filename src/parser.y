@@ -16,6 +16,7 @@ namespace tabulate
 {
     class driver;
     struct param_symtrec;
+    struct id_symtrec;
 }
 #include "../include/types.hh"
 }
@@ -88,9 +89,10 @@ namespace tabulate
 /* Nonterminals */
 %nterm 
     <std::vector<std::string>> decl_list parameter_list ID_list
-    <bool> statement statement_list
+    <bool> statement statement_list compound_statement
     <int> declare expression_list args
     <std::string> decl_item variable
+    <tabulate::id_symtrec> expression
 
 %%
 %start S;
@@ -142,7 +144,7 @@ declaration_stmt:
         */
         for (auto var : $2) {
             tabulate::id_symtrec idrec;
-            idrec.level = drv.level;
+            idrec.level = drv.scope_level;
             idrec.modifier = $1;
             drv.symtab_id.insert(var, idrec, drv.active_func_ptr);
         }
@@ -175,8 +177,7 @@ assignment_stmt:
         // Check modifier of variable
         auto idrec = drv.symtab_id.find($1, drv.scope_level);
         if (idrec.modifier == TABULATE_CONST) {
-            error(yyloc, "Cannot assign variable " + $1 + " marked as constant.");
-            exit(EXIT_FAILURE);
+            throw yy::parser::syntax_error(loc, "Cannot assign variable " + $1 + " marked as constant.");
         }
     }
     | variable EQUAL expression COMMA assignment_stmt
@@ -184,8 +185,7 @@ assignment_stmt:
         // Check modifier of variable
         auto idrec = drv.symtab_id.find($1, drv.scope_level);
         if (idrec.modifier == TABULATE_CONST) {
-            error(yyloc, "Cannot assign variable " + $1 + " marked as constant.");
-            exit(EXIT_FAILURE);
+            throw yy::parser::syntax_error(loc, "Cannot assign variable " + $1 + " marked as constant.");
         }
     }
     ;
@@ -231,8 +231,7 @@ variable:
         // Check if the ID exists in the symbol table
         auto record = id_symtab.find($1, current_level);
         if (record == NULL) {
-            error(yyloc, "Error: Identifier '" << $1 << "' not found.");
-            exit(EXIT_FAILURE);
+            throw yy::parser::syntax_error(loc, "error: identifier " + $1 + " not found."); 
         }
         $$ = $1;
     }
@@ -241,8 +240,7 @@ variable:
         // Check if the ID exists in the symbol table
         auto record = id_symtab.find($1, current_level);
         if (record == NULL) {
-            error(yyloc, "Error: Identifier '" + $1 + "' not found.");
-            exit(EXIT_FAILURE);
+            throw yy::parser::syntax_error(loc, "error: identifier " + $1 + " not found."); 
         }
         $$ = $1;
     }
@@ -260,10 +258,10 @@ function_call:
     {
         auto frec = drv.symtab_func.find($1, drv.scope_level);
         if (!frec) {
-            error(yyloc, "error: couldn't find function " + $1);
+            throw yy::parser::syntax_error(loc, "error: couldn't find function " + $1);
         }
-        if ((int)frec.paramlist.size() != $2) {
-            error(yyloc, "error: incorrect number of arguments for function " + $1);
+        if ((int)frec.paramlist.size() != $3) {
+            throw yy::parser::syntax_error(loc, "error: incorrect number of arguments for function " + $1);
         }
     }
     ;
@@ -287,7 +285,6 @@ struct_declaration:
             std::cerr << "Error: Failed to insert struct into symbol table." << std::endl;
             exit(res);
         }
-        $$ = $2;
     }
     ;
 struct_member_list:
@@ -313,13 +310,6 @@ expression:
     | expression BIOP expression
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
     | function_call
-    {
-        tabulate::func_symtrec func_record = drv.symtab_func.find($1.name, drv.scope_level);
-        if (func_record == NULL) {
-            std::cerr << "Error: Undefined function '" << $1.name << "'." << std::endl;
-            exit(EXIT_FAILURE);
-        }
-    }
     | NEW ID OPEN_PARENTHESIS CLOSE_PARENTHESIS
     ;
 
@@ -361,6 +351,7 @@ compound_statement:
     } 
     statement_list CLOSE_CURLY 
     {
+        $$ = $3;
         drv.scope_level--;
     }
     ;
@@ -399,19 +390,20 @@ parameter_list:
 function_definition: 
     function_head compound_statement
     {
-       if (!$3) {
-           std::cerr << "Error: No return statement '" << $3.name << "'." << std::endl;
-           exit(EXIT_FAILURE);
-       }
-       /* level reduced by 2, since it was increased for parameter_list and function body */
-       drv.scope_level -= 2;     
-       /* delete ST entries */
-       drv.symtab_id.delete_scope(drv.active_func_stack, drv.scope_level);
+        if (!$2) {
+            throw yy::parser::syntax_error(loc, "error: no return statement in function.");
+            exit(EXIT_FAILURE);
+        }
+        /* level reduced by 2, since it was increased for parameter_list and function body */
+        drv.scope_level -= 2;     
+        /* delete ST entries */
+        drv.symtab_id.delete_scope(drv.active_func_stack, drv.scope_level);
     }
     ;
 function_head: 
     FUN ID OPEN_PARENTHESIS 
     {
+        /* Mid-rule action */
         drv.scope_level++;
     } 
     parameter_list CLOSE_PARENTHESIS
@@ -420,10 +412,10 @@ function_head:
         tabulate::func_symtrec frec;
         /* scope_level was incremented in parameter_list */
         frec.level = drv.scope_level - 1;
-        frec.paramlist = $4;
+        frec.paramlist = $5;
         int res = drv.symtab_func.insert($2, frec, drv.symtab_func, drv.active_func_stack);
         if (res == -1) {
-            error(yyloc, "Function '" + $2 + "' already exists in the symbol table");
+            throw yy::parser::syntax_error(loc, "Function '" + $2 + "' already exists in the symbol table");
             exit(EXIT_FAILURE);
         }
         /* increment scope_level for function body */
