@@ -87,6 +87,7 @@ namespace tabulate
 /* Nonterminals */
 %nterm <std::vector<std::string>> parameter_list ID_list
 %nterm <bool> statement statement_list
+%nterm <int> declare
 
 %%
 %start S;
@@ -125,12 +126,16 @@ constant: INT
         ;
 
 // declaring tokens
-declare: LET
-       | CONST
+declare: LET {$$ = TABULATE_LET;}
+       | CONST {$$ = TABULATE_CONST;}
        ;
 
 /* declaration statement starts */
-declaration_stmt: declare decl_list SEMICOLON ;
+declaration_stmt: declare decl_list SEMICOLON
+                    {
+                        $2 = $1;
+                    }
+                ;
 decl_item: ID
             {
                 tabulate::id_symtrec new_record;
@@ -152,8 +157,16 @@ decl_item: ID
                 }
             }
          ;
+
 decl_list: decl_item
+            {
+                $$.push_back($1);
+            }
          | decl_list COMMA decl_item
+            {
+                $$ = $3;
+                $$.push_back($1);
+            }
          ;
 /* declaration statement ends */
 
