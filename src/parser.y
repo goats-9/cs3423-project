@@ -132,9 +132,29 @@ declare: LET
 /* declaration statement starts */
 declaration_stmt: declare decl_list SEMICOLON ;
 decl_item: ID
+            {
+                tabulate::id_symtrec new_record;
+                new_record.level = drv.scope_level;
+                int res = drv.symtab_func.insert($1, new_record, drv.symtab_func, drv.active_func_stack);
+                if (res == -1) {
+                    error(yyloc, "Error: Variable '" + $1 + "' is already declared.");
+                    exit(EXIT_FAILURE);
+                }
+            }
          | ID EQUAL expression
+            {
+                tabulate::id_symtrec new_record;
+                new_record.level = drv.scope_level;
+                int res = drv.symtab_func.insert($1, new_record, drv.symtab_func, drv.active_func_stack);
+                if (res == -1) {
+                    error(yyloc, "Error: Variable '" + $1 + "' is already declared.");
+                    exit(EXIT_FAILURE);
+                }
+            }
+         ;
 decl_list: decl_item
          | decl_list COMMA decl_item
+         ;
 /* declaration statement ends */
 
 // assignment statement
