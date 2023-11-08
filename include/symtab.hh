@@ -60,7 +60,7 @@ namespace tabulate {
     };
 
     struct func_symtrec {
-        int rettype, level;
+        int level;
         std::vector<param_symtrec> paramlist;
     };
 

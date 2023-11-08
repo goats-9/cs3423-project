@@ -15,6 +15,7 @@
 namespace tabulate
 {
     class driver;
+    struct param_symtrec;
 }
 #include "../include/types.hh"
 }
@@ -82,6 +83,10 @@ namespace tabulate
     <tabulate::date> DATE "date"
     <tabulate::time> TIME "time"
     <std::string> RANGE "range"
+
+/* Nonterminals */
+%nterm <std::vector<std::string>> parameter_list ID_list
+%nterm <bool> statement statement_list
 
 %%
 %start S;
@@ -188,16 +193,16 @@ expression_list: expression
                ;
 
 // statement
-statement: declaration_stmt
-         | assignment_stmt
-         | compound_statement
-         | return_stmt
-         | conditional_stmt
-         | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
+statement: declaration_stmt { $$ = false; }
+         | assignment_stmt { $$ = false; }
+         | compound_statement { $$ = false; }
+         | return_stmt {$$ = true;}
+         | conditional_stmt { $$ = false; }
+         | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement { $$ = false; }
          /* We will have to use C++ lambdas for this, and idk how the code gen will be, so idk if we should allow nested funcs*/
          /* | function_definition */
-         | BREAK SEMICOLON
-         | CONTINUE SEMICOLON
+         | BREAK SEMICOLON { $$ = false; }
+         | CONTINUE SEMICOLON { $$ = false; }
          ;
 
 // return statement
@@ -206,8 +211,8 @@ return_stmt: RETURN expression SEMICOLON
            ;
 
 // list of statement list
-statement_list: /* empty */
-              | statement_list statement
+statement_list: /* empty */ { $$ = false; }
+              | statement_list statement { $$ = $1 || $2; }
               ; 
 
 // compound statement
@@ -215,44 +220,54 @@ compound_statement: OPEN_CURLY statement_list CLOSE_CURLY ;
 
 // variable list
 ID_list: ID 
-         {
-             // Create ST record
-             tabulate::id_symtrec id_rec;
-             id_rec.level = drv.scope_level;
-             // Add to ST
-             drv.symtab_id.insert($1, id_rec, drv.symtab_func, drv.active_func_stack);
-         }
-       | ID COMMA ID_list
-         {
-            // Create ST record for the first ID in the list
-            tabulate::id_symtrec id_rec;
-            id_rec.level = drv.scope_level;
-            // Add the first ID to ST
-            drv.symtab_id.insert($1, id_rec, drv.symtab_func, drv.active_func_stack);
-            // No explicit action for variable_list as it's handled in the recursive call
-         }
-       ;
-parameter_list: /* empty */
-              | ID_list
-              ;
+        {
+            /* Accumulate IDs */
+            $$.push_back($1);
+        }
+        | ID COMMA ID_list
+        {
+            /* Accumulate IDs */
+            $$ = $3;
+            $$.push_back($1);
+        }
+        ;
+parameter_list: /* empty */ { drv.scope_level++; }
+            | ID_list 
+            { 
+                drv.scope_level++;
+                for (auto u : $1) {
+                    // Create ID record to insert into ST
+                    tabulate::id_symtrec rec;
+                    rec.level = 
+                    // Insert into ST
+                    drv.symtab_id.insert
+                } 
+            }
+            ;
 
-/* function defination starts */
+/* function definition starts */
 function_definition: function_head OPEN_CURLY statement_list CLOSE_CURLY
                      {
                           /* level reduced by 2, since it was increased for parameter_list and function body */
                           drv.scope_level -= 2;     
                           /* delete ST entries */
-                          drv.symtab_id.delete_scope();
-                          drv.symtab
+                          drv.symtab_id.delete_scope(drv.active_func_stack, drv.scope_level);
                      }
                    ;
 function_head: FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
                {
                     /* insert function into ST */
-                    int res = drv.symtab_func.insert()
+                    tabulate::func_symtrec frec;
+                    /* scope_level was incremented in parameter_list */
+                    frec.level = drv.scope_level - 1;
+                    frec.paramlist = $4;
+                    int res = drv.symtab_func.insert($2, frec, drv.symtab_func, drv.active_func_stack);
+                    if (res == -1) {exit(res);}
+                    /* increment scope_level for function body */
+                    drv.scope_level++;
                }
              ;
-/* function defination ends */
+/* function definition ends */
 
 %%
 void yy::parser::error (const location_type& l, const std::string& m)
