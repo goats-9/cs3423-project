@@ -199,8 +199,6 @@ statement: declaration_stmt { $$ = false; }
          | return_stmt {$$ = true;}
          | conditional_stmt { $$ = false; }
          | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement { $$ = false; }
-         /* We will have to use C++ lambdas for this, and idk how the code gen will be, so idk if we should allow nested funcs*/
-         /* | function_definition */
          | BREAK SEMICOLON { $$ = false; }
          | CONTINUE SEMICOLON { $$ = false; }
          ;
