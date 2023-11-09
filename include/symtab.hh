@@ -53,19 +53,14 @@ namespace tabulate {
         int modifier;
     };
 
-    struct param_symtrec {
-        std::string name;
-        /// @brief Scope of declaration.
-        int level;
-    };
-
     struct func_symtrec {
         int level;
-        std::vector<param_symtrec> paramlist;
+        std::vector<std::string> paramlist;
     };
 
     struct dtype_symtrec {
         int level;
+        std::vector<int> constr_args;
     };
 
     /**
@@ -80,17 +75,14 @@ namespace tabulate {
         int insert(
             K &name, 
             V &rec,
-            symtab<std::string, func_symtrec> &func_symtab,
-            std::stack<std::string> &active_func_stack
+            func_symtrec &active_func_rec
         ) {
             if (tabulate_symtab.find(name) == tabulate_symtab.end()) {
-                if (std::is_same<V, func_symtrec>::value) {
-                    active_func_stack.push(name);
-                } else {
-                    std::string active_func_name = active_func_stack.top();
-                    std::vector<param_symtrec> active_func_params = func_symtab.tabulate_symtab[active_func_name].top().paramlist;
-                    for (param_symtrec param : active_func_params) {
-                        if (param.level + 1 == rec.level && param.name == name) return -1;
+                if (!std::is_same<V, func_symtrec>::value) {
+                    int func_level = active_func_rec.level;
+                    std::vector<std::string> active_func_params = active_func_rec.paramlist;
+                    for (auto param : active_func_params) {
+                        if (func_level + 1 == rec.level && param == name) return -1;
                     }
                 }
                 tabulate_symtab[name].push(rec);
@@ -99,19 +91,18 @@ namespace tabulate {
         }
         
         V find(K &name, int level) {
-            if (tabulate_symtab.find(name) == tabulate_symtab.end()) return NULL;
+            V err;
+            err.level = -1;
+            if (tabulate_symtab.find(name) == tabulate_symtab.end()) return err;
             else {
-                if (tabulate_symtab[name].top().level > level) return NULL;
+                if (tabulate_symtab[name].top().level > level) return err;
                 return tabulate_symtab[name].top();
             }
         }
         
-        void delete_scope(std::stack<std::string> &active_func_stack, int level) {
+        void delete_scope(int level) {
             for (auto &[name, stk] : tabulate_symtab) {
-                while (!stk.empty() && stk.top().level >= level) {
-                    if (active_func_stack.top() == name) active_func_stack.pop();
-                    stk.pop();
-                }
+                while (!stk.empty() && stk.top().level > level) stk.pop();
             }
         }
     };
