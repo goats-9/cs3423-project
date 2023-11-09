@@ -100,9 +100,12 @@ namespace tabulate {
         }
         
         void delete_scope(int level) {
+            std::vector<K> delete_names;
             for (auto &[name, stk] : tabulate_symtab) {
                 while (!stk.empty() && stk.top().level > level) stk.pop();
+                if (stk.empty()) delete_names.push_back(name);
             }
+            for (auto name : delete_names) tabulate_symtab.erase(name);
         }
     };
 }

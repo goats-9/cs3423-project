@@ -10,7 +10,7 @@ fun findMax(rng) {
     let currIdx = 0;
 
     while(currIdx < rangeLength) {
-        if(GET(range, currIdx) > maxVal) {
+        if(GET(rng, currIdx) > maxVal) {
             maxVal = GET(rng, currIdx);
         }
         currIdx = ADD(currIdx, 1);
@@ -28,18 +28,14 @@ struct myclass
 };
 
 fun main(){
-    # Assignment statements in Tabluate #
-    a = 3;
     # We can declare and assign too #
     let s = "string", s1 = "string1", c1 = 20;
     # const modifiers require assignment #
     const b = 2, b1 = 21.12, b2 = "22";
 
-    # Compound statements in Tabulate #
-    let val1 = GET(cell1);
-    let val2 = GET(cell2);
-    let res;
+    let res, val1 = 60, val2 = -123123123;
 
+    # Compound statements in Tabulate #
     if(val1 > 50) {
         if(val2 > 20) {
             res = ADD(MUL(val1,0.8),val2);
@@ -105,6 +101,7 @@ fun main(){
         currIdx = ADD(currIdx, 1);
     }
 
+    const fl1 = FALSE, fl2 = TRUE;
     if (fl1) {
     # CODE #
     } else if (fl2) {

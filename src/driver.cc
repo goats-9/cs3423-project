@@ -93,6 +93,7 @@ namespace tabulate
             "AND",
             "OR",
             "XOR",
+            "GET",
         };
         std::vector<std::string> uniop_func_names = 
         {
@@ -112,5 +113,11 @@ namespace tabulate
         for (auto u :uniop_func_names) {
             symtab_func.tabulate_symtab[u].push(frec);
         }
+    }
+
+    void driver::delete_scope() {
+        driver::symtab_dtype.delete_scope(driver::scope_level);
+        driver::symtab_func.delete_scope(driver::scope_level);
+        driver::symtab_id.delete_scope(driver::scope_level);
     }
 }

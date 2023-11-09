@@ -90,8 +90,9 @@ namespace tabulate
 /* Nonterminals */
 %nterm 
     <std::vector<std::string>> decl_list parameter_list ID_list
-    <int> declare expression_list args
+    <int> declare expression_list args constructor_decl constructor_definition
     <std::string> decl_item variable
+    <std::vector<int>> struct_member_list
 
 %%
 %start S;
@@ -153,7 +154,10 @@ declaration_stmt:
             tabulate::id_symtrec idrec;
             idrec.level = drv.scope_level;
             idrec.modifier = $1;
-            drv.symtab_id.insert(var, idrec, drv.active_func_ptr);
+            int res = drv.symtab_id.insert(var, idrec, drv.active_func_ptr);
+            if (res == -1) {
+                throw yy::parser::syntax_error(@$, "error: '" + var + "' previously declared.");
+            }
         }
     }
     ;
@@ -219,8 +223,7 @@ conditional_stmt:
 // instances
 instance: 
     expression DOT ID
-    |
-    THIS DOT ID 
+    | THIS DOT ID 
     ;
 
 /* accessing arrays and table expressions starts */
@@ -253,7 +256,7 @@ variable:
         }
         $$ = $1;
     }
-    | instance { }
+    | instance { /* runtime semantic check */ }
     ;
 
 /* function call starts */
@@ -281,35 +284,62 @@ constructor_call:
     NEW ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS
     {
         auto crec = drv.symtab_dtype.find($2, drv.scope_level);
-        if (crec == drv.symtab_dtype.end()) {
+        if (crec.level == -1) {
             throw yy::parser::syntax_error(@$, "error: couldn't find constructor " + $2);
         }
-        if ((int)crec->second.constr_args.size() != args_to_vector($4).size()) {
-            throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for constructor " + $2);
+        bool errfl = true;
+        for (auto u : crec.constr_args) {
+            if (u == $4) {
+                errfl = false;
+                break;
+            }
         }
+        if (errfl) throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for constructor " + $2);
     };
 /* Constructor call ends */
 
-/* Constructor defination starts */
+/* Constructor definition starts */
 constructor_decl:
-    CONSTRUCTOR OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS ;
-constructor_defination:
-    constructor_decl compound_statement ;
-/* Constructor defination ends */
+    CONSTRUCTOR OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
+    {
+        ++drv.scope_level;
+        tabulate::id_symtrec idrec;
+        idrec.level = drv.scope_level;
+        idrec.modifier = TABULATE_LET;
+        for (auto name : $3) {
+            drv.symtab_id.insert(name, idrec, drv.active_func_ptr);
+        }
+        drv.active_func_ptr.level = drv.scope_level - 1;
+        drv.active_func_ptr.paramlist = $3;
+        $$ = $3.size();
+    }
+    ;
+constructor_definition:
+    constructor_decl compound_statement {
+        --drv.scope_level;
+        drv.active_func_ptr.level = -1;
+        drv.active_func_ptr.paramlist.clear();
+        drv.delete_scope();
+        $$ = $1;
+    }
+    ;
+/* Constructor definition ends */
 
 /* struct definition starts */
 struct_declaration: 
     STRUCT ID OPEN_CURLY 
     {
         drv.scope_level++;
+        drv.in_struct = true;
     }
     struct_member_list CLOSE_CURLY SEMICOLON
     {
         drv.scope_level--;
+        drv.in_struct = false;
         
         tabulate::dtype_symtrec struc;
         struc.level = drv.scope_level;
-
+        struc.constr_args = $5;
         int res = drv.symtab_dtype.insert($2, struc, drv.active_func_ptr);
         if (res == -1) {
             throw yy::parser::syntax_error(@$, "error: failed to insert struct into symbol table.");
@@ -317,10 +347,10 @@ struct_declaration:
     }
     ;
 struct_member_list:
-    /* empty */
-    | struct_member_list declaration_stmt
-    | struct_member_list function_definition
-    | struct_member_list constructor_defination
+    /* empty */ { }
+    | struct_member_list declaration_stmt { /* runtime semantic check */ }
+    | struct_member_list function_definition { /* runtime semantic check */ }
+    | struct_member_list constructor_definition { $$.push_back($2); }
     ;
 /* struct definition ends */
 
@@ -362,7 +392,7 @@ statement:
         ++drv.while_level;
     } 
     expression CLOSE_PARENTHESIS compound_statement 
-    { 
+    {
         --drv.while_level; 
     }
     | BREAK SEMICOLON 
@@ -400,6 +430,7 @@ compound_statement:
     statement_list CLOSE_CURLY 
     {
         drv.scope_level--;
+        drv.delete_scope();
     }
     ;
 
@@ -421,16 +452,8 @@ ID_list:
 parameter_list: 
     /* empty */ { }
     | ID_list 
-    { 
-        drv.scope_level++;
-        for (auto u : $1) {
-            // Create ID record to insert into ST
-            tabulate::id_symtrec rec;
-            rec.level = drv.scope_level;
-            rec.modifier = TABULATE_LET;
-            // Insert into ST
-            drv.symtab_id.insert(u, rec, drv.active_func_ptr);
-        } 
+    {
+        $$ = $1;
     }
     ;
 
@@ -438,31 +461,35 @@ parameter_list:
 function_definition: 
     function_head compound_statement
     {
-        /* level reduced by 2, since it was increased for parameter_list and function body */
-        drv.scope_level -= 2;     
+        /* level reduced by 1, since it was increased for parameter_list and function body */
+        drv.scope_level--;     
         /* delete ST entries */
-        drv.symtab_id.delete_scope(drv.scope_level);
+        drv.delete_scope();
+        /* cleanup */
+        drv.active_func_ptr.level = -1;
+        drv.active_func_ptr.paramlist.clear();
     }
     ;
 function_head: 
-    FUN ID OPEN_PARENTHESIS 
-    {
-        /* Mid-rule action */
-        drv.scope_level++;
-    } 
-    parameter_list CLOSE_PARENTHESIS
+    FUN ID OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
     {
         /* insert function into ST */
         tabulate::func_symtrec frec;
         /* scope_level was incremented in parameter_list */
-        frec.level = drv.scope_level - 1;
-        frec.paramlist = $5;
+        frec.level = drv.scope_level;
+        frec.paramlist = $4;
         int res = drv.symtab_func.insert($2, frec, drv.active_func_ptr);
         if (res == -1) {
             throw yy::parser::syntax_error(@$, "Function '" + $2 + "' already exists in the symbol table");
         }
-        /* increment scope_level for function body */
-        drv.scope_level++;
+        ++drv.scope_level;
+        // insert params into ST
+        tabulate::id_symtrec idrec;
+        idrec.level = drv.scope_level;
+        idrec.modifier = TABULATE_LET;
+        for (auto u : $4) {
+            drv.symtab_id.insert(u, idrec, drv.active_func_ptr);
+        }
         /* change active function pointer */
         drv.active_func_ptr = frec;
         /* check for main function */
