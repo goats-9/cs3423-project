@@ -36,6 +36,8 @@ namespace tabulate
 
 // Reserved keywords
 %token
+    THIS "this_token"
+    CONSTRUCTOR "constructor_token"
     LET "let_token"
     CONST "const_token"
     STRUCT "struct_token"
@@ -131,6 +133,7 @@ constant:
     | TIME
     | RANGE
     | array_initializer
+    | constructor_call
     ;
 
 // declaring tokens
@@ -217,6 +220,8 @@ conditional_stmt:
 // instances
 instance: 
     expression DOT ID
+    |
+    THIS DOT ID 
     ;
 
 /* accessing arrays and table expressions starts */
@@ -272,6 +277,18 @@ function_call:
     ;
 /* function call ends */
 
+/* Constructor call starts */
+constructor_call:
+    NEW ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS ;
+/* Constructor call ends */
+
+/* Constructor defination starts */
+constructor_decl:
+    CONSTRUCTOR OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS ;
+constructor_defination:
+    constructor_decl compound_statement ;
+/* Constructor defination ends */
+
 /* struct definition starts */
 struct_declaration: 
     STRUCT ID OPEN_CURLY 
@@ -295,6 +312,7 @@ struct_member_list:
     /* empty */
     | struct_member_list declaration_stmt
     | struct_member_list function_definition
+    | struct_member_list constructor_defination
     ;
 /* struct definition ends */
 
@@ -312,7 +330,6 @@ expression:
     | expression BIOP expression
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
     | function_call
-    | NEW ID OPEN_PARENTHESIS CLOSE_PARENTHESIS
     ;
 
 // expression list
