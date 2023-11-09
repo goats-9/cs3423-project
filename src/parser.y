@@ -12,11 +12,26 @@
 
 %code requires{
 #include <iostream>
+#include <vector>
 namespace tabulate
 {
-    struct param_symtrec;
-    struct id_symtrec;
+    // struct id_symtrec {
+    //     /// @brief Scope of declaration.
+    //     int level;
+    //     int modifier;
+    // };
+
+    // struct func_symtrec {
+    //     int level;
+    //     std::vector<std::string> paramlist;
+    // };
+
+    // struct dtype_symtrec {
+    //     int level;
+    //     std::vector<int> constr_args;
+    // };
     class driver;
+    struct id_symtrec;
 }
 #include "../include/types.hh"
 }
@@ -31,7 +46,7 @@ namespace tabulate
 %define parse.lac full
 
 %code {
-#include "../include/tabulate.hh"
+    #include "../include/tabulate.hh"
 }
 
 // Reserved keywords
@@ -91,7 +106,6 @@ namespace tabulate
     <std::vector<std::string>> decl_list parameter_list ID_list
     <int> declare expression_list args
     <std::string> decl_item variable
-    <tabulate::id_symtrec> expression
 
 %%
 %start S;
@@ -243,7 +257,7 @@ variable:
         }
         $$ = $1;
     }
-    | instance
+    | instance { }
     ;
 
 /* function call starts */
@@ -301,7 +315,6 @@ expression:
         if (var_record.level == -1) {
             throw yy::parser::syntax_error(@$, "error: undefined variable '" + $1 + "'.");
         }
-        $$ = var_record;
     }
     | UNIOP expression
     | expression BIOP expression
@@ -389,7 +402,7 @@ ID_list:
     ;
 
 parameter_list: 
-    /* empty */
+    /* empty */ { }
     | ID_list 
     { 
         drv.scope_level++;
