@@ -280,12 +280,12 @@ function_call:
 constructor_call:
     NEW ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS
     {
-        auto crec = drv.symtab_func.find($2, drv.scope_level);
-        if (crec.level == -1) {
-            throw yy::parser::syntax_error(@$, "error: couldn't find constructor " + $1);
+        auto crec = drv.symtab_dtype.find($2, drv.scope_level);
+        if (crec == drv.symtab_dtype.end()) {
+            throw yy::parser::syntax_error(@$, "error: couldn't find constructor " + $2);
         }
-        if ((int)crec.paramlist.size() != $4) {
-            throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for constructor " + $1);
+        if ((int)crec->second.constr_args.size() != args_to_vector($4).size()) {
+            throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for constructor " + $2);
         }
     };
 /* Constructor call ends */
