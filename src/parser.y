@@ -15,21 +15,6 @@
 #include <vector>
 namespace tabulate
 {
-    // struct id_symtrec {
-    //     /// @brief Scope of declaration.
-    //     int level;
-    //     int modifier;
-    // };
-
-    // struct func_symtrec {
-    //     int level;
-    //     std::vector<std::string> paramlist;
-    // };
-
-    // struct dtype_symtrec {
-    //     int level;
-    //     std::vector<int> constr_args;
-    // };
     class driver;
     struct id_symtrec;
 }
@@ -110,7 +95,14 @@ namespace tabulate
 %%
 %start S;
 // last rule to get reduced (for translation purpose)
-S: program;
+S: 
+    program
+    {
+        if (drv.main != 1) {
+            yy::parser::syntax_error($@, "error: there should be exactly one main function.");
+        }
+    }
+    ;
 
 // list of program elements
 program: 
@@ -447,7 +439,6 @@ function_head:
         int res = drv.symtab_func.insert($2, frec, drv.active_func_ptr);
         if (res == -1) {
             throw yy::parser::syntax_error(@$, "Function '" + $2 + "' already exists in the symbol table");
-            exit(EXIT_FAILURE);
         }
         /* increment scope_level for function body */
         drv.scope_level++;
@@ -455,6 +446,8 @@ function_head:
         drv.num_ret = 0;
         /* change active function pointer */
         drv.active_func_ptr = frec;
+        /* check for main function */
+        if ($2 == "main") ++drv.num_main;
     }
     ;
 /* function definition ends */
