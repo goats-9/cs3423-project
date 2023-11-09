@@ -14,9 +14,9 @@
 #include <iostream>
 namespace tabulate
 {
-    class driver;
     struct param_symtrec;
     struct id_symtrec;
+    class driver;
 }
 #include "../include/types.hh"
 }
@@ -89,7 +89,6 @@ namespace tabulate
 /* Nonterminals */
 %nterm 
     <std::vector<std::string>> decl_list parameter_list ID_list
-    <bool> statement statement_list compound_statement
     <int> declare expression_list args
     <std::string> decl_item variable
     <tabulate::id_symtrec> expression
@@ -177,7 +176,7 @@ assignment_stmt:
         // Check modifier of variable
         auto idrec = drv.symtab_id.find($1, drv.scope_level);
         if (idrec.modifier == TABULATE_CONST) {
-            throw yy::parser::syntax_error(loc, "Cannot assign variable " + $1 + " marked as constant.");
+            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1 + " marked as constant.");
         }
     }
     | variable EQUAL expression COMMA assignment_stmt
@@ -185,7 +184,7 @@ assignment_stmt:
         // Check modifier of variable
         auto idrec = drv.symtab_id.find($1, drv.scope_level);
         if (idrec.modifier == TABULATE_CONST) {
-            throw yy::parser::syntax_error(loc, "Cannot assign variable " + $1 + " marked as constant.");
+            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1 + " marked as constant.");
         }
     }
     ;
@@ -229,18 +228,18 @@ variable:
     ID 
     {
         // Check if the ID exists in the symbol table
-        auto record = id_symtab.find($1, current_level);
-        if (record == NULL) {
-            throw yy::parser::syntax_error(loc, "error: identifier " + $1 + " not found."); 
+        auto record = drv.symtab_id.find($1, drv.scope_level);
+        if (record.level == -1) {
+            throw yy::parser::syntax_error(@$, "error: identifier " + $1 + " not found."); 
         }
         $$ = $1;
     }
     | ID accessors 
     {
         // Check if the ID exists in the symbol table
-        auto record = id_symtab.find($1, current_level);
-        if (record == NULL) {
-            throw yy::parser::syntax_error(loc, "error: identifier " + $1 + " not found."); 
+        auto record = drv.symtab_id.find($1, drv.scope_level);
+        if (record.level == -1) {
+            throw yy::parser::syntax_error(@$, "error: identifier " + $1 + " not found."); 
         }
         $$ = $1;
     }
@@ -257,11 +256,11 @@ function_call:
     | ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS
     {
         auto frec = drv.symtab_func.find($1, drv.scope_level);
-        if (!frec) {
-            throw yy::parser::syntax_error(loc, "error: couldn't find function " + $1);
+        if (frec.level == -1) {
+            throw yy::parser::syntax_error(@$, "error: couldn't find function " + $1);
         }
         if ((int)frec.paramlist.size() != $3) {
-            throw yy::parser::syntax_error(loc, "error: incorrect number of arguments for function " + $1);
+            throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for function " + $1);
         }
     }
     ;
@@ -280,10 +279,9 @@ struct_declaration:
         tabulate::dtype_symtrec struc;
         struc.level = drv.scope_level;
 
-        int res = drv.symtab_dtype.insert($2, struc, drv.symtab_func, drv.active_func_stack);
+        int res = drv.symtab_dtype.insert($2, struc, drv.active_func_ptr);
         if (res == -1) {
-            std::cerr << "Error: Failed to insert struct into symbol table." << std::endl;
-            exit(res);
+            throw yy::parser::syntax_error(@$, "error: failed to insert struct into symbol table.");
         }
     }
     ;
@@ -300,9 +298,8 @@ expression:
     | variable
     {
         tabulate::id_symtrec var_record = drv.symtab_id.find($1, drv.scope_level);
-        if (var_record == NULL) {
-            std::cerr << "Error: Undefined variable '" << $1 << "'." << std::endl;
-            exit(EXIT_FAILURE);
+        if (var_record.level == -1) {
+            throw yy::parser::syntax_error(@$, "error: undefined variable '" + $1 + "'.");
         }
         $$ = var_record;
     }
@@ -321,14 +318,35 @@ expression_list:
 
 // statement
 statement: 
-    declaration_stmt { $$ = false; }
-    | assignment_stmt { $$ = false; }
-    | compound_statement { $$ = false; }
-    | return_stmt {$$ = true;}
-    | conditional_stmt { $$ = false; }
-    | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement { $$ = false; }
-    | BREAK SEMICOLON { $$ = false; }
-    | CONTINUE SEMICOLON { $$ = false; }
+    declaration_stmt
+    | assignment_stmt
+    | compound_statement
+    | return_stmt {++drv.num_ret;}
+    | conditional_stmt
+    | WHILE OPEN_PARENTHESIS
+    {
+        /**
+         * increase the while_level for checking
+         * break and continue statements
+        */ 
+        ++drv.while_level;
+    } 
+    expression CLOSE_PARENTHESIS compound_statement 
+    { 
+        --drv.while_level; 
+    }
+    | BREAK SEMICOLON 
+    { 
+        if (drv.while_level < 1) {
+            throw yy::parser::syntax_error(@$, "error: break used outside a loop.");
+        }
+    }
+    | CONTINUE SEMICOLON
+    { 
+        if (drv.while_level < 1) {
+            throw yy::parser::syntax_error(@$, "error: continue used outside a loop.");
+        }
+    }
     ;
 
 // return statement
@@ -339,8 +357,8 @@ return_stmt:
 
 // list of statement list
 statement_list: 
-    /* empty */ { $$ = false; }
-    | statement_list statement { $$ = $1 || $2; }
+    /* empty */
+    | statement_list statement
     ; 
 
 // compound statement
@@ -351,7 +369,6 @@ compound_statement:
     } 
     statement_list CLOSE_CURLY 
     {
-        $$ = $3;
         drv.scope_level--;
     }
     ;
@@ -379,9 +396,10 @@ parameter_list:
         for (auto u : $1) {
             // Create ID record to insert into ST
             tabulate::id_symtrec rec;
-            rec.level = 
+            rec.level = drv.scope_level;
+            rec.modifier = TABULATE_LET;
             // Insert into ST
-            drv.symtab_id.insert
+            drv.symtab_id.insert(u, rec, drv.active_func_ptr);
         } 
     }
     ;
@@ -390,14 +408,14 @@ parameter_list:
 function_definition: 
     function_head compound_statement
     {
-        if (!$2) {
-            throw yy::parser::syntax_error(loc, "error: no return statement in function.");
-            exit(EXIT_FAILURE);
+        /* error out if no return statement */
+        if (!drv.num_ret) {
+            throw yy::parser::syntax_error(@$, "error: no return statement in function.");
         }
         /* level reduced by 2, since it was increased for parameter_list and function body */
         drv.scope_level -= 2;     
         /* delete ST entries */
-        drv.symtab_id.delete_scope(drv.active_func_stack, drv.scope_level);
+        drv.symtab_id.delete_scope(drv.scope_level);
     }
     ;
 function_head: 
@@ -413,13 +431,17 @@ function_head:
         /* scope_level was incremented in parameter_list */
         frec.level = drv.scope_level - 1;
         frec.paramlist = $5;
-        int res = drv.symtab_func.insert($2, frec, drv.symtab_func, drv.active_func_stack);
+        int res = drv.symtab_func.insert($2, frec, drv.active_func_ptr);
         if (res == -1) {
-            throw yy::parser::syntax_error(loc, "Function '" + $2 + "' already exists in the symbol table");
+            throw yy::parser::syntax_error(@$, "Function '" + $2 + "' already exists in the symbol table");
             exit(EXIT_FAILURE);
         }
         /* increment scope_level for function body */
         drv.scope_level++;
+        /* set number of returns to 0 for check */
+        drv.num_ret = 0;
+        /* change active function pointer */
+        drv.active_func_ptr = frec;
     }
     ;
 /* function definition ends */

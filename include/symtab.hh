@@ -92,7 +92,7 @@ namespace tabulate {
         
         V find(K &name, int level) {
             V err;
-            V.level = -1;
+            err.level = -1;
             if (tabulate_symtab.find(name) == tabulate_symtab.end()) return err;
             else {
                 if (tabulate_symtab[name].top().level > level) return err;
