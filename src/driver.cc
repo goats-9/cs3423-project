@@ -47,7 +47,7 @@ namespace tabulate
         }
     }
     
-    int tabulate::driver::scan_begin()
+    int driver::scan_begin()
     {
         yy_flex_debug = trace_scanning;
         // checking extension
@@ -66,8 +66,48 @@ namespace tabulate
         return 0;
     }
 
-    void tabulate::driver::scan_end()
+    void driver::scan_end()
     {
         fclose(yyin);
+    }
+
+    void driver::symtab_init() {
+        // Initialize function symbol table with standard
+        // functions offered by Tabulate
+        std::vector<std::string> biop_func_names = 
+        {
+            "ADD",
+            "SUB",
+            "MUL",
+            "DIV",
+            "MOD",
+            "POW",
+            "BOR",
+            "BAND",
+            "BXOR",
+            "BNOT",
+            "BLS",
+            "BRS",
+            "AND",
+            "OR",
+            "XOR"
+        };
+        std::vector<std::string> uniop_func_names = 
+        {
+            "NOT",
+            "TYPEOF"
+        };
+        std::vector<std::string> biop_paramlist = {"p1","p2"};
+        std::vector<std::string> uniop_paramlist = {"p1"};
+        func_symtrec frec;
+        frec.level = 0;
+        frec.paramlist = biop_paramlist;
+        for (auto u : biop_func_names) {
+             symtab_func[u].push(frec);
+        }
+        frec.paramlist = uniop_paramlist;
+        for (auto u :uniop_func_names) {
+             symtab_func[u].push(frec);
+        }
     }
 }

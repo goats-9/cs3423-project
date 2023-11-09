@@ -6,11 +6,10 @@
  * Symbol Table Structure
  * ----------------------
  *
- * The symbol table is implemented as a Red-Black tree (C++ map). Each key-value
- * pair of the map represents a symbol table entry indexed by the name of the
- * identifiers, functions, keywords, datatypes, etc. Each entry in the symbol
- * table, except the immutable pre-defined datatypes and operations, is
- * implemented as a stack, to handle nested scopes.
+ * The symbol table is implemented as a Hash table (C++ unordered_map). Each 
+ * key-value pair of the map represents a symbol table entry indexed by the 
+ * name of the identifiers, functions, datatypes, etc. Each entry in the symbol
+ * table, is implemented as a stack, to handle nested scopes.
  *
  * Symbol Table Record Structure
  * -----------------------------

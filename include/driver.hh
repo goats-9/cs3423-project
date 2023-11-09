@@ -50,9 +50,7 @@ namespace tabulate {
         symtab<std::string, func_symtrec> symtab_func;
         symtab<std::string, dtype_symtrec> symtab_dtype;
 
-        // other variable
-        int result;
-
         driver();
+        void symtab_init();
     };
 }
