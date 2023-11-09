@@ -76,17 +76,15 @@ namespace tabulate {
             V &rec,
             func_symtrec &active_func_rec
         ) {
-            if (tabulate_symtab.find(name) == tabulate_symtab.end()) {
-                if (!std::is_same<V, func_symtrec>::value) {
-                    int func_level = active_func_rec.level;
-                    std::vector<std::string> active_func_params = active_func_rec.paramlist;
-                    for (auto param : active_func_params) {
-                        if (func_level + 1 == rec.level && param == name) return -1;
-                    }
-                }
-                tabulate_symtab[name].push(rec);
-                return 0;
-            } else return -1;
+            if (tabulate_symtab.find(name) != tabulate_symtab.end()) {
+                auto crec = tabulate_symtab[name].top();
+                /* error if declared in scope already */
+                if (crec.level == rec.level) return -1;
+                /* error if function parameter redeclared */
+                if (crec.level == active_func_rec.level + 1 && rec.level == crec.level + 1) return -1;
+            }
+            tabulate_symtab[name].push(rec);
+            return 0;
         }
         
         V find(K &name, int level) {
