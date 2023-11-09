@@ -45,7 +45,7 @@ namespace tabulate {
 
         // symbol table
         func_symtrec active_func_ptr;
-        int scope_level, while_level, num_ret, num_main;
+        int scope_level, while_level, num_main;
         symtab<std::string, id_symtrec> symtab_id;
         symtab<std::string, func_symtrec> symtab_func;
         symtab<std::string, dtype_symtrec> symtab_dtype;

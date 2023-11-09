@@ -119,11 +119,6 @@ close_parenthesis ")"
     drv.handleToken(token,yytext);
     return token;
 }
-"returns" {
-    auto token = yy::parser::make_RETURNS(loc);
-    drv.handleToken(token,yytext);
-    return token;
-}
 "break" {
     auto token = yy::parser::make_BREAK(loc);
     drv.handleToken(token,yytext);

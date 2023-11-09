@@ -47,7 +47,6 @@ namespace tabulate
     WHILE "while_token"
     FUN "function_token"
     RETURN "return_token"
-    RETURNS "returns_token"
     BREAK "break_token"
     CONTINUE "continue_token"
     NEW "new_token"
@@ -100,8 +99,8 @@ namespace tabulate
 S: 
     program
     {
-        if (drv.main != 1) {
-            yy::parser::syntax_error($@, "error: there should be exactly one main function.");
+        if (drv.num_main != 1) {
+            yy::parser::syntax_error(@$, "error: there should be exactly one main function.");
         }
     }
     ;
@@ -343,7 +342,7 @@ statement:
     declaration_stmt
     | assignment_stmt
     | compound_statement
-    | return_stmt {++drv.num_ret;}
+    | return_stmt
     | conditional_stmt
     | WHILE OPEN_PARENTHESIS
     {
@@ -430,10 +429,6 @@ parameter_list:
 function_definition: 
     function_head compound_statement
     {
-        /* error out if no return statement */
-        if (!drv.num_ret) {
-            throw yy::parser::syntax_error(@$, "error: no return statement in function.");
-        }
         /* level reduced by 2, since it was increased for parameter_list and function body */
         drv.scope_level -= 2;     
         /* delete ST entries */
@@ -459,8 +454,6 @@ function_head:
         }
         /* increment scope_level for function body */
         drv.scope_level++;
-        /* set number of returns to 0 for check */
-        drv.num_ret = 0;
         /* change active function pointer */
         drv.active_func_ptr = frec;
         /* check for main function */

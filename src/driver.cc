@@ -15,6 +15,8 @@ namespace tabulate
         isLexOut = false;
         scope_level = 0;
         while_level = 0;
+        num_main = 0;
+        driver::symtab_init();
     }
 
     int driver::parse(const std::string &f)
@@ -90,12 +92,13 @@ namespace tabulate
             "BRS",
             "AND",
             "OR",
-            "XOR"
+            "XOR",
         };
         std::vector<std::string> uniop_func_names = 
         {
             "NOT",
-            "TYPEOF"
+            "TYPEOF",
+            "LENGTH",
         };
         std::vector<std::string> biop_paramlist = {"p1","p2"};
         std::vector<std::string> uniop_paramlist = {"p1"};
@@ -103,11 +106,11 @@ namespace tabulate
         frec.level = 0;
         frec.paramlist = biop_paramlist;
         for (auto u : biop_func_names) {
-             symtab_func[u].push(frec);
+            symtab_func.tabulate_symtab[u].push(frec);
         }
         frec.paramlist = uniop_paramlist;
         for (auto u :uniop_func_names) {
-             symtab_func[u].push(frec);
+            symtab_func.tabulate_symtab[u].push(frec);
         }
     }
 }
