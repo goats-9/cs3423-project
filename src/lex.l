@@ -59,6 +59,21 @@ close_parenthesis ")"
     */
 
     /* reserved keywords */
+"this" {
+    auto token = yy::parser::make_THIS(loc);
+    drv.handleToken(token,yytext);
+    return token;
+}
+"constructor" {
+    auto token = yy::parser::make_CONSTRUCTOR(loc);
+    drv.handleToken(token,yytext);
+    return token;
+}
+"new" {
+    auto token = yy::parser::make_NEW(loc);
+    drv.handleToken(token,yytext);
+    return token;
+}
 "let" {
     auto token = yy::parser::make_LET(loc);
     drv.handleToken(token,yytext);
