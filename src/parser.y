@@ -294,6 +294,8 @@ constructor_call:
                 break;
             }
         }
+        /* default constructor has 0 args */
+        if (errfl && !$4) errfl = false;
         if (errfl) throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for constructor " + $2);
     };
 /* Constructor call ends */
@@ -348,14 +350,14 @@ struct_declaration:
     ;
 struct_member_list:
     /* empty */ { }
-    | struct_member_list declaration_stmt { /* runtime semantic check */ }
-    | struct_member_list function_definition { /* runtime semantic check */ }
-    | struct_member_list constructor_definition { $$.push_back($2); }
+    | struct_member_list declaration_stmt { $$ = $1; }
+    | struct_member_list function_definition { $$ = $1; }
+    | struct_member_list constructor_definition { $$ = $1; $$.push_back($2); }
     ;
 /* struct definition ends */
 
 // expression
-expression: 
+expression:
     constant
     | variable
     {
@@ -450,7 +452,7 @@ ID_list:
     ;
 
 parameter_list: 
-    /* empty */ { }
+    /* empty */ { $$ = {}; }
     | ID_list 
     {
         $$ = $1;
