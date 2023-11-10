@@ -1,39 +1,25 @@
-class myclass
+struct myclass
 {
-    class inner
-    {
-        fun twice(a)
-        {
-            return ADD(a,a);
-        }
-    };
-    let a = inner();
     fun add(a,b)
     {
         return ADD(a,b);
     }
 };
-
-let a = 67;
-const b = "90";
-print(DIV(a,2));
-print(a+a);
-print(b+b);
-let c = myclass();
-c.at1 = 1;
-print(c.add(a,c.at1));
-arr = [
-    23
-    ,
-    [
-        "hello"
+fun main()
+{
+    let a = 67;
+    const b = "90";
+    let c = new myclass();
+    c.at1 = 1;
+    let arr = [
+        23
         ,
-        "world"
-    ]
-]
+        [
+            "hello"
+            ,
+            "world"
+        ]
+    ];
 
-print(arr[1][0] + arr[1][1]);
-
-arr.add_item(9);
-print(arr[2]);
-print(arr::)
+    arr.add_item(9);
+}
