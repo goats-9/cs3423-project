@@ -1,5 +1,4 @@
-#ifndef ANY_HH
-#define ANY_HH
+#pragma once
 
 class pos;
 #include <string>
@@ -81,5 +80,3 @@ bool operator<=(const any &a, const any &b);
 std::ostream &operator<<(std::ostream &o, const any &a);
 
 /* operator overloading ends */
-
-#endif
