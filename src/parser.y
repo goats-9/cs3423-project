@@ -392,7 +392,7 @@ statement:
             throw yy::parser::syntax_error(@$, "error: continue used outside a loop.");
         }
     }
-    | expression SEMICOLON
+    | function_call SEMICOLON
     ;
 
 // return statement
