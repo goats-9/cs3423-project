@@ -305,10 +305,3 @@ TSWLatexianTemp*
 
 # CMake build files
 build
-
-# generated
-src/location.hh
-src/parser.tab.hh
-src/parser.tab.cc 
-src/lex.yy.c
-*.o
