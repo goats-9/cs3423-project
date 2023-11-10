@@ -1,18 +1,15 @@
-struct test
-{
-    constructor()
-    {
-        
+struct test {
+    constructor() {
+
     }
-    constructor(a,b)
-    {
+    constructor(a, b) {
         this.a = a;
         this.b = b;
     }
 };
 
-fun main() {
-    let a;
-    let b = new test();
+fun main()  {
+    let a = new test();
+    let b = new test(1, 2);
     return 0;
 }
