@@ -57,14 +57,14 @@ namespace tabulate
     COLON "colon_token" 
     SEMICOLON "semcolon_token"
     COMMA "comma_token"
-    OPEN_SQUARE_BRAC "open_square_bracket_token" 
-    CLOSE_SQUARE_BRAC "close_square_bracket_token"
     OPEN_CURLY "open_curly_bracket_token"
     CLOSE_CURLY "close_curly_bracket_token"
     OPEN_PARENTHESIS "open_parenthesis_token"
     CLOSE_PARENTHESIS "close_parenthesis_token"
 
 %left 
+    OPEN_SQUARE_BRAC "open_square_bracket_token" 
+    CLOSE_SQUARE_BRAC "close_square_bracket_token"
     DOT "dot_token" 
 
 // Identifiers
@@ -228,11 +228,8 @@ instance:
 
 /* accessing arrays and table expressions starts */
 accessors: 
-    accessor
-    | accessors accessor
-    ;
-accessor: 
     OPEN_SQUARE_BRAC expression CLOSE_SQUARE_BRAC
+    | OPEN_SQUARE_BRAC expression CLOSE_SQUARE_BRAC accessors
     ;
 /* accessing arrays and table expressions ends */
 
@@ -247,15 +244,7 @@ variable:
         }
         $$ = $1;
     }
-    | ID accessors 
-    {
-        // Check if the ID exists in the symbol table
-        auto record = drv.symtab_id.find($1, drv.scope_level);
-        if (record.level == -1) {
-            throw yy::parser::syntax_error(@$, "error: identifier " + $1 + " not found."); 
-        }
-        $$ = $1;
-    }
+    | expression accessors {/* runtime semantic check */}
     | instance { /* runtime semantic check */ }
     ;
 
@@ -360,12 +349,6 @@ struct_member_list:
 expression:
     constant
     | variable
-    {
-        tabulate::id_symtrec var_record = drv.symtab_id.find($1, drv.scope_level);
-        if (var_record.level == -1) {
-            throw yy::parser::syntax_error(@$, "error: undefined variable '" + $1 + "'.");
-        }
-    }
     | UNIOP expression
     | expression BIOP expression
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
@@ -409,6 +392,7 @@ statement:
             throw yy::parser::syntax_error(@$, "error: continue used outside a loop.");
         }
     }
+    | expression SEMICOLON
     ;
 
 // return statement
