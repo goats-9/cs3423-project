@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <cstddef>
+#include <string>
 
 class any;
 class cell
@@ -57,4 +57,18 @@ public:
     {
         tb = a.tb;
     }
+};
+
+class date
+{
+public:
+    int year, month, day;
+    date(std::string str);
+};
+
+class time
+{
+public:
+    int hour, min, sec;
+    time(std::string str);
 };

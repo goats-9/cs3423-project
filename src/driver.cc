@@ -27,10 +27,12 @@ namespace tabulate
         location.initialize(&file);
         if (scan_begin())
             return 1;
+        outFile.open(file + ".cc");
         yy::parser parse(*this);
         parse.set_debug_level(trace_parsing);
         int res = parse();
         scan_end();
+        outFile.close();
         return res;
     }
     
