@@ -10,7 +10,7 @@ BISON_TARGET(
   tabulateParser 
   parser.y 
   ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cc 
-  DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.hh
+  DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.hh COMPILE_FLAGS -Wcounterexamples
 )
 add_flex_bison_dependency(tabulateScanner tabulateParser)
 
