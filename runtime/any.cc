@@ -120,7 +120,7 @@ any &any::at(const any &i)
     {
         vector<any> *ptr = (vector<any> *)data;
         int idx = *(int *)i.data;
-        if (idx >= ptr->size())
+        if (idx >= (int)ptr->size())
         {
             throw runtime_error("out of index");
         }
@@ -268,7 +268,7 @@ ostream &operator<<(ostream &o, const any &a)
     }
     if (a.type == "bool")
     {
-        o << *(bool *)a.data ? "true" : "false";
+        o << (*(bool *)a.data ? "true" : "false");
         return o;
     }
     if (a.type == "none")
@@ -285,7 +285,7 @@ ostream &operator<<(ostream &o, const any &a)
             return o;
         }
         o << "[";
-        for (int i = 0; i < ptr->size() - 1; i++)
+        for (int i = 0; i < (int)ptr->size() - 1; i++)
         {
             o << (*ptr)[i] << ", ";
         }

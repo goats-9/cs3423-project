@@ -110,6 +110,7 @@ any DIV(const any &a, const any &b, const pos &p)
 // MOD
 any MOD(const any &a, const any &b, const pos &p)
 {
+    st.infunc(p);
     if (a.type == "int" && b.type == "int")
     {
         int *ptr1 = (int *)a.data;

@@ -9,3 +9,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # add include directory to this project
 add_subdirectory(src)
+add_subdirectory(runtime)
