@@ -1,9 +1,7 @@
-#ifndef TYPES_HH
-#define TYPES_HH
-
-class any;
+#pragma once
 #include <vector>
 
+class any;
 class cell
 {
 private:
@@ -59,5 +57,3 @@ public:
         tb = a.tb;
     }
 };
-
-#endif

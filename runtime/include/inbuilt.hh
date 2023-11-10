@@ -1,5 +1,4 @@
-#ifndef INBUILT_HH
-#define INBUILT_HH
+#pragma once
 
 class any;
 class pos;
@@ -50,5 +49,3 @@ any LTE(any &a, const any &b, const pos &p);
 
 // DISP
 any DISP(const any &a);
-
-#endif

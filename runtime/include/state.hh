@@ -1,5 +1,4 @@
-#ifndef STATE_HH
-#define STATE_HH
+#pragma once
 
 #include "location.hh"
 #include <stack>
@@ -49,5 +48,3 @@ public:
         func_call.pop();
     }
 };
-
-#endif
