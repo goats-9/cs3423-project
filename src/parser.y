@@ -69,30 +69,33 @@ namespace tabulate
 
 // Identifiers
 %token 
-    <std::string> ID "identifier_token"
+    <tabulate::Default> ID "identifier_token"
 
 // Operators
 %left
-    <std::string> UNIOP "unary operator"
+    <tabulate::Default> UNIOP "unary operator"
 %right
-    <std::string> BIOP "binary operator"
+    <tabulate::Default> BIOP "binary operator"
 
 // Constants
-%token
-    <int> INT "integer"
-    <std::string> STRING "string"
-    <bool> BOOL "boolean"
-    <double> DOUBLE "double"
-    <tabulate::date> DATE "date"
-    <tabulate::time> TIME "time"
-    <std::string> RANGE "range"
+%token <tabulate::Default>
+    INT "integer"
+    STRING "string"
+    BOOL "boolean"
+    DOUBLE "double"
+    DATE "date"
+    TIME "time"
+    RANGE "range"
 
-/* Nonterminals */
+/* Nonterminals for semantic and translation*/
 %nterm 
-    <std::vector<std::string>> decl_list parameter_list ID_list
-    <int> declare expression_list args constructor_decl constructor_definition
-    <std::string> decl_item variable
-    <std::vector<int>> struct_member_list
+    <tabulate::vector_of_string> decl_list parameter_list ID_list
+    <tabulate::Int> declare expression_list args constructor_decl constructor_definition
+    <tabulate::String> decl_item variable
+    <tabulate::vector_of_int> struct_member_list
+/* Nonterminals for translation */
+%nterm
+    <tabulate::constant> constant array_initializer constructor_call
 
 %%
 %start S;
@@ -100,9 +103,11 @@ namespace tabulate
 S: 
     program
     {
+        // checking if main exist
         if (drv.num_main != 1) {
             yy::parser::syntax_error(@$, "error: there should be exactly one main function.");
         }
+
     }
     ;
 
@@ -121,25 +126,63 @@ program_element:
 // array initializer
 array_initializer: 
     OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC
+    {
+        // $$ << "{" << $2 << "}" ;
+    }
     ;
 
 // all constants
 constant: 
-    INT
+    INT 
+    {
+        $$.type = "int";
+        $$.value << "int(" << $1 << ")";
+    }
     | STRING
+    {
+        $$.type = "string";
+        $$.value << "string(" << $1 << ")";
+    }
     | BOOL
+    {
+        $$.type = "bool";
+        $$.value << "bool(" << $1 << ")";
+    }
     | DOUBLE
+    {
+        $$.type = "double";
+        $$.value << "double(" << $1 << ")";
+    }
     | DATE
+    {
+        $$.type = "date";
+        $$.value << "date(" << $1 << ")";
+    }
     | TIME
+    {
+        $$.type = "time";
+        $$.value << "time(" << $1 << ")";
+    }
     | RANGE
-    | array_initializer
-    | constructor_call
+    {
+        $$.type = "range";
+        $$.value << "range(" << $1 << ")";
+    }
+    | array_initializer 
+    {
+        // $$.type = "array";
+        // $$.value << "vector<any>(" << $1 << ")";
+    }
+    | constructor_call 
+    {
+        // $$ = $1;
+    }
     ;
 
 // declaring tokens
 declare: 
-    LET {$$ = TABULATE_LET;}
-    | CONST {$$ = TABULATE_CONST;}
+    LET {$$.sem = TABULATE_LET;}
+    | CONST {$$.sem = TABULATE_CONST;}
     ;
 
 /* declaration statement starts */
@@ -150,10 +193,10 @@ declaration_stmt:
          * 1. (SATG) Collect info here.
          * 2. Add to symbol table. 
         */
-        for (auto var : $2) {
+        for (auto var : $2.sem) {
             tabulate::id_symtrec idrec;
             idrec.level = drv.scope_level;
-            idrec.modifier = $1;
+            idrec.modifier = $1.sem;
             int res = drv.symtab_id.insert(var, idrec, drv.active_func_ptr);
             if (res == -1) {
                 throw yy::parser::syntax_error(@$, "error: '" + var + "' previously declared.");
@@ -165,18 +208,18 @@ declaration_stmt:
 decl_list: 
     decl_item
     {
-        $$.push_back($1);
+        $$.sem.push_back($1.sem);
     }
     | decl_list COMMA decl_item
     {
-        $$ = $1;
-        $$.push_back($3);
+        $$.sem = $1.sem;
+        $$.sem.push_back($3.sem);
     }
     ;
 
 decl_item: 
-    ID { $$ = $1; }
-    | ID EQUAL expression { $$ = $1; }
+    ID { $$.sem = $1; }
+    | ID EQUAL expression { $$.sem = $1; }
     ;
 
 /* declaration statement ends */
@@ -186,17 +229,17 @@ assignment_stmt:
     variable EQUAL expression SEMICOLON
     {
         // Check modifier of variable
-        auto idrec = drv.symtab_id.find($1, drv.scope_level);
+        auto idrec = drv.symtab_id.find($1.sem, drv.scope_level);
         if (idrec.modifier == TABULATE_CONST) {
-            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1 + " marked as constant.");
+            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
         }
     }
     | variable EQUAL expression COMMA assignment_stmt
     {
         // Check modifier of variable
-        auto idrec = drv.symtab_id.find($1, drv.scope_level);
+        auto idrec = drv.symtab_id.find($1.sem, drv.scope_level);
         if (idrec.modifier == TABULATE_CONST) {
-            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1 + " marked as constant.");
+            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
         }
     }
     ;
@@ -242,7 +285,7 @@ variable:
         if (record.level == -1) {
             throw yy::parser::syntax_error(@$, "error: identifier " + $1 + " not found."); 
         }
-        $$ = $1;
+        $$.sem = $1;
     }
     | expression accessors {/* runtime semantic check */}
     | instance { /* runtime semantic check */ }
@@ -250,8 +293,8 @@ variable:
 
 /* function call starts */
 args:
-    /* empty */ {$$ = 0;}
-    | expression_list {$$ = $1;}
+    /* empty */ {$$.sem = 0;}
+    | expression_list {$$.sem = $1.sem;}
     ;
 function_call: 
     instance OPEN_PARENTHESIS args CLOSE_PARENTHESIS  
@@ -261,7 +304,7 @@ function_call:
         if (frec.level == -1) {
             throw yy::parser::syntax_error(@$, "error: couldn't find function " + $1);
         }
-        if ((int)frec.paramlist.size() != $3) {
+        if ((int)frec.paramlist.size() != $3.sem) {
             throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for function " + $1);
         }
     }
@@ -278,14 +321,17 @@ constructor_call:
         }
         bool errfl = true;
         for (auto u : crec.constr_args) {
-            if (u == $4) {
+            if (u == $4.sem) {
                 errfl = false;
                 break;
             }
         }
         /* default constructor has 0 args */
-        if (errfl && !$4) errfl = false;
+        if (errfl && !$4.sem) errfl = false;
         if (errfl) throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for constructor " + $2);
+        // translation
+        // $$.type = $2;
+        // $$.value << $2 << "(" << $4.trans << ")";
     };
 /* Constructor call ends */
 
@@ -297,12 +343,12 @@ constructor_decl:
         tabulate::id_symtrec idrec;
         idrec.level = drv.scope_level;
         idrec.modifier = TABULATE_LET;
-        for (auto name : $3) {
+        for (auto name : $3.sem) {
             drv.symtab_id.insert(name, idrec, drv.active_func_ptr);
         }
         drv.active_func_ptr.level = drv.scope_level - 1;
-        drv.active_func_ptr.paramlist = $3;
-        $$ = $3.size();
+        drv.active_func_ptr.paramlist = $3.sem;
+        $$.sem = $3.sem.size();
     }
     ;
 constructor_definition:
@@ -311,7 +357,7 @@ constructor_definition:
         drv.active_func_ptr.level = -1;
         drv.active_func_ptr.paramlist.clear();
         drv.delete_scope();
-        $$ = $1;
+        $$.sem = $1.sem;
     }
     ;
 /* Constructor definition ends */
@@ -330,7 +376,7 @@ struct_declaration:
         
         tabulate::dtype_symtrec struc;
         struc.level = drv.scope_level;
-        struc.constr_args = $5;
+        struc.constr_args = $5.sem;
         int res = drv.symtab_dtype.insert($2, struc, drv.active_func_ptr);
         if (res == -1) {
             throw yy::parser::syntax_error(@$, "error: failed to insert struct into symbol table.");
@@ -339,9 +385,9 @@ struct_declaration:
     ;
 struct_member_list:
     /* empty */ { }
-    | struct_member_list declaration_stmt { $$ = $1; }
-    | struct_member_list function_definition { $$ = $1; }
-    | struct_member_list constructor_definition { $$ = $1; $$.push_back($2); }
+    | struct_member_list declaration_stmt { $$.sem = $1.sem; }
+    | struct_member_list function_definition { $$.sem = $1.sem; }
+    | struct_member_list constructor_definition { $$.sem = $1.sem; $$.sem.push_back($2.sem); }
     ;
 /* struct definition ends */
 
@@ -357,8 +403,8 @@ expression:
 
 // expression list
 expression_list: 
-    expression { $$ = 1; }
-    | expression COMMA expression_list {$$ = 1 + $3; }
+    expression { $$.sem = 1; }
+    | expression COMMA expression_list {$$.sem = 1 + $3.sem; }
     ;
 
 // statement
@@ -425,21 +471,21 @@ ID_list:
     ID 
     {
         /* Accumulate IDs */
-        $$.push_back($1);
+        $$.sem.push_back($1);
     }
     | ID COMMA ID_list
     {
         /* Accumulate IDs */
-        $$ = $3;
-        $$.push_back($1);
+        $$.sem = $3.sem;
+        $$.sem.push_back($1);
     }
     ;
 
 parameter_list: 
-    /* empty */ { $$ = {}; }
+    /* empty */ { $$.sem = {}; }
     | ID_list 
     {
-        $$ = $1;
+        $$.sem = $1.sem;
     }
     ;
 
@@ -463,7 +509,7 @@ function_head:
         tabulate::func_symtrec frec;
         /* scope_level was incremented in parameter_list */
         frec.level = drv.scope_level;
-        frec.paramlist = $4;
+        frec.paramlist = $4.sem;
         int res = drv.symtab_func.insert($2, frec, drv.active_func_ptr);
         if (res == -1) {
             throw yy::parser::syntax_error(@$, "Function '" + $2 + "' already exists in the symbol table");
@@ -473,7 +519,7 @@ function_head:
         tabulate::id_symtrec idrec;
         idrec.level = drv.scope_level;
         idrec.modifier = TABULATE_LET;
-        for (auto u : $4) {
+        for (auto u : $4.sem) {
             drv.symtab_id.insert(u, idrec, drv.active_func_ptr);
         }
         /* change active function pointer */

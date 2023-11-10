@@ -215,7 +215,7 @@ close_parenthesis ")"
 }
     /* constant */
 {INT} {
-    auto token = yy::parser::make_INT(stoi(yytext), loc);
+    auto token = yy::parser::make_INT(yytext, loc);
     drv.handleToken(token,yytext);
     return token;
 }
@@ -225,33 +225,27 @@ close_parenthesis ")"
     return token;
 }
 {BOOL} {
-    bool val = false;
-    if (string(yytext) == "true")
-    { 
-        val = true;
-    }
-    auto token = yy::parser::make_BOOL(val, loc);
+    auto token = yy::parser::make_BOOL(yytext, loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {DOUBLE} {
-    auto token = yy::parser::make_DOUBLE(stod(yytext), loc);
+    auto token = yy::parser::make_DOUBLE(yytext, loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {TIME} {
-    auto token = yy::parser::make_TIME(tabulate::time(yytext), loc);
+    auto token = yy::parser::make_TIME("\"" + string(yytext) + "\"", loc);
     drv.handleToken(token,yytext);
     return token;
 }    
 {DATE} {
-    auto token = yy::parser::make_DATE(tabulate::date(yytext), loc);
+    auto token = yy::parser::make_DATE("\"" + string(yytext) + "\"", loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {RANGE} {
-    // TODO: make a class range in tabulate/types.hh
-    auto token = yy::parser::make_RANGE(yytext, loc);
+    auto token = yy::parser::make_RANGE("\"" + string(yytext) + "\"", loc);
     drv.handleToken(token,yytext);
     return token;
 }

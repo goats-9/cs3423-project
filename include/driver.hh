@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
+#include <fstream>
 #include "parser.tab.hh"
 #include "symtab.hh"
+#include "translation.hh"
 
 // Prototype of yylex given to Flex
 #define YY_DECL yy::parser::symbol_type yylex(tabulate::driver &drv)
@@ -31,6 +33,10 @@ namespace tabulate {
 
         // Whether to generate lexer output
         bool isLexOut;
+
+        std::ofstream outFile;
+
+        translation trans;
 
         // Handling the scanner.
         // Return 0 on success
