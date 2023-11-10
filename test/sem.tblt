@@ -1,5 +1,18 @@
+struct test
+{
+    constructor()
+    {
+        
+    }
+    constructor(a,b)
+    {
+        this.a = a;
+        this.b = b;
+    }
+};
+
 fun main() {
-    let a = 2;
-    const a = 3;
+    let a;
+    let b = new test();
     return 0;
 }
