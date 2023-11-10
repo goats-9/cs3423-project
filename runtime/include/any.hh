@@ -26,10 +26,10 @@ public:
         this->type = "none";
     }
     // constructor for compiler
-    any(void *data, const std::string &type)
+    any(void *_data, const std::string &_type)
     {
-        this->data = data;
-        this->type = type;
+        data = _data;
+        type = _type;
     }
     // copy constructor
     any(const any &a)
