@@ -69,16 +69,16 @@ namespace tabulate
 
 // Identifiers
 %token 
-    <tabulate::Default> ID "identifier_token"
+    <std::string> ID "identifier_token"
 
 // Operators
 %left
-    <tabulate::Default> UNIOP "unary operator"
+    <std::string> UNIOP "unary operator"
 %right
-    <tabulate::Default> BIOP "binary operator"
+    <std::string> BIOP "binary operator"
 
 // Constants
-%token <tabulate::Default>
+%token <std::string>
     INT "integer"
     STRING "string"
     BOOL "boolean"
@@ -95,7 +95,9 @@ namespace tabulate
     <tabulate::vector_of_int> struct_member_list
 /* Nonterminals for translation */
 %nterm
+    <tabulate::instance> instance
     <tabulate::constant> constant array_initializer constructor_call
+    <tabulate::Default> expression function_call accessors assignment_stmt declaration_stmt return_stmt
 
 %%
 %start S;
@@ -127,7 +129,8 @@ program_element:
 array_initializer: 
     OPEN_SQUARE_BRAC expression_list CLOSE_SQUARE_BRAC
     {
-        // $$ << "{" << $2 << "}" ;
+        $$.type = "array";
+        $$.value << "vector<any>({" << $2.trans << "})";
     }
     ;
 
@@ -170,19 +173,26 @@ constant:
     }
     | array_initializer 
     {
-        // $$.type = "array";
-        // $$.value << "vector<any>(" << $1 << ")";
+        $$ = $1;
     }
     | constructor_call 
     {
-        // $$ = $1;
+        $$ = $1;
     }
     ;
 
 // declaring tokens
 declare: 
-    LET {$$.sem = TABULATE_LET;}
-    | CONST {$$.sem = TABULATE_CONST;}
+    LET 
+    {
+        $$.sem = TABULATE_LET;
+        $$.trans = "any";
+    }
+    | CONST 
+    {
+        $$.sem = TABULATE_CONST;
+        $$.trans = "const any";
+    }
     ;
 
 /* declaration statement starts */
@@ -202,6 +212,9 @@ declaration_stmt:
                 throw yy::parser::syntax_error(@$, "error: '" + var + "' previously declared.");
             }
         }
+
+        // translation
+        $$.trans << $1.trans << " " << $2.trans << ";" ;
     }
     ;
 
@@ -209,17 +222,29 @@ decl_list:
     decl_item
     {
         $$.sem.push_back($1.sem);
+        $$.trans = $1.trans;
     }
     | decl_list COMMA decl_item
     {
         $$.sem = $1.sem;
         $$.sem.push_back($3.sem);
+        
+        // translation
+        $$.trans << $1.trans << "," << $3.trans;
     }
     ;
 
 decl_item: 
-    ID { $$.sem = $1; }
-    | ID EQUAL expression { $$.sem = $1; }
+    ID 
+    { 
+        $$.sem = $1; 
+        $$.trans = $1;
+    }
+    | ID EQUAL expression 
+    { 
+        $$.sem = $1; 
+        $$.trans << $1 << " = " << $3.trans;
+    }
     ;
 
 /* declaration statement ends */
@@ -233,6 +258,9 @@ assignment_stmt:
         if (idrec.modifier == TABULATE_CONST) {
             throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
         }
+
+        // translation
+        $$.trans << $1.trans << " = " << $3.trans << ";";
     }
     | variable EQUAL expression COMMA assignment_stmt
     {
@@ -241,6 +269,9 @@ assignment_stmt:
         if (idrec.modifier == TABULATE_CONST) {
             throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
         }
+
+        // translation
+        $$.trans << $1.trans << " = " << $3.trans << "," << $5.trans;
     }
     ;
 
@@ -266,13 +297,27 @@ conditional_stmt:
 // instances
 instance: 
     expression DOT ID
+    {
+        $$.exp = $1.trans;
+        $$.attribute = $3;
+    }
     | THIS DOT ID 
+    {
+        $$.exp = "this";
+        $$.attribute = $3;
+    }
     ;
 
 /* accessing arrays and table expressions starts */
 accessors: 
     OPEN_SQUARE_BRAC expression CLOSE_SQUARE_BRAC
+    {
+        $$.trans << ".at(" << $2.trans << ")";
+    }
     | OPEN_SQUARE_BRAC expression CLOSE_SQUARE_BRAC accessors
+    {
+        $$.trans << ".at(" << $2.trans << ")" << $4.trans ;
+    }
     ;
 /* accessing arrays and table expressions ends */
 
@@ -286,18 +331,65 @@ variable:
             throw yy::parser::syntax_error(@$, "error: identifier " + $1 + " not found."); 
         }
         $$.sem = $1;
+
+        // translation
+        $$.trans << $1;
     }
-    | expression accessors {/* runtime semantic check */}
-    | instance { /* runtime semantic check */ }
+    | expression accessors 
+    {
+        /* runtime semantic check */
+
+        // translation
+        $$.trans << $1.trans << $2.trans; 
+    }
+    | instance 
+    { 
+        /* runtime semantic check */ 
+
+        // translation
+        if ($1.exp == "this")
+        {
+            $$.trans << "mem[\"" << $1.attribute << "\"]";
+        }
+        else
+        {
+            $$.trans << $1.exp << ".access(\"" << $1.attribute << "\")";
+        }
+    }
     ;
 
 /* function call starts */
 args:
-    /* empty */ {$$.sem = 0;}
-    | expression_list {$$.sem = $1.sem;}
+    /* empty */ 
+    {
+        $$.sem = 0;
+        $$.trans = "";
+    }
+    | expression_list 
+    {
+        $$.sem = $1.sem;
+        $$.trans = $1.trans;
+    }
     ;
 function_call: 
-    instance OPEN_PARENTHESIS args CLOSE_PARENTHESIS  
+    instance OPEN_PARENTHESIS args CLOSE_PARENTHESIS
+    {
+        // semantic check required for this.func
+
+        // translation
+        if ($1.exp == "this")
+        {
+            $$.trans
+            << "this->" << $1.attribute << "(" << $3.trans << ")";
+        }
+        else
+        {
+            $$.trans 
+            << $1.exp << ".run(\"" 
+            << $1.attribute << "\"," << "{" << $3.trans << "}" << "," << tabulate::translatePos(@$,$1.attribute)
+            << ")";
+        }
+    }  
     | ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS
     {
         auto frec = drv.symtab_func.find($1, drv.scope_level);
@@ -307,6 +399,12 @@ function_call:
         if ((int)frec.paramlist.size() != $3.sem) {
             throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for function " + $1);
         }
+
+        // translation
+        $$.trans
+        << $1 << "(" << $3.trans << "," 
+        <<  tabulate::translatePos(@$,$1) 
+        << ")";
     }
     ;
 /* function call ends */
@@ -330,8 +428,8 @@ constructor_call:
         if (errfl && !$4.sem) errfl = false;
         if (errfl) throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for constructor " + $2);
         // translation
-        // $$.type = $2;
-        // $$.value << $2 << "(" << $4.trans << ")";
+        $$.type = $2;
+        $$.value << $2 << "(" << $4.trans << ")";
     };
 /* Constructor call ends */
 
@@ -394,25 +492,68 @@ struct_member_list:
 // expression
 expression:
     constant
+    {
+        $$.trans 
+        << "any(new " << $1.value << ",\"" << $1.type << "\")";
+    }
     | variable
+    {
+        $$.trans = $1.trans;
+    }
     | UNIOP expression
+    {
+        $$.trans 
+        << $1 << "(" << $2.trans << "," 
+        << tabulate::translatePos(@$,$1)
+        << ")";
+    }
     | expression BIOP expression
+    {
+        $$.trans 
+        << $2 << "(" << $1.trans << "," << $3.trans  << "," 
+        << tabulate::translatePos(@$,$2)
+        << ")";
+    }
     | OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+    {
+        $$.trans
+        << "(" << $2.trans << ")";
+    }
     | function_call
+    {
+        $$.trans << $1.trans;
+    }
     ;
 
 // expression list
 expression_list: 
-    expression { $$.sem = 1; }
-    | expression COMMA expression_list {$$.sem = 1 + $3.sem; }
+    expression 
+    { 
+        $$.sem = 1; 
+        $$.trans = $1.trans;
+    }
+    | expression COMMA expression_list 
+    {
+        $$.sem = 1 + $3.sem; 
+        $$.trans << $1.trans << "," << $3.trans ;
+    }
     ;
 
 // statement
 statement: 
     declaration_stmt
+    {
+        drv.outFile << $1.trans << "\n";
+    }
     | assignment_stmt
+    {
+        drv.outFile << $1.trans << "\n";
+    }
     | compound_statement
     | return_stmt
+    {
+        drv.outFile << $1.trans << "\n";
+    }
     | conditional_stmt
     | WHILE OPEN_PARENTHESIS
     {
@@ -439,12 +580,34 @@ statement:
         }
     }
     | function_call SEMICOLON
+    {
+        drv.outFile << $1.trans << ";\n";
+    }
     ;
 
 // return statement
 return_stmt: 
     RETURN expression SEMICOLON
+    {
+        if (drv.in_main)
+        {
+            $$.trans << "return to_int(" 
+            << $2.trans << "," <<  tabulate::translatePos(@$,"return")
+            << ");";
+        }
+        else
+        {
+            $$.trans << "return " << $2.trans << ";";
+        }
+    }
     | RETURN SEMICOLON
+    {
+        if (drv.in_main)
+        {
+            throw yy::parser::syntax_error(@$, "main function cannot return none");
+        }
+        $$.trans << "return any();";
+    }
     ;
 
 // list of statement list
@@ -458,11 +621,13 @@ compound_statement:
     OPEN_CURLY
     {
         drv.scope_level++;
+        drv.outFile << "{\n"; 
     } 
     statement_list CLOSE_CURLY 
     {
         drv.scope_level--;
         drv.delete_scope();
+        drv.outFile << "}\n"; 
     }
     ;
 
@@ -500,6 +665,10 @@ function_definition:
         /* cleanup */
         drv.active_func_ptr.level = -1;
         drv.active_func_ptr.paramlist.clear();
+        if (drv.in_main)
+        {
+            drv.in_main = false;
+        }
     }
     ;
 function_head: 
@@ -525,7 +694,11 @@ function_head:
         /* change active function pointer */
         drv.active_func_ptr = frec;
         /* check for main function */
-        if ($2 == "main") ++drv.num_main;
+        if ($2 == "main") 
+        {
+            ++drv.num_main;
+            drv.in_main = true;
+        }
     }
     ;
 /* function definition ends */

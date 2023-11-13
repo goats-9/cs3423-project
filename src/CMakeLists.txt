@@ -30,7 +30,7 @@ target_compile_options(
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/include)
 
-set(src_files main.cc driver.cc types.cc)
+set(src_files main.cc driver.cc types.cc translation.cc)
 set (runtime_header ${CMAKE_SOURCE_DIR}/runtime/include/runtime.hh)
 configure_file(${CMAKE_SOURCE_DIR}/include/runtime_env.hh.in runtime_env.hh)
 
