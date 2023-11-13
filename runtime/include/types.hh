@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <fstream>
+#include <map>
+#include <utility>
 
 class any;
 class cell
@@ -46,7 +49,7 @@ public:
 class table
 {
 public:
-    std::vector<std::vector<cell>> tb;
+    std::map<std::pair<int, int>, cell> tb;
     // default constructor
     table()
     {
@@ -57,6 +60,8 @@ public:
     {
         tb = a.tb;
     }
+    void read(std::string &path, std::string delim);
+    void write(std::string &path, std::string delim);
 };
 
 class date
