@@ -2,8 +2,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <map>
-#include <utility>
+#include <sstream>
 
 class any;
 class cell
@@ -49,7 +48,7 @@ public:
 class table
 {
 public:
-    std::map<std::pair<int, int>, cell> tb;
+    std::vector<std::vector<cell>> tb;
     // default constructor
     table()
     {
@@ -60,8 +59,8 @@ public:
     {
         tb = a.tb;
     }
-    void read(std::string &path, std::string delim);
-    void write(std::string &path, std::string delim);
+    int read(std::string &path, char delim);
+    int write(std::string &path, char delim);
 };
 
 class date
