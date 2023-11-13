@@ -9,22 +9,7 @@ namespace yy
     std::string &operator<< (std::string&s,const char* a);
 }
 namespace tabulate {
-
-    // std::vector<std::string> split(std::string s, std::string del);
-    
-    // class date {
-    // public:
-    //     int _year, _month, _day;
-    //     date();
-    //     date(std::string str);
-    // };
-
-    // class time {
-    // public:
-    //     int _hour, _min, _sec;
-    //     time();
-    //     time(std::string str);
-    // };
+    /* types of non terminal starts */
     typedef struct vector_of_string
     {
         std::vector<std::string> sem;
@@ -45,10 +30,19 @@ namespace tabulate {
         std::string sem;
         std::string trans;
     } String;
-    typedef std::string Default;
     typedef struct constant
     {
         std::string type;
         std::string value;
     } constant;
+    typedef struct instance
+    {
+        std::string exp;
+        std::string attribute;
+    } instance;
+    typedef struct Default
+    {
+        std::string trans;
+    } Default;
+    /* types of non terminal ends */
 }

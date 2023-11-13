@@ -1,4 +1,5 @@
 #include "../include/driver.hh"
+#include "runtime_env.hh"
 #include <iostream>
 #include <cstring>
 
@@ -28,6 +29,7 @@ namespace tabulate
         if (scan_begin())
             return 1;
         outFile.open(file + ".cc");
+        outFile << "#include \"" << RUNTIME_HEADER << "\"\n";
         yy::parser parse(*this);
         parse.set_debug_level(trace_parsing);
         int res = parse();
