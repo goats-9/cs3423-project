@@ -24,7 +24,6 @@ TIME {DIGIT}{1,2}{colon}{DIGIT}{1,2}{colon}{DIGIT}{1,2}
 RANGE {DIGIT}+{colon}{DIGIT}+(~{DIGIT}*)?
 COMMENTS #[^#]*#
 SPACE [ \t]
-IGNORE ({SPACE}|{COMMENTS})
 char_id_start [_a-zA-Z]
 char_id [_a-zA-Z0-9]
 ID {char_id_start}{char_id}*
@@ -256,14 +255,39 @@ close_parenthesis ")"
     drv.handleToken(token,yytext);
     return token;
 }
-    /* comments and spaces */
-{IGNORE} {
+    /* spaces */
+{SPACE} {
+    loc.step();
+}
+    /* comments */
+{COMMENTS} {
+    int lines_in_comment = 0;
+    int col_length = 0;
+    for (int i=0;i<yyleng;i++)
+    {
+        if (yytext[i] == '\n')
+        {
+            lines_in_comment++;
+            col_length = 0;
+        }
+        else
+        {
+            col_length++;
+        }
+    }
+    loc.lines(lines_in_comment);
+    if (lines_in_comment > 0)
+    {
+        loc.columns(col_length);
+    }
     loc.step();
 }
     /* newline */
 \n {loc.lines (yyleng); loc.step();}
     /* error handling */
-. {throw yy::parser::syntax_error(loc, "invalid character: " + string(yytext));}
+. {
+    throw yy::parser::syntax_error(loc, "invalid character: " + string(yytext));
+}
     /* EOF */
 <<EOF>>    return yy::parser::make_YYEOF (loc);
 %%

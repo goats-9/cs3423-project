@@ -33,8 +33,9 @@ namespace tabulate
             return 1;
         // opening file
         outFile.open(remove_extension() + ".cc");
-        // including runtime headers
+        // including preamble
         outFile << "#include \"" << RUNTIME_HEADER << "\"\n";
+        outFile << "state st(\"" << file << "\");\n";
         // parsing starts
         yy::parser parse(*this);
         parse.set_debug_level(trace_parsing);
