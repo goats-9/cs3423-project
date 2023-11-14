@@ -7,4 +7,3 @@
 #include <map>
 #include <stdexcept>
 using namespace std;
-state st;

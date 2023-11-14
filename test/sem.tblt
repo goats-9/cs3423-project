@@ -16,7 +16,12 @@ fun test()
 }
 fun test2()
 {
-    return 34;
+    return "34";
+}
+
+fun test3(e,f)
+{
+    return ADD(e,f);
 }
 
 fun main()  {
@@ -26,7 +31,7 @@ fun main()  {
     #
     let e = test();
     let f = test2();
-    const d = ADD(e,f);
+    const d = test3(e,f);
     #
     let c = a.att1[0][1][2].att2()[0].att6(a,b);
     (SUB(ADD(a.att1[0][9][1:4~2].att2().att6,a.attr2).run(),c.attr2).att1[0] AND 1).run();

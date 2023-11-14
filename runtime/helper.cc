@@ -45,6 +45,8 @@ int to_int(const any &a,const pos & p)
 
 void disp_error(const runtime_error &e)
 {
-    cerr << st;
-    cerr << e.what() << '\n';
+    cerr 
+    << "Runtime Type error:\n"
+    << st
+    << e.what() << '\n';
 }
