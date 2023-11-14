@@ -22,6 +22,12 @@ namespace tabulate {
         // check file name
         bool check_extension();
 
+        // remove extension
+        std::string remove_extension();
+
+        // compiles the translated c++ code
+        int compile();
+
         // Run the parser on file F.  Return 0 on success.
         int parse(const std::string &f);
 
@@ -54,6 +60,7 @@ namespace tabulate {
         int scope_level, while_level, num_main;
         bool in_struct;
         bool in_main;
+        bool in_func;
         symtab<std::string, id_symtrec> symtab_id;
         symtab<std::string, func_symtrec> symtab_func;
         symtab<std::string, dtype_symtrec> symtab_dtype;

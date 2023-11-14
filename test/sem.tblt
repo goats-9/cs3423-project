@@ -1,3 +1,4 @@
+#
 struct test {
     constructor() {
 
@@ -7,11 +8,28 @@ struct test {
         this.b = b;
     }
 };
+#
+
+fun test()
+{
+    return 1;
+}
+fun test2()
+{
+    return 34;
+}
 
 fun main()  {
+    #
     let a = new test();
     let b = new test(1, 2);
+    #
+    let e = test();
+    let f = test2();
+    const d = ADD(e,f);
+    #
     let c = a.att1[0][1][2].att2()[0].att6(a,b);
     (SUB(ADD(a.att1[0][9][1:4~2].att2().att6,a.attr2).run(),c.attr2).att1[0] AND 1).run();
+    #
     return 0;
 }

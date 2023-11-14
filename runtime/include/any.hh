@@ -7,10 +7,10 @@ class pos;
 class any
 {
 private:
-    void Constructor(const any &a);
-    void Destructor();
-    any &Accessor(const std::string &id);
-    any Runner(const std::string &id, const std::vector<any> &params);
+    // void Constructor(const any &a);
+    // void Destructor();
+    // any &Accessor(const std::string &id);
+    // any Runner(const std::string &id, const std::vector<any> &params);
     void construct(const any &a);
     void destruct();
     bool isInbuilt(const std::string &t);
@@ -45,7 +45,7 @@ public:
     any access(const std::string &id);
 
     // run method
-    any run(const std::string &id, const std::vector<any> &params);
+    any run(const std::string &id, const std::vector<any> &params, const pos &p);
 
     // accessing array elements
     any &at(const any &i);

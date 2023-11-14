@@ -18,6 +18,7 @@ const a = 90; -> const any a = any(new int(90),"int");
 3. handling function call
 ```
 func(a,2) -> func(a,any(new int(2),"int"),pos(start_line,start_col,end_line,end_col,"func")) 
+fun main() -> int main(int argc, char* argv[]) 
 ```
 
 4. handling struct

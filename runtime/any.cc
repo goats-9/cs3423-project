@@ -1,9 +1,12 @@
 #include "any.hh"
 #include "types.hh"
 #include "helper.hh"
+#include "state.hh"
 #include <iostream>
 #include <vector>
 using namespace std;
+
+extern state st;
 
 bool any::isInbuilt(const string &t)
 {
@@ -55,7 +58,7 @@ void any::construct(const any &a)
         data = new cell(*(cell *)a.data);
         type = "cell";
     }
-    Constructor(a);
+    // Constructor(a);
 }
 
 void any::destruct()
@@ -88,7 +91,7 @@ void any::destruct()
     {
         delete (cell *)data;
     }
-    Destructor();
+    // Destructor();
 }
 
 // access member
@@ -98,16 +101,17 @@ any any::access(const string &id)
     {
         throw runtime_error(type + " does not have any member " + id);
     }
-    return Accessor(id);
+    // return Accessor(id);
 }
 // run method
-any any::run(const string &id, const vector<any> &params)
+any any::run(const string &id, const vector<any> &params, const pos &p)
 {
+    st.infunc(p);
     if (isInbuilt(type))
     {
         throw runtime_error(type + " does not have any method " + id);
     }
-    return Runner(id, params);
+    // return Runner(id, params);
 }
 
 any &any::at(const any &i)

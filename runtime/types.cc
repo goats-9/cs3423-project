@@ -32,6 +32,7 @@ int table::read(std::string &path, char delim = ',') {
         tb.push_back(v);
     }
     fin.close();
+    return 0;
 }
 int table::write(std::string &path, char delim = ',') {
     fstream fout(path);
@@ -45,6 +46,7 @@ int table::write(std::string &path, char delim = ',') {
         fout << '\n';
     }
     fout.close();
+    return 0;
 }
 date::date(std::string str)
 {
