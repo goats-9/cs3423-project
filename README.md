@@ -7,4 +7,5 @@ cd build
 cmake ..
 cmake --build . --target install
 ./tabulate /path/to/source.tblt
+./a.out
 ```
