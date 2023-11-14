@@ -11,6 +11,11 @@ namespace yy
 }
 namespace tabulate {
     /* types of non terminal starts */
+    typedef struct function_info
+    {
+        std::string name;
+        int params;
+    }function_info;
     typedef struct vector_of_string
     {
         std::vector<std::string> sem;
@@ -19,7 +24,7 @@ namespace tabulate {
     typedef struct struct_member_list
     {
         std::vector<int> constr_args_list;
-        std::vector<tabulate::func_symtrec> func_in_struct;
+        std::vector<function_info> func_in_struct;
         std::string trans;
     } struct_member_list;
     typedef struct Int

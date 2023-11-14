@@ -1,4 +1,4 @@
-#
+
 struct test {
     constructor() {
 
@@ -7,8 +7,19 @@ struct test {
         this.a = a;
         this.b = b;
     }
+    fun test3(c)
+    {
+        SUB(c,this.c);
+    }
+    fun test20(a,b)
+    {
+        return SUB(a,b);
+    }  
 };
-#
+
+
+struct myclass
+{};
 
 fun test()
 {
