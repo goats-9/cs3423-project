@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fstream>
+#include <map>
 #include "parser.tab.hh"
 #include "symtab.hh"
 #include "translation.hh"
@@ -58,12 +59,15 @@ namespace tabulate {
         // symbol table
         func_symtrec active_func_ptr;
         int scope_level, while_level, num_main;
+        std::string current_struct;
         bool in_struct;
         bool in_main;
         bool in_func;
+        bool in_construct;
         symtab<std::string, id_symtrec> symtab_id;
         symtab<std::string, func_symtrec> symtab_func;
         symtab<std::string, dtype_symtrec> symtab_dtype;
+        std::map<std::string,std::string> ID_mapping_struct_func;
 
         driver();
         void symtab_init();

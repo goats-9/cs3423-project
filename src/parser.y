@@ -91,7 +91,7 @@ namespace tabulate
 %nterm 
     <tabulate::vector_of_string> decl_list parameter_list ID_list
     <tabulate::Int> declare expression_list args constructor_decl constructor_definition
-    <tabulate::func_symtrec> function_definition function_head
+    <tabulate::function_info> function_definition function_head
     <tabulate::String> decl_item variable
     <tabulate::struct_member_list> struct_member_list
 /* Nonterminals for translation */
@@ -338,7 +338,14 @@ variable:
         $$.sem = $1;
 
         // translation
-        $$.trans << $1;
+        if (drv.ID_mapping_struct_func.find($1) != drv.ID_mapping_struct_func.end())
+        {
+            $$.trans << drv.ID_mapping_struct_func[$1];
+        }
+        else
+        {
+            $$.trans << $1;
+        }
     }
     | expression accessors 
     {
@@ -450,25 +457,31 @@ constructor_call:
 constructor_decl:
     CONSTRUCTOR OPEN_PARENTHESIS parameter_list CLOSE_PARENTHESIS
     {
-        ++drv.scope_level;
+        // ++drv.scope_level;
         tabulate::id_symtrec idrec;
-        idrec.level = drv.scope_level;
+        idrec.level = drv.scope_level + 1;
         idrec.modifier = TABULATE_LET;
         for (auto name : $3.sem) {
             drv.symtab_id.insert(name, idrec, drv.active_func_ptr);
         }
-        drv.active_func_ptr.level = drv.scope_level - 1;
+        drv.active_func_ptr.level = drv.scope_level;
         drv.active_func_ptr.paramlist = $3.sem;
         $$.sem = $3.sem.size();
+        drv.in_construct = true;
+
+        // translation
+        drv.outFile
+        << drv.current_struct << "(" << $3.trans << ")\n";
     }
     ;
 constructor_definition:
     constructor_decl compound_statement {
-        --drv.scope_level;
+        // --drv.scope_level;
         drv.active_func_ptr.level = -1;
         drv.active_func_ptr.paramlist.clear();
         drv.delete_scope();
         $$.sem = $1.sem;
+        drv.in_construct = false;
     }
     ;
 /* Constructor definition ends */
@@ -479,8 +492,17 @@ struct_declaration:
     {
         drv.scope_level++;
         drv.in_struct = true;
+        drv.current_struct = $2;
+
+        // translation
+        drv.outFile 
+        << "class " << $2 << "{\n"
+        << "public:\n"
+        << "funcMap<" << $2 << "> func;\n"
+        << "funcParams func_params;\n"
+        << "memMap mem;\n"; 
     }
-    struct_member_list CLOSE_CURLY SEMICOLON
+    struct_member_list 
     {
         drv.scope_level--;
         drv.in_struct = false;
@@ -492,6 +514,34 @@ struct_declaration:
         if (res == -1) {
             throw yy::parser::syntax_error(@$, "error: failed to insert struct into symbol table.");
         }
+        // translation
+        drv.outFile
+        << "void func_decl(){\n";
+        for (auto i: $5.func_in_struct)
+        {
+            drv.outFile
+            << "func[\"" << i.name << "\"] = &" << $2 << "::" << i.name  << ";\n"
+            << "func_params[\"" << i.name << "\"] = " << i.params << ";\n";
+        }
+        drv.outFile
+        << "}\n";
+        if ($5.constr_args_list.empty())
+        {
+            drv.outFile
+            << $2 << "(){\n"
+            << "func_decl();\n"
+            << "}\n";
+        }
+        drv.outFile
+        << $2 << "(const " << $2 << " &a){\n"
+        << "copyConstruct\n"
+        << "}\n";
+    }
+    CLOSE_CURLY SEMICOLON
+    {
+        // translation
+        drv.outFile
+        << "};\n";
     }
     ;
 struct_member_list:
@@ -658,13 +708,24 @@ compound_statement:
         {
             drv.outFile << "st.infunc(p);\n";
         }
+        if (drv.in_construct && drv.scope_level == 2)
+        {
+            drv.outFile
+            << "func_decl();\n";
+        }
     } 
     statement_list CLOSE_CURLY 
     {
+        // translation of default return (except main)
         if (drv.in_func && !drv.in_main && drv.scope_level == 1)
         {
             drv.outFile 
             << "st.outfunc();\n"
+            << "return any();\n";
+        }
+        if (drv.in_func && drv.in_struct && drv.scope_level == 2)
+        {
+            drv.outFile 
             << "return any();\n";
         }
         drv.scope_level--;
@@ -683,14 +744,14 @@ ID_list:
         // translation
         $$.trans << "any " << $1;
     }
-    | ID COMMA ID_list
+    | ID_list COMMA ID
     {
         /* Accumulate IDs */
-        $$.sem = $3.sem;
-        $$.sem.push_back($1);
+        $$.sem = $1.sem;
+        $$.sem.push_back($3);
 
         // translation
-        $$.trans << "any " << $1 << "," << $3.trans ;
+        $$.trans << $1.trans << "," << "any " << $3 ;
     }
     ;
 
@@ -721,7 +782,7 @@ function_definition:
 
         if (drv.in_main)
         {
-            // translation
+            // translation for return statement in main
             drv.outFile 
             << "catch(const runtime_error &e){\n"
             << "disp_error(e);\n"
@@ -734,6 +795,8 @@ function_definition:
 
         // setting in_func false;
         drv.in_func = false;
+        // clearing drv.ID_mapping_struct_func
+        drv.ID_mapping_struct_func.clear();
 
         $$ = $1;
     }
@@ -753,14 +816,15 @@ function_head:
         // ++drv.scope_level;
         // insert params into ST
         tabulate::id_symtrec idrec;
-        idrec.level = drv.scope_level;
+        idrec.level = drv.scope_level + 1;
         idrec.modifier = TABULATE_LET;
         for (auto u : $4.sem) {
             drv.symtab_id.insert(u, idrec, drv.active_func_ptr);
         }
         /* change active function pointer */
         drv.active_func_ptr = frec;
-        $1 = frec;
+        $$.name = $2;
+        $$.params = $4.sem.size();
         /* check for main function */
         if ($2 == "main") 
         {
@@ -779,6 +843,14 @@ function_head:
             drv.outFile 
             << "int main(int agrc, char* argv[])\n{\n"
             << "try\n";
+        }
+        else if (drv.in_struct)
+        {
+            drv.outFile << "any " << $2 << "(vector<any> params)\n";
+            for(int i=0;i< (int)$4.sem.size();i++)
+            {
+                drv.ID_mapping_struct_func[$4.sem[i]] = "params[" + std::to_string(i) + "]";
+            }
         }
         else
         {

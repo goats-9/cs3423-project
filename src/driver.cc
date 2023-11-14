@@ -20,6 +20,7 @@ namespace tabulate
         in_main = false;
         in_func = false;
         in_struct = false;
+        in_construct = false;
         driver::symtab_init();
     }
 

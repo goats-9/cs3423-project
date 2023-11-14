@@ -8,6 +8,6 @@ namespace tabulate
     class translation
     {
     public:
-
+        
     };
 }
