@@ -1,7 +1,10 @@
 #include "any.hh"
 #include "helper.hh"
+#include "state.hh"
 #include <stdexcept>
 using namespace std;
+
+extern state st;
 
 // unary function error message
 runtime_error uni_err(const std::string &func, const any &a)
@@ -27,4 +30,21 @@ vector<string> split(string s, string del)
     } while (end != -1);
 
     return res;
+}
+
+int to_int(const any &a,const pos & p)
+{
+    st.infunc(p);
+    if (a.type == "int")
+    {
+        st.outfunc();
+        return *(int *)a.data;
+    }
+    throw std::runtime_error("Return type of main is not int(but " + a.type + ")");
+}
+
+void disp_error(const runtime_error &e)
+{
+    cerr << st;
+    cerr << e.what() << '\n';
 }

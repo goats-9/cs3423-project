@@ -12,7 +12,7 @@ target_compile_options(
   "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3;-O2>>"
 )
 
-set(src_files any.cc helper.cc inbuilt.cc types.cc)
+set(src_files any.cc helper.cc inbuilt.cc types.cc state.cc)
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include

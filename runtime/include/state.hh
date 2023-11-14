@@ -3,6 +3,7 @@
 #include "location.hh"
 #include <stack>
 #include <string>
+#include <iostream>
 
 class pos
 {
@@ -48,3 +49,5 @@ public:
         func_call.pop();
     }
 };
+
+std::ostream& operator<<(std::ostream& o, state s);

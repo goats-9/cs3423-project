@@ -17,6 +17,9 @@ namespace tabulate
         scope_level = 0;
         while_level = 0;
         num_main = 0;
+        in_main = false;
+        in_func = false;
+        in_struct = false;
         driver::symtab_init();
     }
 
@@ -28,16 +31,31 @@ namespace tabulate
         location.initialize(&file);
         if (scan_begin())
             return 1;
-        outFile.open(file + ".cc");
+        // opening file
+        outFile.open(remove_extension() + ".cc");
+        // including runtime headers
         outFile << "#include \"" << RUNTIME_HEADER << "\"\n";
+        // parsing starts
         yy::parser parse(*this);
         parse.set_debug_level(trace_parsing);
         int res = parse();
+        // parsing ends
         scan_end();
         outFile.close();
+        if (!res)
+        {
+            res = compile();
+        }
         return res;
     }
     
+    int driver::compile()
+    {
+        int res = std::system(("g++ " + remove_extension() + ".cc -L. -lruntime" ).c_str());
+        // std::system(("g++ -o " + remove_extension() + " " + remove_extension() + ".o -L. -lruntime").c_str());
+        return res;
+    }
+
     bool driver::check_extension()
     {
         if (file.substr(file.find_last_of(".") + 1) == "tblt")
@@ -45,6 +63,12 @@ namespace tabulate
         return false;
     }
     
+    // remove extension
+    std::string driver::remove_extension()
+    {
+        return file.substr(0,file.find_last_of("."));
+    }
+
     void driver::handleToken(yy::parser::symbol_type token, const std::string &text)
     {
         if (isLexOut)

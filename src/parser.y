@@ -401,10 +401,18 @@ function_call:
         }
 
         // translation
-        $$.trans
-        << $1 << "(" << $3.trans << "," 
-        <<  tabulate::translatePos(@$,$1) 
-        << ")";
+        if ($3.sem)
+        {
+            $$.trans
+            << $1 << "(" << $3.trans << "," 
+            <<  tabulate::translatePos(@$,$1) 
+            << ")";
+        }
+        else
+        {
+            $$.trans
+            << $1 << "(" << tabulate::translatePos(@$,$1) << ")" ;
+        }
     }
     ;
 /* function call ends */
@@ -597,7 +605,18 @@ return_stmt:
         }
         else
         {
-            $$.trans << "return " << $2.trans << ";";
+            if (drv.in_func && !drv.in_struct)
+            {
+                $$.trans 
+                << "any ret_val = " << $2.trans << ";\n"
+                << "st.outfunc();\n"
+                << "return ret_val;";
+            }
+            else
+            {
+                $$.trans
+                << "return " << $2.trans << ";";
+            }
         }
     }
     | RETURN SEMICOLON
@@ -622,6 +641,10 @@ compound_statement:
     {
         drv.scope_level++;
         drv.outFile << "{\n"; 
+        if (drv.in_func && !drv.in_main && !drv.in_struct)
+        {
+            drv.outFile << "st.infunc(p);\n";
+        }
     } 
     statement_list CLOSE_CURLY 
     {
@@ -637,20 +660,31 @@ ID_list:
     {
         /* Accumulate IDs */
         $$.sem.push_back($1);
+
+        // translation
+        $$.trans << "any " << $1;
     }
     | ID COMMA ID_list
     {
         /* Accumulate IDs */
         $$.sem = $3.sem;
         $$.sem.push_back($1);
+
+        // translation
+        $$.trans << "any " << $1 << "," << $3.trans ;
     }
     ;
 
 parameter_list: 
-    /* empty */ { $$.sem = {}; }
+    /* empty */ 
+    { 
+        $$.sem = {};
+        $$.trans = ""; 
+    }
     | ID_list 
     {
         $$.sem = $1.sem;
+        $$.trans = $1.trans;
     }
     ;
 
@@ -665,10 +699,22 @@ function_definition:
         /* cleanup */
         drv.active_func_ptr.level = -1;
         drv.active_func_ptr.paramlist.clear();
+
         if (drv.in_main)
         {
+            // translation
+            drv.outFile 
+            << "catch(const runtime_error &e){\n"
+            << "disp_error(e);\n"
+            << "return 1;\n"
+            << "}\nreturn 0;\n}";
+
+            // updating drv.in_main
             drv.in_main = false;
         }
+
+        // setting in_func false;
+        drv.in_func = false;
     }
     ;
 function_head: 
@@ -696,8 +742,32 @@ function_head:
         /* check for main function */
         if ($2 == "main") 
         {
+            if (!$4.sem.empty())
+            {
+                throw yy::parser::syntax_error(@$, "Function '" + $2 + "' cannot have any parameter");
+            }
             ++drv.num_main;
             drv.in_main = true;
+        }
+        drv.in_func = true;
+
+        // translation
+        if (drv.in_main)
+        {
+            drv.outFile 
+            << "int main(int agrc, char* argv[])\n{\n"
+            << "try\n";
+        }
+        else
+        {
+            if ($4.sem.empty())
+            {
+                drv.outFile << "any " << $2 << "(const pos &p)\n";
+            }
+            else
+            {
+                drv.outFile << "any " << $2 << "(" << $4.trans << ",const pos &p)\n" ;
+            }
         }
     }
     ;

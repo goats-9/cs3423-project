@@ -87,7 +87,9 @@ any any::Runner(const string &id,const vector<any> &params)
         {
             throw runtime_error(type + " does not have any method " + id);
         }
-        return (ptr->*f)(params);
+        any val =  (ptr->*f)(params);
+        st.outfunc();
+        return val;
     }
     throw runtime_error("dot(.) does not support (" + type + ")");
 }
