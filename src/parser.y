@@ -91,6 +91,7 @@ namespace tabulate
 %nterm 
     <tabulate::vector_of_string> decl_list parameter_list ID_list
     <tabulate::Int> declare expression_list args constructor_decl constructor_definition
+    <tabulate::func_symtrec> function_definition function_head
     <tabulate::String> decl_item variable
     <tabulate::struct_member_list> struct_member_list
 /* Nonterminals for translation */
@@ -495,9 +496,9 @@ struct_declaration:
     ;
 struct_member_list:
     /* empty */ { }
-    | struct_member_list declaration_stmt { $$.constr_args_list = $1.constr_args_list; }
-    | struct_member_list function_definition { $$.constr_args_list = $1.constr_args_list; }
-    | struct_member_list constructor_definition { $$.constr_args_list = $1.constr_args_list; $$.constr_args_list.push_back($2.sem); }
+    | struct_member_list declaration_stmt { $$ = $1; }
+    | struct_member_list function_definition { $$ = $1; $$.func_in_struct.push_back($2); }
+    | struct_member_list constructor_definition { $$ = $1; $$.constr_args_list.push_back($2.sem); }
     ;
 /* struct definition ends */
 
@@ -733,6 +734,8 @@ function_definition:
 
         // setting in_func false;
         drv.in_func = false;
+
+        $$ = $1;
     }
     ;
 function_head: 
@@ -757,6 +760,7 @@ function_head:
         }
         /* change active function pointer */
         drv.active_func_ptr = frec;
+        $1 = frec;
         /* check for main function */
         if ($2 == "main") 
         {
