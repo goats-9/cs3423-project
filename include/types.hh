@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "symtab.hh"
 
 namespace yy
 {
@@ -15,11 +16,12 @@ namespace tabulate {
         std::vector<std::string> sem;
         std::string trans;
     } vector_of_string;
-    typedef struct vector_of_int
+    typedef struct struct_member_list
     {
-        std::vector<int> sem;
+        std::vector<int> constr_args_list;
+        std::vector<tabulate::func_symtrec> func_in_struct;
         std::string trans;
-    } vector_of_int;
+    } struct_member_list;
     typedef struct Int
     {
         int sem;

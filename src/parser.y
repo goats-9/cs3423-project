@@ -92,7 +92,7 @@ namespace tabulate
     <tabulate::vector_of_string> decl_list parameter_list ID_list
     <tabulate::Int> declare expression_list args constructor_decl constructor_definition
     <tabulate::String> decl_item variable
-    <tabulate::vector_of_int> struct_member_list
+    <tabulate::struct_member_list> struct_member_list
 /* Nonterminals for translation */
 %nterm
     <tabulate::instance> instance
@@ -486,7 +486,7 @@ struct_declaration:
         
         tabulate::dtype_symtrec struc;
         struc.level = drv.scope_level;
-        struc.constr_args = $5.sem;
+        struc.constr_args = $5.constr_args_list;
         int res = drv.symtab_dtype.insert($2, struc, drv.active_func_ptr);
         if (res == -1) {
             throw yy::parser::syntax_error(@$, "error: failed to insert struct into symbol table.");
@@ -495,9 +495,9 @@ struct_declaration:
     ;
 struct_member_list:
     /* empty */ { }
-    | struct_member_list declaration_stmt { $$.sem = $1.sem; }
-    | struct_member_list function_definition { $$.sem = $1.sem; }
-    | struct_member_list constructor_definition { $$.sem = $1.sem; $$.sem.push_back($2.sem); }
+    | struct_member_list declaration_stmt { $$.constr_args_list = $1.constr_args_list; }
+    | struct_member_list function_definition { $$.constr_args_list = $1.constr_args_list; }
+    | struct_member_list constructor_definition { $$.constr_args_list = $1.constr_args_list; $$.constr_args_list.push_back($2.sem); }
     ;
 /* struct definition ends */
 
