@@ -205,18 +205,29 @@ any LTE(const any &a, const any &b, const pos &p)
 
 /* Comparison ends */
 
-// DISP
-any DISP(const any &a)
+// TYPEOF
+any TYPEOF(const any &a,const pos &p)
 {
-    if (a.type == "array")
-    {
-        vector<any> *ptr = (vector<any> *)a.data;
-        for(any i: (*ptr))
-        {
-            cout << i << " " ;
-        }
-        cout << "\n";
-        return any();
-    }
-    throw uni_err("DISP",a);
+    st.infunc(p);
+    st.outfunc();
+    return any(new string(a.type),"string");
+}
+
+// DISP
+any DISP(const any &a,const pos &p)
+{
+    // if (a.type == "array")
+    // {
+    //     vector<any> *ptr = (vector<any> *)a.data;
+    //     for(any i: (*ptr))
+    //     {
+    //         cout << i << " " ;
+    //     }
+    //     cout << "\n";
+    //     return any();
+    // }
+    st.infunc(p);
+    std::cout << a << "\n";
+    st.outfunc();
+    return any();
 }

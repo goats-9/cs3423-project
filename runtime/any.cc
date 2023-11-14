@@ -107,6 +107,15 @@ any any::access(const string &id)
 any any::run(const string &id, const vector<any> &params, const pos &p)
 {
     st.infunc(p);
+    if (type == "array")
+    {
+        if (id == "size")
+        {
+            st.outfunc();
+            return any(new int(((vector<any>*)data)->size()),"int");
+        }
+        throw runtime_error(type + " does not have any method " + id);
+    }
     if (isInbuilt(type))
     {
         throw runtime_error(type + " does not have any method " + id);
@@ -114,8 +123,9 @@ any any::run(const string &id, const vector<any> &params, const pos &p)
     // return Runner(id, params);
 }
 
-any &any::at(const any &i)
+any &any::at(const any &i,const pos &p)
 {
+    st.infunc(p);
     if (i.type != "int")
     {
         throw runtime_error("index should be a integer but it was " + i.type);
@@ -124,10 +134,11 @@ any &any::at(const any &i)
     {
         vector<any> *ptr = (vector<any> *)data;
         int idx = *(int *)i.data;
-        if (idx >= (int)ptr->size())
+        if (idx >= (int)ptr->size() || idx < 0)
         {
             throw runtime_error("out of index");
         }
+        st.outfunc();
         return (*ptr)[idx];
     }
     throw runtime_error("[] operator does not support (" + type + ")");
@@ -296,7 +307,7 @@ ostream &operator<<(ostream &o, const any &a)
         o << (*ptr)[ptr->size() - 1] << "]";
         return o;
     }
-    throw runtime_error("Cannot print " + a.type);
+    throw uni_err("DISP",a);;
 }
 
 /* operator overloading ends */

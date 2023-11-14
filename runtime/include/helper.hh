@@ -17,5 +17,8 @@ std::vector<std::string> split(std::string s, std::string del);
 // converts any to int if possible
 int to_int(const any &a, const pos &p);
 
+// converts any to bool if possible
+int to_bool(const any &a, const pos &p);
+
 // displays runtime error message
 void disp_error(const std::runtime_error &e);

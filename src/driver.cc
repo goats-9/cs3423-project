@@ -129,6 +129,7 @@ namespace tabulate
             "NOT",
             "TYPEOF",
             "LENGTH",
+            "DISP"
         };
         std::vector<std::string> biop_paramlist = {"p1","p2"};
         std::vector<std::string> uniop_paramlist = {"p1"};
