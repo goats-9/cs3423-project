@@ -1,5 +1,6 @@
 %{
 #include <fstream>
+#include <map>
 #include <stdio.h>
 #include "tabulate.hh"
 #include "parser.tab.hh"
@@ -7,6 +8,24 @@ using namespace std;
 
 // Code run each time a pattern is matched.
 # define YY_USER_ACTION  loc.columns (yyleng);
+
+map<string,string> biOp_to_func = {
+    {"==","EQ"},
+    {"!=","NE"},
+    {">","GT"},
+    {"<","LT"},
+    {">=","GTE"},
+    {"<=","LTE"},
+    {"AND","AND"},
+    {"OR","OR"},
+    {"XOR","XOR"}
+};
+map<string,string> uniOp_to_func = {
+    {"NOT","NOT"},
+    {"-","UniMinus"},
+    {"~","NOT"},
+    {"TYPEOF","TYPEOF"}
+};
 %}
 
 %option noyywrap nounput noinput batch debug
@@ -146,12 +165,12 @@ close_parenthesis ")"
     } 
     */
 {bi_OP} {
-    auto token = yy::parser::make_BIOP(yytext,loc);
+    auto token = yy::parser::make_BIOP(biOp_to_func[yytext],loc);
     drv.handleToken(token,yytext);
     return token;
 }
 {uni_OP} {
-    auto token = yy::parser::make_UNIOP(yytext,loc);
+    auto token = yy::parser::make_UNIOP(uniOp_to_func[yytext],loc);
     drv.handleToken(token,yytext);
     return token;
 }

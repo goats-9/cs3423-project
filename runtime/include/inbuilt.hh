@@ -28,24 +28,27 @@ any POW(const any &a, const any &b, const pos &p);
 /* Comparison starts */
 
 // Equal
-any EQ(any &a, const any &b, const pos &p);
+any EQ(const any &a, const any &b, const pos &p);
 
 // Not Equal
-any NE(any &a, const any &b, const pos &p);
+any NE(const any &a, const any &b, const pos &p);
 
 // Greater Than
-any GT(any &a, const any &b, const pos &p);
+any GT(const any &a, const any &b, const pos &p);
 
 // Less Than
-any LT(any &a, const any &b, const pos &p);
+any LT(const any &a, const any &b, const pos &p);
 
 // Greater Than or Equal
-any GTE(any &a, const any &b, const pos &p);
+any GTE(const any &a, const any &b, const pos &p);
 
 // Less Than or Equal
-any LTE(any &a, const any &b, const pos &p);
+any LTE(const any &a, const any &b, const pos &p);
 
 /* Comparison ends */
 
+// TYPEOF
+any TYPEOF(const any &a,const pos &p);
+
 // DISP
-any DISP(const any &a);
+any DISP(const any &a,const pos &p);

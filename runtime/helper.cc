@@ -40,6 +40,37 @@ int to_int(const any &a,const pos & p)
         st.outfunc();
         return *(int *)a.data;
     }
+    if (a.type == "bool")
+    {
+        st.outfunc();
+        return int(*(bool *)a.data);
+    }
+    if (a.type == "double")
+    {
+        st.outfunc();
+        return int(*(double *)a.data);
+    }
+    throw std::runtime_error("Return type of main is not int (but " + a.type + ")");
+}
+
+int to_bool(const any &a,const pos & p)
+{
+    st.infunc(p);
+    if (a.type == "int")
+    {
+        st.outfunc();
+        return bool(*(int *)a.data);
+    }
+    if (a.type == "double")
+    {
+        st.outfunc();
+        return bool(*(double *)a.data);
+    }
+    if (a.type == "bool")
+    {
+        st.outfunc();
+        return (*(bool *)a.data);
+    }
     throw std::runtime_error("Return type of main is not int(but " + a.type + ")");
 }
 

@@ -312,11 +312,15 @@ instance:
 accessors: 
     OPEN_SQUARE_BRAC expression CLOSE_SQUARE_BRAC
     {
-        $$.trans << ".at(" << $2.trans << ")";
+        $$.trans << ".at(" 
+        << $2.trans << "," << tabulate::translatePos(@$,"[] operator")
+        << ")";
     }
     | OPEN_SQUARE_BRAC expression CLOSE_SQUARE_BRAC accessors
     {
-        $$.trans << ".at(" << $2.trans << ")" << $4.trans ;
+        $$.trans << ".at(" 
+        << $2.trans << "," << tabulate::translatePos(@$,"[] operator")
+        << ")" << $4.trans ;
     }
     ;
 /* accessing arrays and table expressions ends */
@@ -563,15 +567,19 @@ statement:
         drv.outFile << $1.trans << "\n";
     }
     | conditional_stmt
-    | WHILE OPEN_PARENTHESIS
+    | WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS 
     {
         /**
          * increase the while_level for checking
          * break and continue statements
         */ 
         ++drv.while_level;
+        drv.outFile
+        << "while (to_bool(" 
+        << $3.trans << "," << tabulate::translatePos(@$,"while predicate")
+        << "))";
     } 
-    expression CLOSE_PARENTHESIS compound_statement 
+    compound_statement 
     {
         --drv.while_level; 
     }
@@ -580,12 +588,16 @@ statement:
         if (drv.while_level < 1) {
             throw yy::parser::syntax_error(@$, "error: break used outside a loop.");
         }
+
+        drv.outFile << "break;\n";
     }
     | CONTINUE SEMICOLON
     { 
         if (drv.while_level < 1) {
             throw yy::parser::syntax_error(@$, "error: continue used outside a loop.");
         }
+
+        drv.outFile << "continue;\n";
     }
     | function_call SEMICOLON
     {
@@ -600,7 +612,7 @@ return_stmt:
         if (drv.in_main)
         {
             $$.trans << "return to_int(" 
-            << $2.trans << "," <<  tabulate::translatePos(@$,"return")
+            << $2.trans << "," <<  tabulate::translatePos(@$,"return in function main")
             << ");";
         }
         else
@@ -641,13 +653,19 @@ compound_statement:
     {
         drv.scope_level++;
         drv.outFile << "{\n"; 
-        if (drv.in_func && !drv.in_main && !drv.in_struct)
+        if (drv.in_func && !drv.in_main && drv.scope_level == 1)
         {
             drv.outFile << "st.infunc(p);\n";
         }
     } 
     statement_list CLOSE_CURLY 
     {
+        if (drv.in_func && !drv.in_main && drv.scope_level == 1)
+        {
+            drv.outFile 
+            << "st.outfunc();\n"
+            << "return any();\n";
+        }
         drv.scope_level--;
         drv.delete_scope();
         drv.outFile << "}\n"; 
@@ -693,7 +711,7 @@ function_definition:
     function_head compound_statement
     {
         /* level reduced by 1, since it was increased for parameter_list and function body */
-        drv.scope_level--;     
+        // drv.scope_level--;     
         /* delete ST entries */
         drv.delete_scope();
         /* cleanup */
@@ -729,7 +747,7 @@ function_head:
         if (res == -1) {
             throw yy::parser::syntax_error(@$, "Function '" + $2 + "' already exists in the symbol table");
         }
-        ++drv.scope_level;
+        // ++drv.scope_level;
         // insert params into ST
         tabulate::id_symtrec idrec;
         idrec.level = drv.scope_level;

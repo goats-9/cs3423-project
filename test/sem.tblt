@@ -14,14 +14,25 @@ fun test()
 {
     return 1;
 }
+
 fun test2()
 {
-    return "34";
+    return 34;
 }
-
 fun test3(e,f)
 {
     return ADD(e,f);
+}
+
+fun printArray(arr)
+{
+    let i = SUB(arr.size(),1);
+    while(i >= 0)
+    {
+        DISP(arr[i]);
+        DISP(TYPEOF(arr[i]));
+        i = SUB(i,1);
+    } 
 }
 
 fun main()  {
@@ -31,10 +42,24 @@ fun main()  {
     #
     let e = test();
     let f = test2();
-    const d = test3(e,f);
+    let d = test3(e,f);
     #
     let c = a.att1[0][1][2].att2()[0].att6(a,b);
     (SUB(ADD(a.att1[0][9][1:4~2].att2().att6,a.attr2).run(),c.attr2).att1[0] AND 1).run();
     #
-    return 0;
+    DISP("d is ");
+    DISP(d);
+    
+    while(d != 36)
+    {
+        d = ADD(d,1);
+        DISP("d is ");
+        DISP(d);
+    }
+
+    # Arrays #
+    let arr = [1,"hello",90.8,false];
+    DISP("Displaying array using a function");
+    printArray(arr);
+    return true;
 }
