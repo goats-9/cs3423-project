@@ -92,7 +92,7 @@ namespace tabulate
     <tabulate::vector_of_string> decl_list parameter_list ID_list
     <tabulate::Int> declare expression_list args constructor_decl constructor_definition
     <tabulate::String> decl_item variable
-    <tabulate::vector_of_int> struct_member_list
+    <tabulate::struct_member_list> struct_member_list
 /* Nonterminals for translation */
 %nterm
     <tabulate::instance> instance
