@@ -9,7 +9,7 @@ struct myclass2 {
     }
     fun test3(c)
     {
-        SUB(c,this.c);
+        this.a = SUB(c,this.b);
     }
     fun test20(a,b)
     {
@@ -27,8 +27,16 @@ fun fib(n)
     {
         return 1;
     }
-    let dp = [1,1,2];
-    return dp[n];
+    let dp = [1,1];
+    let i = 2;
+
+    while (i < n)
+    {
+        dp.add_item(ADD(dp[SUB(i,1)],dp[SUB(i,2)]));
+        i = ADD(i,1);
+    }
+
+    return dp[SUB(n,1)];
 }
 
 fun printArray(arr)
@@ -43,6 +51,11 @@ fun printArray(arr)
 }
 
 fun main()  {
-    DISP(fib(2));
+    DISP(fib(5));
+
+    let obj2 = new myclass2(1,2);
+
+    obj2.test3(56);
+    DISP(obj2.a);
     return 0;
 }

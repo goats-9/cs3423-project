@@ -113,8 +113,22 @@ any any::run(const string &id, const vector<any> &params, const pos &p)
     {
         if (id == "size")
         {
+            if (params.size() != 0)
+            {
+                throw runtime_error(id + " accepts 0 params but recieved " + to_string(params.size()));
+            }
             st.outfunc();
             return any(new int(((vector<any>*)data)->size()),"int");
+        }
+        if (id == "add_item")
+        {
+            if (params.size() != 1)
+            {
+                throw runtime_error(id + " accepts 1 params but recieved " + to_string(params.size()));
+            }
+            ((vector<any>*)data)->push_back(params[0]);
+            st.outfunc();
+            return any();
         }
         throw runtime_error(type + " does not have any method " + id);
     }

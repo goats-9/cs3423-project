@@ -19,11 +19,17 @@ using memMap = map<string, any>;
     func = a.func;    \
     func_params = a.func_params;
 
-#define runnerCode                                                     \
-    f = ptr->func[id];                                                 \
-    if (!f)                                                            \
-    {                                                                  \
-        throw runtime_error(type + " does not have any method " + id); \
-    }                                                                  \
-    st.outfunc();                                                      \
+#define runnerCode                                                                                                         \
+    f = ptr->func[id];                                                                                                     \
+    if (!f)                                                                                                                \
+    {                                                                                                                      \
+        throw runtime_error(type + " does not have any method " + id);                                                     \
+    }                                                                                                                      \
+    if (ptr->func_params[id] != params.size())                                                                             \
+    {                                                                                                                      \
+        string err;                                                                                                        \
+        err = id + " accepts " + to_string(ptr->func_params[id]) + " parameters but recieved " + to_string(params.size()); \
+        throw runtime_error(err);                                                                                          \
+    }                                                                                                                      \
+    st.outfunc();                                                                                                          \
     return (ptr->*f)(params, p);
