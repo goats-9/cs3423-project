@@ -71,7 +71,7 @@ int to_bool(const any &a,const pos & p)
         st.outfunc();
         return (*(bool *)a.data);
     }
-    throw std::runtime_error("Return type of main is not int(but " + a.type + ")");
+    throw std::runtime_error("predicate(of type " + a.type + ") cannot be converted to boolean");
 }
 
 void disp_error(const runtime_error &e)

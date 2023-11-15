@@ -58,7 +58,7 @@ void any::construct(const any &a)
         data = new cell(*(cell *)a.data);
         type = "cell";
     }
-    // Constructor(a);
+    Constructor(a);
 }
 
 void any::destruct()
@@ -91,17 +91,19 @@ void any::destruct()
     {
         delete (cell *)data;
     }
-    // Destructor();
+    Destructor();
 }
 
 // access member
-any any::access(const string &id)
+any &any::access(const string &id,const pos&p)
 {
+    st.infunc(p);
     if (isInbuilt(type))
     {
         throw runtime_error(type + " does not have any member " + id);
     }
-    // return Accessor(id);
+    st.outfunc();
+    return Accessor(id);
 }
 // run method
 any any::run(const string &id, const vector<any> &params, const pos &p)
@@ -120,7 +122,7 @@ any any::run(const string &id, const vector<any> &params, const pos &p)
     {
         throw runtime_error(type + " does not have any method " + id);
     }
-    // return Runner(id, params);
+    return Runner(id, params,p);
 }
 
 any &any::at(const any &i,const pos &p)

@@ -1,5 +1,5 @@
 
-struct test {
+struct myclass2 {
     constructor() {
 
     }
@@ -18,21 +18,17 @@ struct test {
 };
 
 
-struct myclass
+struct myclass1
 {};
 
-fun test()
+fun fib(n)
 {
-    return 1;
-}
-
-fun test2()
-{
-    return 34;
-}
-fun test3(e,f)
-{
-    return ADD(e,f);
+    if (n == 0)
+    {
+        return 1;
+    }
+    let dp = [1,1,2];
+    return dp[n];
 }
 
 fun printArray(arr)
@@ -47,30 +43,6 @@ fun printArray(arr)
 }
 
 fun main()  {
-    #
-    let a = new test();
-    let b = new test(1, 2);
-    #
-    let e = test();
-    let f = test2();
-    let d = test3(e,f);
-    #
-    let c = a.att1[0][1][2].att2()[0].att6(a,b);
-    (SUB(ADD(a.att1[0][9][1:4~2].att2().att6,a.attr2).run(),c.attr2).att1[0] AND 1).run();
-    #
-    DISP("d is ");
-    DISP(d);
-    
-    while(d != 36)
-    {
-        d = ADD(d,1);
-        DISP("d is ");
-        DISP(d);
-    }
-
-    # Arrays #
-    let arr = [1,"hello",90.8,false];
-    DISP("Displaying array using a function");
-    printArray(arr);
-    return true;
+    DISP(fib(2));
+    return 0;
 }

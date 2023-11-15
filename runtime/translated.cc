@@ -76,7 +76,7 @@ any &any::Accessor(const string &id)
     }
     throw runtime_error("dot(.) does not support (" + type + ")");
 }
-any any::Runner(const string &id,const vector<any> &params)
+any any::Runner(const string &id,const vector<any> &params, const pos &p)
 {
     if (type == "myclass")
     {
@@ -87,10 +87,10 @@ any any::Runner(const string &id,const vector<any> &params)
         {
             throw runtime_error(type + " does not have any method " + id);
         }
-        any val =  (ptr->*f)(params);
         st.outfunc();
-        return val;
+        return (ptr->*f)(params,p);
     }
+    throw uni_err("dot(.)",*this);
     throw runtime_error("dot(.) does not support (" + type + ")");
 }
 

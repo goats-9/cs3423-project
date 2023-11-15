@@ -9,7 +9,7 @@
 using namespace std;
 
 template <typename T>
-using funcMap = map<string, any (T::*)(vector<any>)>;
+using funcMap = map<string, any (T::*)(vector<any>, const pos &)>;
 using funcParams = map<string, int>;
 using memMap = map<string, any>;
 
@@ -19,4 +19,11 @@ using memMap = map<string, any>;
     func = a.func;    \
     func_params = a.func_params;
 
-    
+#define runnerCode                                                     \
+    f = ptr->func[id];                                                 \
+    if (!f)                                                            \
+    {                                                                  \
+        throw runtime_error(type + " does not have any method " + id); \
+    }                                                                  \
+    st.outfunc();                                                      \
+    return (ptr->*f)(params, p);
