@@ -9,6 +9,9 @@ namespace yy
     std::string &operator<< (std::string&s,std::string a);
     std::string &operator<< (std::string&s,const char* a);
 }
+#define TABULATE_STRUCT 0
+#define TABULATE_FUNC 1
+
 namespace tabulate {
     /* types of non terminal starts */
     typedef struct function_info
@@ -16,6 +19,10 @@ namespace tabulate {
         std::string name;
         int params;
     }function_info;
+    typedef struct struct_info
+    {
+        std::string name;
+    }struct_info;
     typedef struct vector_of_string
     {
         std::vector<std::string> sem;
@@ -27,6 +34,15 @@ namespace tabulate {
         std::vector<function_info> func_in_struct;
         std::string trans;
     } struct_member_list;
+    typedef struct program_element
+    {
+        int type;
+        struct_info structInfo;
+    }program_element;
+    typedef struct program
+    {
+        std::vector<struct_info> structList;
+    }program;
     typedef struct Int
     {
         int sem;

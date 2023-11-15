@@ -7,10 +7,10 @@ class pos;
 class any
 {
 private:
-    // void Constructor(const any &a);
-    // void Destructor();
-    // any &Accessor(const std::string &id);
-    // any Runner(const std::string &id, const std::vector<any> &params);
+    void Constructor(const any &a);
+    void Destructor();
+    any &Accessor(const std::string &id);
+    any Runner(const std::string &id, const std::vector<any> &params,const pos &p);
     void construct(const any &a);
     void destruct();
     bool isInbuilt(const std::string &t);
@@ -42,7 +42,7 @@ public:
         construct(a);
     }
     // access member
-    any access(const std::string &id);
+    any &access(const std::string &id,const pos&p);
 
     // run method
     any run(const std::string &id, const std::vector<any> &params, const pos &p);

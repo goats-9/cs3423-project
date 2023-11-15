@@ -97,6 +97,9 @@ namespace tabulate
 /* Nonterminals for translation */
 %nterm
     <tabulate::instance> instance
+    <tabulate::struct_info> struct_declaration
+    <tabulate::program_element> program_element
+    <tabulate::program> program
     <tabulate::constant> constant array_initializer constructor_call
     <tabulate::Default> expression function_call accessors assignment_stmt declaration_stmt return_stmt
 
@@ -111,19 +114,87 @@ S:
             yy::parser::syntax_error(@$, "error: there should be exactly one main function.");
         }
 
+        // declaring new datatypes in runtime function
+        // Constructor
+        drv.outFile
+        << "void any::Constructor(const any &a)\n"
+        << "{\n";
+        for (auto i: $1.structList)
+        {
+            drv.outFile 
+            << "if (a.type == \"" << i.name << "\"){\n"
+            << "data = new " << i.name << "(*(" << i.name << " *)a.data);\n"
+            << "type = \"" << i.name << "\";\n"
+            << "}\n";
+        }
+        drv.outFile << "}\n"
+        // Destructor()
+        << "void any::Destructor(){\n";
+        for (auto i: $1.structList)
+        {
+            drv.outFile 
+            << "if (type == \"" << i.name << "\"){\n"
+            << "delete (" << i.name << "*)data;\n"
+            << "}\n";
+        }
+        drv.outFile << "}\n"
+        // Accessor
+        << "any &any::Accessor(const string &id){\n";
+        for (auto i: $1.structList)
+        {
+            drv.outFile 
+            << "if (type == \"" << i.name << "\"){\n"
+            << i.name << " *ptr = (" << i.name << " *)data;\n"
+            << "return ptr->mem[id];\n"
+            << "}\n";
+        }
+        drv.outFile 
+        << "throw uni_err(\"dot(.)\",*this);"
+        << "}\n"
+        // Runner()
+        << "any any::Runner(const string &id,const vector<any> &params, const pos &p){\n";
+        for (auto i: $1.structList)
+        {
+            drv.outFile 
+            << "if (type == \"" << i.name << "\"){\n"
+            << "any (" << i.name << "::*f)(vector<any>, const pos &);\n"
+            << i.name << " *ptr = (" << i.name << " *)data;\n"
+            << "runnerCode\n"
+            << "}\n";
+        }
+        drv.outFile 
+        << "throw uni_err(\"dot(.)\",*this);\n"
+        << "}\n";
     }
     ;
 
 // list of program elements
 program: 
     /* empty */
+    {
+        
+    }
     | program program_element
+    {
+        $$ = $1;
+        if ($2.type == TABULATE_STRUCT)
+        {
+            $$.structList.push_back($2.structInfo);
+        }
+    }
     ; 
 
 // program element
 program_element: 
     function_definition
+    {
+        $$.type = TABULATE_FUNC;
+    }
     | struct_declaration
+    {
+        $$.type = TABULATE_STRUCT;
+        $$.structInfo = $1;
+    }
     ;
 
 // array initializer
@@ -278,16 +349,33 @@ assignment_stmt:
 
 /* conditional statement starts */
 if_stmt: 
-    IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
+    IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS 
+    {
+        location loc(@1.begin,@4.end);
+        drv.outFile 
+        << "if (to_bool(" << $3.trans <<  "," << tabulate::translatePos(loc,"if predicate") << "))\n";
+    }
+    compound_statement
     ;
 elif_stmt: 
-    ELSE IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS compound_statement
+    ELSE IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS 
+    {
+        location loc(@1.begin,@5.end);
+        drv.outFile 
+        << "else if (to_bool(" << $4.trans <<  "," << tabulate::translatePos(loc,"else if predicate") <<"))\n";
+    }
+    compound_statement
     ;
 list_of_elif: /* empty */
     | list_of_elif elif_stmt
     ;
 else_stmt: 
-    ELSE compound_statement 
+    ELSE
+    {
+        drv.outFile 
+        << "else\n";
+    } 
+    compound_statement 
     ;
 conditional_stmt: 
     if_stmt list_of_elif
@@ -365,7 +453,7 @@ variable:
         }
         else
         {
-            $$.trans << $1.exp << ".access(\"" << $1.attribute << "\")";
+            $$.trans << $1.exp << ".access(\"" << $1.attribute << "\"," << tabulate::translatePos(@$,"dot(.)") << ")";
         }
     }
     ;
@@ -449,7 +537,14 @@ constructor_call:
         if (errfl) throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for constructor " + $2);
         // translation
         $$.type = $2;
-        $$.value << $2 << "(" << $4.trans << ")";
+        if ($4.sem == 0)
+        {
+            $$.value << $2 << "(" << tabulate::translatePos(@$,"new " + $2) << ")";
+        }
+        else
+        {
+            $$.value << $2 << "(" << $4.trans << "," << tabulate::translatePos(@$,"new " + $2) << ")";
+        }
     };
 /* Constructor call ends */
 
@@ -470,8 +565,16 @@ constructor_decl:
         drv.in_construct = true;
 
         // translation
-        drv.outFile
-        << drv.current_struct << "(" << $3.trans << ")\n";
+        if ($3.sem.empty())
+        {
+            drv.outFile
+            << drv.current_struct << "(const pos &p)\n";
+        }
+        else
+        {
+            drv.outFile
+            << drv.current_struct << "(" << $3.trans << ",const pos &p)\n";
+        }
     }
     ;
 constructor_definition:
@@ -528,7 +631,7 @@ struct_declaration:
         if ($5.constr_args_list.empty())
         {
             drv.outFile
-            << $2 << "(){\n"
+            << $2 << "(const pos &p){\n"
             << "func_decl();\n"
             << "}\n";
         }
@@ -539,6 +642,7 @@ struct_declaration:
     }
     CLOSE_CURLY SEMICOLON
     {
+        $$.name = $2;
         // translation
         drv.outFile
         << "};\n";
@@ -668,18 +772,10 @@ return_stmt:
         }
         else
         {
-            if (drv.in_func && !drv.in_struct)
-            {
-                $$.trans 
-                << "any ret_val = " << $2.trans << ";\n"
-                << "st.outfunc();\n"
-                << "return ret_val;";
-            }
-            else
-            {
-                $$.trans
-                << "return " << $2.trans << ";";
-            }
+            $$.trans 
+            << "any ret_val = " << $2.trans << ";\n"
+            << "st.outfunc();\n"
+            << "return ret_val;";
         }
     }
     | RETURN SEMICOLON
@@ -708,9 +804,14 @@ compound_statement:
         {
             drv.outFile << "st.infunc(p);\n";
         }
+        if (drv.in_func && drv.in_struct && drv.scope_level == 2)
+        {
+            drv.outFile << "st.infunc(p);\n";
+        }
         if (drv.in_construct && drv.scope_level == 2)
         {
             drv.outFile
+            << "st.infunc(p);\n"
             << "func_decl();\n";
         }
     } 
@@ -726,7 +827,13 @@ compound_statement:
         if (drv.in_func && drv.in_struct && drv.scope_level == 2)
         {
             drv.outFile 
+            << "st.outfunc();\n"
             << "return any();\n";
+        }
+        if (drv.in_construct && drv.scope_level == 2)
+        {
+            drv.outFile 
+            << "st.outfunc();\n";
         }
         drv.scope_level--;
         drv.delete_scope();
@@ -846,7 +953,7 @@ function_head:
         }
         else if (drv.in_struct)
         {
-            drv.outFile << "any " << $2 << "(vector<any> params)\n";
+            drv.outFile << "any " << $2 << "(vector<any> params,const pos &p)\n";
             for(int i=0;i< (int)$4.sem.size();i++)
             {
                 drv.ID_mapping_struct_func[$4.sem[i]] = "params[" + std::to_string(i) + "]";
