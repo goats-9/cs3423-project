@@ -41,12 +41,12 @@ fun fib(n)
 
 fun printArray(arr)
 {
-    let i = SUB(arr.size(),1);
-    while(i >= 0)
+    let i = 0 ;
+    DISP("printing array:");
+    while(i <= SUB(arr.size(),1))
     {
         DISP(arr[i]);
-        DISP(TYPEOF(arr[i]));
-        i = SUB(i,1);
+        i = ADD(i,1);
     } 
 }
 
@@ -57,5 +57,10 @@ fun main()  {
 
     obj2.test3(56);
     DISP(obj2.a);
+
+    let obj1 = new myclass1();
+
+    obj1.arr = [1,["2.0ef", "yuy",3],3.932];
+    printArray(obj1.arr);
     return 0;
 }

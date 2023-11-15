@@ -83,11 +83,11 @@ return any();
 any printArray(any arr,const pos &p)
 {
 st.infunc(p);
-any i = SUB(arr.run("size",{},pos(44,17,44,27,"size")),any(new int(1),"int"),pos(44,13,44,30,"SUB"));
-while (to_bool(GTE(i,any(new int(0),"int"),pos(45,11,45,17,"GTE")),pos(45,18,45,18,"while predicate"))){
-DISP(arr.at(i,pos(47,17,47,20,"[] operator")),pos(47,9,47,21,"DISP"));
-DISP(TYPEOF((arr.at(i,pos(48,24,48,27,"[] operator"))),pos(48,14,48,28,"TYPEOF")),pos(48,9,48,29,"DISP"));
-i = SUB(i,any(new int(1),"int"),pos(49,13,49,21,"SUB"));
+any i = any(new int(0),"int");
+DISP(any(new string("printing array:"),"string"),pos(45,5,45,28,"DISP"));
+while (to_bool(LTE(i,SUB(arr.run("size",{},pos(46,20,46,30,"size")),any(new int(1),"int"),pos(46,16,46,33,"SUB")),pos(46,11,46,33,"LTE")),pos(46,34,46,34,"while predicate"))){
+DISP(arr.at(i,pos(48,17,48,20,"[] operator")),pos(48,9,48,21,"DISP"));
+i = ADD(i,any(new int(1),"int"),pos(49,13,49,21,"ADD"));
 }
 st.outfunc();
 return any();
@@ -100,7 +100,10 @@ DISP(fib(any(new int(5),"int"),pos(54,10,54,16,"fib")),pos(54,5,54,17,"DISP"));
 any obj2 = any(new myclass2(any(new int(1),"int"),any(new int(2),"int"),pos(56,16,56,33,"new myclass2")),"myclass2");
 obj2.run("test3",{any(new int(56),"int")},pos(58,5,58,19,"test3"));
 DISP(obj2.access("a",pos(59,10,59,16,"dot(.)")),pos(59,5,59,17,"DISP"));
-return to_int(any(new int(0),"int"),pos(60,5,60,14,"return in function main"));
+any obj1 = any(new myclass1(pos(61,16,61,30,"new myclass1")),"myclass1");
+obj1.access("arr",pos(63,5,63,13,"dot(.)")) = any(new vector<any>({any(new int(1),"int"),any(new vector<any>({any(new string("2.0ef"),"string"),any(new string("yuy"),"string"),any(new int(3),"int")}),"array"),any(new double(3.932),"double")}),"array");
+printArray(obj1.access("arr",pos(64,16,64,24,"dot(.)")),pos(64,5,64,25,"printArray"));
+return to_int(any(new int(0),"int"),pos(65,5,65,14,"return in function main"));
 }
 catch(const runtime_error &e){
 disp_error(e);
