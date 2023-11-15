@@ -22,7 +22,7 @@ st.outfunc();
 any test3(vector<any> params,const pos &p)
 {
 st.infunc(p);
-SUB(params[0],mem["c"],pos(12,9,12,22,"SUB"));
+mem["a"] = SUB(params[0],mem["b"],pos(12,18,12,31,"SUB"));
 st.outfunc();
 return any();
 }
@@ -68,8 +68,13 @@ any ret_val = any(new int(1),"int");
 st.outfunc();
 return ret_val;
 }
-any dp = any(new vector<any>({any(new int(1),"int"),any(new int(1),"int"),any(new int(2),"int")}),"array");
-any ret_val = dp.at(n,pos(31,14,31,17,"[] operator"));
+any dp = any(new vector<any>({any(new int(1),"int"),any(new int(1),"int")}),"array");
+any i = any(new int(2),"int");
+while (to_bool(LT(i,n,pos(33,12,33,17,"LT")),pos(33,18,33,18,"while predicate"))){
+dp.run("add_item",{ADD(dp.at(SUB(i,any(new int(1),"int"),pos(35,28,35,36,"SUB")),pos(35,27,35,37,"[] operator")),dp.at(SUB(i,any(new int(2),"int"),pos(35,41,35,49,"SUB")),pos(35,40,35,50,"[] operator")),pos(35,21,35,51,"ADD"))},pos(35,9,35,52,"add_item"));
+i = ADD(i,any(new int(1),"int"),pos(36,13,36,21,"ADD"));
+}
+any ret_val = dp.at(SUB(n,any(new int(1),"int"),pos(39,15,39,23,"SUB")),pos(39,14,39,24,"[] operator"));
 st.outfunc();
 return ret_val;
 st.outfunc();
@@ -78,11 +83,11 @@ return any();
 any printArray(any arr,const pos &p)
 {
 st.infunc(p);
-any i = SUB(arr.run("size",{},pos(36,17,36,27,"size")),any(new int(1),"int"),pos(36,13,36,30,"SUB"));
-while (to_bool(GTE(i,any(new int(0),"int"),pos(37,11,37,17,"GTE")),pos(37,18,37,18,"while predicate"))){
-DISP(arr.at(i,pos(39,17,39,20,"[] operator")),pos(39,9,39,21,"DISP"));
-DISP(TYPEOF((arr.at(i,pos(40,24,40,27,"[] operator"))),pos(40,14,40,28,"TYPEOF")),pos(40,9,40,29,"DISP"));
-i = SUB(i,any(new int(1),"int"),pos(41,13,41,21,"SUB"));
+any i = SUB(arr.run("size",{},pos(44,17,44,27,"size")),any(new int(1),"int"),pos(44,13,44,30,"SUB"));
+while (to_bool(GTE(i,any(new int(0),"int"),pos(45,11,45,17,"GTE")),pos(45,18,45,18,"while predicate"))){
+DISP(arr.at(i,pos(47,17,47,20,"[] operator")),pos(47,9,47,21,"DISP"));
+DISP(TYPEOF((arr.at(i,pos(48,24,48,27,"[] operator"))),pos(48,14,48,28,"TYPEOF")),pos(48,9,48,29,"DISP"));
+i = SUB(i,any(new int(1),"int"),pos(49,13,49,21,"SUB"));
 }
 st.outfunc();
 return any();
@@ -91,8 +96,11 @@ int main(int agrc, char* argv[])
 {
 try
 {
-DISP(fib(any(new int(3),"int"),pos(46,10,46,16,"fib")),pos(46,5,46,17,"DISP"));
-return to_int(any(new int(0),"int"),pos(47,5,47,14,"return in function main"));
+DISP(fib(any(new int(5),"int"),pos(54,10,54,16,"fib")),pos(54,5,54,17,"DISP"));
+any obj2 = any(new myclass2(any(new int(1),"int"),any(new int(2),"int"),pos(56,16,56,33,"new myclass2")),"myclass2");
+obj2.run("test3",{any(new int(56),"int")},pos(58,5,58,19,"test3"));
+DISP(obj2.access("a",pos(59,10,59,16,"dot(.)")),pos(59,5,59,17,"DISP"));
+return to_int(any(new int(0),"int"),pos(60,5,60,14,"return in function main"));
 }
 catch(const runtime_error &e){
 disp_error(e);
