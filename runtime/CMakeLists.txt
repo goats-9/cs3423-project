@@ -15,6 +15,7 @@ target_compile_options(
 set(src_files any.cc helper.cc inbuilt.cc types.cc state.cc)
 
 include_directories(
+  ${CMAKE_BINARY_DIR}/src
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
