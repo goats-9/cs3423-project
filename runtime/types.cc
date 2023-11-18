@@ -20,7 +20,8 @@ void cell::construct(const any &a)
     val = new any(a);
 }
 int table::read(std::string &path, char delim = ',') {
-    fstream fin(path);
+    fstream fin(path, std::ios_base::in);
+    if (!fin) return -1; 
     // CSV handler: Read file line by line
     std::string s;
     while (getline(fin, s)) {
