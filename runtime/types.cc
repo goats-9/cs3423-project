@@ -53,6 +53,24 @@ int table::write(std::string &path, char delim = ',') {
     fout.close();
     return 0;
 }
+any table::sum(any &r1, any &r2) {
+    if(r1.type == "range" && r2.type == "range"){
+        double total = 0;
+        for (int i = r1.data.start; i <= r1.data.end; i += r1.data.step) {
+            for (int j = r2.data.start; j <= r2.data.end; j += r2.data.step) {
+                auto it = tb.find({i, j});
+                if (it != tb.end()) {
+                    total += it->second.getDoubleVal();
+                }
+            }
+        }
+        // return table / cell? debate?
+    }
+    else{
+        runtime_error e = std::runtime_error("Argument must be a range.");
+        disp_error(e);
+    }
+}
 date::date(std::string str)
 {
     std::vector<std::string> temp = split(str, "-");
