@@ -96,21 +96,23 @@ public:
 */
 class formula
 {
-private:
+public:
     table tb;
     std::string opname;
     std::vector<any> args;
-public:
-
+    formula (table &_tb, std::string &_opname, std::vector<any> &_args) 
+            : tb(_tb), opname(_opname), args(_args)
+            {}
 };
 
 /**
- * 
+ * @class range
 */
 class range 
 {
-private:
-    int start, stop, step;
 public:
-
+    int start, stop, step;
+    range (int _start, int _stop, int _step) 
+        : start(_start), stop(_stop), step(_step)
+        {}
 };
