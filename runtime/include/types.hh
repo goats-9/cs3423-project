@@ -62,6 +62,18 @@ public:
         construct(a);
     }
 
+    // get double value from cell
+    double getDoubleVal() {
+        std::string type = val->type;
+        if (type == "int") {
+            return static_cast<double>(*(reinterpret_cast<int*>(val->data)));
+        } else if (type == "double") {
+            return *(reinterpret_cast<double*>(val->data));
+        } else {
+            return 0.0;
+        }
+    }
+
     // destructor
     ~cell()
     {
