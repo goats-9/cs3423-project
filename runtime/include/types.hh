@@ -51,6 +51,7 @@ class table
 {
 public:
     std::map<std::pair<int, int>, cell> tb;
+    int row_max, col_max;
     // default constructor
     table()
     {
