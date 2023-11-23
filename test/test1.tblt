@@ -1,0 +1,11 @@
+fun test(a,b)
+{
+    return ADD(a,b);
+}
+
+fun main()
+{
+    let a = 90;
+    const b = "90";
+    DISP(test(a,b));
+}

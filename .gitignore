@@ -306,6 +306,9 @@ TSWLatexianTemp*
 # CMake build files
 build
 
+# Generated c++ code in test
+test/*.cc
+
 # Build files
 test/*.cc
 runtime/include/location.hh
