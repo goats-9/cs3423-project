@@ -59,3 +59,11 @@ install(
   TARGETS tabulate 
   DESTINATION "${PROJECT_BINARY_DIR}"
 )
+
+# Copy location.hh to appropriate place
+add_custom_command(
+  TARGET tabulate POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_CURRENT_BINARY_DIR}/location.hh
+  ${CMAKE_SOURCE_DIR}/runtime/include/location.hh
+)
