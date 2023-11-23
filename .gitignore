@@ -305,3 +305,6 @@ TSWLatexianTemp*
 
 # CMake build files
 build
+
+# Generated c++ code in test
+test/*.cc
