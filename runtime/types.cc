@@ -53,6 +53,12 @@ int table::write(std::string &path, char delim = ',') {
     fout.close();
     return 0;
 }
+any table::operator[] (any &dim)
+{
+    if (dim.type != "shape") throw std::runtime_error("Improper usage of table access.");
+    shape dim_data = *(shape *)dim.data;
+    return tb[{dim_data.first, dim_data.second}];
+}
 date::date(std::string str)
 {
     std::vector<std::string> temp = split(str, "-");

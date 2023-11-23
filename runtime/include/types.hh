@@ -7,6 +7,28 @@
 #include <map>
 
 class any;
+/**
+ * @class shape
+*/
+class shape
+{
+public:
+    std::pair<int, int> vals;
+    shape();
+    shape(any &a, any &b);
+};
+
+/**
+ * @class range
+*/
+class range 
+{
+public:
+    int start, stop, step;
+    range (int _start, int _stop, int _step) 
+        : start(_start), stop(_stop), step(_step)
+        {}
+};
 class cell
 {
 private:
@@ -51,7 +73,7 @@ class table
 {
 public:
     std::map<std::pair<int, int>, cell> tb;
-    int row_max, col_max;
+    shape sp;
     // default constructor
     table()
     {
@@ -62,20 +84,12 @@ public:
     {
         tb = a.tb;
     }
-    int read(std::string &path, char delim);
-    int write(std::string &path, char delim);
-    any sum(any &r1, any &r2);
-    any minimum(any &r1, any &r2);
-    any maximum(any &r1, any &r2);
-    any product(any &r1, any &r2);
-    any average(any &r1, any &r2);
-    any count(any &r1, any &r2);
-    any ceiling(any &r1, any &r2);
-    any floor(any &r1, any &r2);
-    any modulus(any &r1, any &r2, any &r3);
-    any power(any &r1, any &r2, any &r3);
+    any operator[](any &dim);
+    int read(any &path, any &delim);
+    int write(any &path, any &delim);
     any shape();
 };
+
 
 class date
 {
@@ -89,30 +103,4 @@ class time
 public:
     int hour, min, sec;
     time(std::string str);
-};
-
-/**
- * @class formula
-*/
-class formula
-{
-public:
-    table tb;
-    std::string opname;
-    std::vector<any> args;
-    formula (table &_tb, std::string &_opname, std::vector<any> &_args) 
-            : tb(_tb), opname(_opname), args(_args)
-            {}
-};
-
-/**
- * @class range
-*/
-class range 
-{
-public:
-    int start, stop, step;
-    range (int _start, int _stop, int _step) 
-        : start(_start), stop(_stop), step(_step)
-        {}
 };

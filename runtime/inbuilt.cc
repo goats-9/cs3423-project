@@ -205,6 +205,19 @@ any LTE(const any &a, const any &b, const pos &p)
 
 /* Comparison ends */
 
+/* Bitwise starts */
+
+any BOR(const any &a, const any &b, const pos &p)
+{
+    st.infunc(p);
+    bool cond = (a.type == "int") && (b.type == "int");
+    if (!cond) throw bi_err("BOR", a, b);
+    st.outfunc();
+    return any(new int(a.data | b.data), "int");
+}
+
+/* Bitwise ends */
+
 // TYPEOF
 any TYPEOF(const any &a,const pos &p)
 {
