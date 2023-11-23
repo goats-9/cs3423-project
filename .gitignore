@@ -305,3 +305,7 @@ TSWLatexianTemp*
 
 # CMake build files
 build
+
+# Build files
+test/*.cc
+runtime/include/location.hh

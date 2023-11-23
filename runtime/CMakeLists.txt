@@ -26,6 +26,9 @@ target_link_libraries(
   PUBLIC runtime_compiler_flags
 )
 
+# Copy location.hh to include subdirectory
+file(COPY_FILE ${CMAKE_BINARY_DIR}/src/location.hh include/location.hh)
+
 install(
   TARGETS runtime
   DESTINATION "${PROJECT_BINARY_DIR}"
