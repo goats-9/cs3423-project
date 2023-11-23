@@ -10,3 +10,30 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # add directories to this project
 add_subdirectory(src)
 add_subdirectory(runtime)
+
+# set up testing
+enable_testing()
+
+function(testcase_pass testname testfile)
+    add_test(
+        NAME ${testname}
+        COMMAND ./tabulate ${testfile}
+    )
+    set_tests_properties(
+        ${testname}
+        PROPERTIES PASS_REGULAR_EXPRESSION "parsed successfully"
+    )
+endfunction(testcase_pass)
+
+function(testcase_fail testname testfile)
+    add_test(
+        NAME ${testname}
+        COMMAND ./tabulate ${testfile}
+    )
+    set_tests_properties(
+        ${testname}
+        PROPERTIES PASS_REGULAR_EXPRESSION "error"
+    )
+endfunction(testcase_fail)
+
+testcase_pass(test1 "../test/sem.tblt")

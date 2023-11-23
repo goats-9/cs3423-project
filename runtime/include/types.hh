@@ -3,6 +3,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <utility>
+#include <map>
 
 class any;
 class cell
@@ -48,7 +50,7 @@ public:
 class table
 {
 public:
-    std::vector<std::vector<cell>> tb;
+    std::map<std::pair<int, int>, cell> tb;
     // default constructor
     table()
     {
@@ -61,6 +63,17 @@ public:
     }
     int read(std::string &path, char delim);
     int write(std::string &path, char delim);
+    any sum(any &r1, any &r2);
+    any minimum(any &r1, any &r2);
+    any maximum(any &r1, any &r2);
+    any product(any &r1, any &r2);
+    any average(any &r1, any &r2);
+    any count(any &r1, any &r2);
+    any ceiling(any &r1, any &r2);
+    any floor(any &r1, any &r2);
+    any modulus(any &r1, any &r2, any &r3);
+    any power(any &r1, any &r2, any &r3);
+    any shape();
 };
 
 class date
@@ -75,4 +88,28 @@ class time
 public:
     int hour, min, sec;
     time(std::string str);
+};
+
+/**
+ * @class formula
+*/
+class formula
+{
+private:
+    table tb;
+    std::string opname;
+    std::vector<any> args;
+public:
+
+};
+
+/**
+ * 
+*/
+class range 
+{
+private:
+    int start, stop, step;
+public:
+
 };

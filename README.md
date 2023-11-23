@@ -40,7 +40,7 @@ cmake --build . --target install
 | Tabulate | C++ |
 |-|-|
 | `a.func(c,d)` | `a.run("func",{c,d},pos(start_line,start_col,end_line,end_col,"func"))` |
-| `b.d` | `a.access("d")` |
+| `b.d` | `b.access("d")` |
 
 5. defining struct
 
