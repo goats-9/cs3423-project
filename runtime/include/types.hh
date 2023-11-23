@@ -3,6 +3,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <utility>
+#include <map>
 
 class any;
 class cell
@@ -48,7 +50,7 @@ public:
 class table
 {
 public:
-    std::vector<std::vector<cell>> tb;
+    std::map<std::pair<int, int>, cell> tb;
     // default constructor
     table()
     {
