@@ -54,6 +54,7 @@ fun main()  {
     DISP(fib(5));
 
     let obj2 = new myclass2(1,2);
+    let myclass2 = new myclass2();
 
     obj2.test3(56);
     DISP(obj2.a);
