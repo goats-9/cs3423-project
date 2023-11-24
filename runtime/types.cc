@@ -5,23 +5,19 @@ using namespace std;
 
 void cell::destroy()
 {
-    if (is_first)
-    {
-        delete val;
-    }
+    // Nothiing
 }
 void cell::construct(const cell &a)
 {
     val = a.val;
-    is_first = false;
 }
 void cell::construct(const any &a)
 {
-    val = new any(a);
+    val = a;
 }
 // int table::read(std::string &path, char delim = ',') {
 //     fstream fin(path, std::ios_base::in);
-//     if (!fin) return -1; 
+//     if (!fin) return -1;
 //     // CSV handler: Read file line by line
 //     std::string s;
 //     int row = 0;
