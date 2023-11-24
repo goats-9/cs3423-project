@@ -33,6 +33,7 @@ map<string,string> uniOp_to_func = {
 
 /* Declare token defination as follow */
 
+RESERVED "any"|"pos"|"state"|"uni_err"|"bi_err"|"split"|"disp_error"|"__funcMap"|"__funcParams"|"__memMap"|"__copyConstruct"|"__runnerCode"
 DIGIT [0-9]
 INT -?{DIGIT}*
 DOUBLE ({DIGIT}+\.{DIGIT}*)|({DIGIT}*\.{DIGIT}+)
@@ -75,6 +76,11 @@ close_parenthesis ")"
     Add token defination below
     Some tokens are added for reference
     */
+
+    /* Restructed reserved keywords */
+{RESERVED} {
+    throw yy::parser::syntax_error(loc, "cannot use reserved keyword: " + string(yytext));
+}
 
     /* reserved keywords */
 "this" {

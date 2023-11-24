@@ -100,7 +100,7 @@ namespace tabulate
     <tabulate::struct_info> struct_declaration
     <tabulate::program_element> program_element
     <tabulate::program> program
-    <tabulate::constant> constant array_initializer constructor_call
+    <tabulate::constant> constant array_initializer constructor_call shape_initializer
     <tabulate::Default> expression function_call accessors assignment_stmt declaration_stmt return_stmt
 
 %%
@@ -159,7 +159,7 @@ S:
             << "if (type == \"" << i.name << "\"){\n"
             << "any (" << i.name << "::*f)(vector<any>, const pos &);\n"
             << i.name << " *ptr = (" << i.name << " *)data;\n"
-            << "runnerCode\n"
+            << "__runnerCode\n"
             << "}\n";
         }
         drv.outFile 
@@ -206,6 +206,14 @@ array_initializer:
     }
     ;
 
+// shape intializer
+shape_initializer:
+    OPEN_PARENTHESIS expression COMMA expression CLOSE_PARENTHESIS
+    {
+        $$.type = "shape";
+        $$.value << "shape(" << $2.trans << "," << $4.trans << ")";
+    }
+
 // all constants
 constant: 
     INT 
@@ -244,6 +252,11 @@ constant:
         $$.value << "range(" << $1 << ")";
     }
     | array_initializer 
+    {
+        $$ = $1;
+    }
+    |
+    shape_initializer
     {
         $$ = $1;
     }
@@ -601,9 +614,9 @@ struct_declaration:
         drv.outFile 
         << "class " << $2 << "{\n"
         << "public:\n"
-        << "funcMap<" << $2 << "> func;\n"
-        << "funcParams func_params;\n"
-        << "memMap mem;\n"; 
+        << "__funcMap<" << $2 << "> func;\n"
+        << "__funcParams func_params;\n"
+        << "__memMap mem;\n"; 
     }
     struct_member_list 
     {
@@ -637,7 +650,7 @@ struct_declaration:
         }
         drv.outFile
         << $2 << "(const " << $2 << " &a){\n"
-        << "copyConstruct\n"
+        << "__copyConstruct\n"
         << "}\n";
     }
     CLOSE_CURLY SEMICOLON
