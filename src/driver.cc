@@ -123,7 +123,16 @@ namespace tabulate
             "AND",
             "OR",
             "XOR",
-            "GET",
+            "SUM",
+            "MINIMUM",
+            "MAXIMUM",
+            "AVERAGE",
+            "PRODUCT",
+            "COUNT",
+            "CEILING",
+            "FLOOR",
+            "MODULUS",
+            "POWER",
         };
         std::vector<std::string> uniop_func_names = 
         {
