@@ -281,16 +281,6 @@ any TYPEOF(const any &a, const pos &p)
 // DISP
 any DISP(const any &a, const pos &p)
 {
-    // if (a.type == "array")
-    // {
-    //     vector<any> *ptr = (vector<any> *)a.data;
-    //     for(any i: (*ptr))
-    //     {
-    //         cout << i << " " ;
-    //     }
-    //     cout << "\n";
-    //     return any();
-    // }
     st.infunc(p);
     std::cout << a << "\n";
     st.outfunc();

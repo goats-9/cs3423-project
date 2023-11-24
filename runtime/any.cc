@@ -372,6 +372,30 @@ ostream &operator<<(ostream &o, const any &a)
         o << "none";
         return o;
     }
+    if (a.type == "range")
+    {
+        range *ptr = (range *)a.data;
+        o << ptr->start << ":" << ptr->stop << "~" << ptr->step;
+        return o;
+    }
+    if (a.type == "time")
+    {
+        Time *ptr = (Time *)a.data;
+        o << ptr->hour << ":" << ptr->min << ":" << ptr->sec;
+        return o;
+    }
+    if (a.type == "date")
+    {
+        date *ptr = (date *)a.data;
+        o << ptr->year << "-" << ptr->month << "-" << ptr->day;
+        return o;
+    }
+    if (a.type == "shape")
+    {
+        shape *ptr = (shape *)a.data;
+        o << "(" << ptr->vals.first << "," << ptr->vals.second << ")" ;
+        return o;
+    }
     if (a.type == "array")
     {
         vector<any> *ptr = (vector<any> *)a.data;

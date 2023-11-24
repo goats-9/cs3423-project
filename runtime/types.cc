@@ -64,12 +64,12 @@ range::range(std::string str, const pos &p)
     st.infunc(p);
     std::vector<std::string> temp = split(str, "~");
     step = stoi(temp[1]);
-    temp = split(temp[0],":");
+    temp = split(temp[0], ":");
     start = stoi(temp[0]);
     stop = stoi(temp[1]);
-    if (step < 0)
+    if (step <= 0)
     {
-        throw runtime_error("step of range cannot be negetive");
+        throw runtime_error("step of range cannot be negetive or zero");
     }
     if (start < 0)
     {
@@ -130,21 +130,18 @@ Time::Time(std::string str, const pos &p)
     st.outfunc();
 }
 
-shape::shape(const any &a,const any &b,const pos &p)
+shape::shape(const any &a, const any &b, const pos &p)
 {
     st.infunc(p);
-    if (a.type != "int" || b.type != "int" )
+    if ((a.type != "int" && a.type != "range") || (b.type != "int" && b.type != "range"))
     {
-        throw runtime_error("both elements of shape should be (int,int) but found (" + a.type + "," + b.type + ")");
+        throw runtime_error("both elements of shape should be (int OR range,int OR range) but found (" + a.type + "," + b.type + ")");
     }
-    int a_val = *(int *)a.data;
-    int b_val = *(int *)b.data;
-
-    if (a_val < 0 || b_val < 0)
+    if ((a.type == "int" && *(int *)a.data < 0) || (b.type == "int" && *(int *)b.data < 0))
     {
         throw runtime_error("both elements have to be positive");
     }
 
-    vals = {a_val,b_val};
+    vals = {a, b};
     st.outfunc();
 }
