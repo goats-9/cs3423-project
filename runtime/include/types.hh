@@ -69,26 +69,26 @@ public:
     }
 };
 
-// class table
-// {
-// public:
-//     std::map<std::pair<int, int>, cell> tb;
-//     shape sp;
-//     // default constructor
-//     table()
-//     {
-//         // empty
-//     }
-//     // copy constructor
-//     table(const table &a)
-//     {
-//         tb = a.tb;
-//     }
-//     any operator[](any &dim);
-//     int read(any &path, any &delim);
-//     int write(any &path, any &delim);
-//     any shape();
-// };
+class table
+{
+public:
+    std::map<std::pair<int, int>, cell> tb;
+    // shape sp;
+    // default constructor
+    table()
+    {
+        // empty
+    }
+    // copy constructor
+    table(const table &a)
+    {
+        tb = a.tb;
+    }
+    any operator[](any &dim);
+    int read(any &path, any &delim);
+    int write(any &path, any &delim);
+    any shape();
+};
 
 
 // class date
