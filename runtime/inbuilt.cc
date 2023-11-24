@@ -312,28 +312,29 @@ any sum(any &tab1, const pos &p)
     st.outfunc();
     throw uni_err("SUM",tab1);
 }
-// any minimum(any &tab1, )
-// {
-//     st.infunc(p);
-//     if(tab1.type == "cell")
-//     {
-//         double *ptr1 = (double *)tab1.data;
-//         st.outfunc();
-//         return any(new double(*ptr1), "double");
-//     }
-//     if(tab1.type == "table")
-//     {
-//         double total = 0.0;
-//         for (const auto &entry : tab1.data.tb){
-//             double value = (double *)entry.second.val;
-//             total += value;
-//         }
-//         st.outfunc();
-//         return any(new double(total), "double");
-//     }
-//     st.outfunc();
-//     throw uni_err("SUM",tab1);
-// }
+any minimum(any &tab1, const pos &p)
+{
+     st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        double *ptr = (double *)tab1.data;
+        st.outfunc();
+        return any(new double(*ptr), "double");
+    }
+    if(tab1.type == "table")
+    {
+        double m = std::numeric_limits<double>::max();
+        table *ptr = (table *)tab1.data;
+        for (const auto &entry : ptr->tb){
+            double *value = (double *)entry.second.val;
+            m += min(m,*value);
+        }
+        st.outfunc();
+        return any(new double(m), "double");
+    }
+    st.outfunc();
+    throw uni_err("SUM",tab1);
+}
 any maximum(any &tab1);
 any average(any &tab1);
 any product(any &tab1);
