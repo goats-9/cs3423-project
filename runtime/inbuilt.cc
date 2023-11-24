@@ -314,7 +314,7 @@ any sum(any &tab1, const pos &p)
 }
 any minimum(any &tab1, const pos &p)
 {
-     st.infunc(p);
+    st.infunc(p);
     if(tab1.type == "cell")
     {
         double *ptr = (double *)tab1.data;
@@ -333,13 +333,102 @@ any minimum(any &tab1, const pos &p)
         return any(new double(m), "double");
     }
     st.outfunc();
-    throw uni_err("SUM",tab1);
+    throw uni_err("MINIMUM",tab1);
 }
-any maximum(any &tab1);
-any average(any &tab1);
-any product(any &tab1);
-any count(any &tab1);
-any ceiling(any &tab1);
+any maximum(any &tab1, const pos &p)
+{
+    st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        double *ptr = (double *)tab1.data;
+        st.outfunc();
+        return any(new double(*ptr), "double");
+    }
+    if(tab1.type == "table")
+    {
+        double m = std::numeric_limits<double>::min();
+        table *ptr = (table *)tab1.data;
+        for (const auto &entry : ptr->tb){
+            double *value = (double *)entry.second.val;
+            m += max(m,*value);
+        }
+        st.outfunc();
+        return any(new double(m), "double");
+    }
+    st.outfunc();
+    throw uni_err("MAXIMUM",tab1);
+}
+any average(any &tab1, const pos &p)
+{
+    st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        double *ptr = (double *)tab1.data;
+        st.outfunc();
+        return any(new double(*ptr), "double");
+    }
+    if(tab1.type == "table")
+    {
+        double total = 0.0; int count = 0;
+        table *ptr = (table *)tab1.data;
+        for (const auto &entry : ptr->tb){
+            double *value = (double *)entry.second.val;
+            total += *value; count++;
+        }
+        st.outfunc();
+        return any(new double(total/count), "double");
+    }
+    st.outfunc();
+    throw uni_err("AVERAGE",tab1);
+}
+any product(any &tab1, const pos &p)
+{
+    st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        double *ptr = (double *)tab1.data;
+        st.outfunc();
+        return any(new double(*ptr), "double");
+    }
+    if(tab1.type == "table")
+    {
+        double prod = 1.0;
+        table *ptr = (table *)tab1.data;
+        for (const auto &entry : ptr->tb){
+            double *value = (double *)entry.second.val;
+            prod *= *value;
+        }
+        st.outfunc();
+        return any(new double(prod), "double");
+    }
+    st.outfunc();
+    throw uni_err("PRODUCT",tab1);
+}
+any count(any &tab1, const pos &p)
+{
+    st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        st.outfunc();
+        return any(new int(1), "int");
+    }
+    if(tab1.type == "table")
+    {
+        int count = 0;
+        table *ptr = (table *)tab1.data;
+        for (const auto &entry : ptr->tb){
+            count++;
+        }
+        st.outfunc();
+        return any(new int(count), "int");
+    }
+    st.outfunc();
+    throw uni_err("COUNT",tab1);
+}
+any ceiling(any &tab1)
+{
+
+}
 any floor(any &tab1);
 any modulus(any &tab1, any &N);
 any power(any &tab1, any &N);
