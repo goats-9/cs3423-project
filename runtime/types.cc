@@ -19,6 +19,9 @@ void cell::construct(const any &a)
     if (isInbuilt(a.type)) val = a;
     else throw runtime_error("cell cannot take non-primitive datatype.");
 }
+any cell::get() {
+    return val;
+}
 any table::read(const any &_path, const any &_delim = any(new string(","), "string"))
 {
     if (_path.type != "string")
@@ -122,6 +125,26 @@ any table::dim()
     return any(new shape(_row, _col), "shape");
 }
 
+any table::get(const any &dim)
+{
+    if (dim.type != "shape") throw runtime_error("invalid table access");
+    shape dshape = *(shape *)dim.data;
+    bool cond = (dshape.vals.first.type == "int" || dshape.vals.first.type == "range")
+                && (dshape.vals.second.type == "int" || dshape.vals.second.type == "range");
+    if (!cond) throw runtime_error("invalid dimensions entered");
+    range r1(dshape.vals.first), r2(dshape.vals.second);
+    std::vector<any> ret;
+    for (int i = r1.start; i <= r1.stop; i += r1.step) {
+        std::vector<any> ret_push;
+        for (int j = r2.start; j <= r2.stop; j += r2.step) {
+            if (tb.find({i,j}) == tb.end()) ret_push.push_back(any());
+            else ret_push.push_back(any(&tb[{i,j}], "cell"));
+        }
+        ret.push_back(any(&ret_push, "array"));
+    }
+    return any(&ret, "array");
+}
+
 range::range(std::string str, const pos &p)
 {
     st.infunc(p);
@@ -169,6 +192,16 @@ date::date(std::string str, const pos &p)
         throw runtime_error("day cannot be negetive");
     }
     st.outfunc();
+}
+
+range::range(const any &a) {
+    if (a.type == "int") {
+        int x = *(int *)a.data;
+        start = x, stop = x, step = 1;
+    } else if (a.type == "range") {
+        range r = *(range *)a.data;
+        start = r.start, stop = r.stop, step = r.step;
+    } else throw runtime_error("cannot cast object to range");
 }
 
 Time::Time(std::string str, const pos &p)

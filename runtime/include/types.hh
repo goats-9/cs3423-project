@@ -35,6 +35,7 @@ class range
 public:
     int start, stop, step;
     range (std::string str,const pos &p);
+    range (const any &a);
     range(){}
 };
 class cell
@@ -74,6 +75,7 @@ public:
     {
         destroy();
     }
+    any get();
 };
 
 class table
@@ -97,6 +99,7 @@ public:
     any read(const any &path, const any &delim);
     any write(const any &path, const any &delim);
     any dim();
+    any get(const any &dim);
 };
 
 
