@@ -290,6 +290,11 @@ declaration_stmt:
         */
         for (auto var : $2.sem) {
             tabulate::id_symtrec idrec;
+            drv.find(var,idrec);
+            if (idrec.level == -2)
+            {
+                throw yy::parser::syntax_error(@$, "Cannot assign variable " + var + " as it is defined already");
+            }
             idrec.level = drv.scope_level;
             idrec.modifier = $1.sem;
             int res = drv.symtab_id.insert(var, idrec, drv.active_func_ptr);
@@ -338,11 +343,18 @@ decl_item:
 assignment_stmt: 
     variable EQUAL expression SEMICOLON
     {
-        // Check modifier of variable
-        auto idrec = drv.symtab_id.find($1.sem, drv.scope_level);
-        if (idrec.modifier == TABULATE_CONST) {
-            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
-        }
+        // // Check modifier of variable
+        // tabulate::id_symtrec idrec;
+        // drv.find($1.sem,idrec);
+        // if (idrec.level == -1) {
+        //     throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $1.sem);
+        // }
+        // if (idrec.level == -2) {
+        //     throw yy::parser::syntax_error(@$, "error: already defined " + $1.sem);
+        // }
+        // if (idrec.modifier == TABULATE_CONST) {
+        //     throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
+        // }
 
         // translation
         $$.trans << $1.trans << " = " << $3.trans << ";";
@@ -350,10 +362,17 @@ assignment_stmt:
     | variable EQUAL expression COMMA assignment_stmt
     {
         // Check modifier of variable
-        auto idrec = drv.symtab_id.find($1.sem, drv.scope_level);
-        if (idrec.modifier == TABULATE_CONST) {
-            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
-        }
+        // tabulate::id_symtrec idrec;
+        // drv.find($1.sem,idrec);
+        // if (idrec.level == -1) {
+        //     throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $1.sem);
+        // }
+        // if (idrec.level == -2) {
+        //     throw yy::parser::syntax_error(@$, "error: already defined " + $1.sem);
+        // }
+        // if (idrec.modifier == TABULATE_CONST) {
+        //     throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
+        // }
 
         // translation
         $$.trans << $1.trans << " = " << $3.trans << "," << $5.trans;
@@ -432,9 +451,13 @@ variable:
     ID 
     {
         // Check if the ID exists in the symbol table
-        auto record = drv.symtab_id.find($1, drv.scope_level);
-        if (record.level == -1) {
-            throw yy::parser::syntax_error(@$, "error: identifier " + $1 + " not found."); 
+        tabulate::id_symtrec idrec;
+        drv.find($1,idrec);
+        if (idrec.level == -1) {
+            throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $1);
+        }
+        if (idrec.level == -2) {
+            throw yy::parser::syntax_error(@$, "error: already defined " + $1);
         }
         $$.sem = $1;
 
@@ -505,9 +528,13 @@ function_call:
     }  
     | ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS
     {
-        auto frec = drv.symtab_func.find($1, drv.scope_level);
+        tabulate::func_symtrec frec;
+        drv.find($1,frec);
         if (frec.level == -1) {
-            throw yy::parser::syntax_error(@$, "error: couldn't find function " + $1);
+            throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $1);
+        }
+        if (frec.level == -2) {
+            throw yy::parser::syntax_error(@$, "error: already defined " + $1);
         }
         if ((int)frec.paramlist.size() != $3.sem) {
             throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for function " + $1);
@@ -534,9 +561,13 @@ function_call:
 constructor_call:
     NEW ID OPEN_PARENTHESIS args CLOSE_PARENTHESIS
     {
-        auto crec = drv.symtab_dtype.find($2, drv.scope_level);
+        tabulate::dtype_symtrec crec;
+        drv.find($2,crec);
         if (crec.level == -1) {
-            throw yy::parser::syntax_error(@$, "error: couldn't find constructor " + $2);
+            throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $2);
+        }
+        if (crec.level == -2) {
+            throw yy::parser::syntax_error(@$, "error: already defined " + $2);
         }
         bool errfl = true;
         for (auto u : crec.constr_args) {
