@@ -104,18 +104,36 @@ any table::write(const any &_path, const any &_delim = any(new string(","), "str
     fout.close();
     return any();
 }
-any table::assign(const any &sp, const any &elements)
+any table::assign(const any &dim, const any &elements)
 {
-    if (sp.type != "shape")
-    {
-        throw runtime_error("Data type of shape should be shape but found " + sp.type);
+    if (dim.type != "shape") throw runtime_error("invalid table access");
+    shape dshape = *(shape *)dim.data;
+    bool cond = (dshape.vals.first.type == "int" || dshape.vals.first.type == "range")
+                && (dshape.vals.second.type == "int" || dshape.vals.second.type == "range");
+    if (!cond) throw runtime_error("invalid dimensions entered");
+    range r1(dshape.vals.first), r2(dshape.vals.second);
+    if (elements.type != "array") throw runtime_error("2D array not entered");
+    std::vector<any> elements_arr = *(std::vector<any> *)elements.data;
+    for (int i = r1.start, j = 0; i <= r1.stop; i += r1.step, j++) {
+        if (j >= elements_arr.size()) throw runtime_error("Array of incorrect size");
+        if (elements_arr[j].type != "array") throw runtime_error("2D array not entered");
+        std::vector<any> elements_arr_arr = *(std::vector<any> *)elements_arr[j].data;
+        for (int ii = r2.start, jj = 0; ii <= r2.stop; ii += r2.step, jj++) {
+            if (jj >= elements_arr_arr.size()) throw runtime_error("Array of incorrect size");
+            if (!isInbuilt(elements_arr_arr[jj].type)) throw runtime_error("Element is not a primitive");
+            tb[{i,ii}] = cell(elements_arr_arr[jj]);
+        }
     }
-    any first = ((shape *)sp.data)->vals.first;
-    any second = ((shape *)sp.data)->vals.second;
-    if (first.type == "int" && second.type == "int")
-    {
-
+    std::vector<any> ret;
+    for (int i = r1.start; i <= r1.stop; i += r1.step) {
+        std::vector<any> ret_push;
+        for (int j = r2.start; j <= r2.stop; j += r2.step) {
+            if (tb.find({i,j}) == tb.end()) ret_push.push_back(any());
+            else ret_push.push_back(any(&tb[{i,j}], "cell"));
+        }
+        ret.push_back(any(&ret_push, "array"));
     }
+    return any(&ret, "array");
 }
 
 any table::dim()
