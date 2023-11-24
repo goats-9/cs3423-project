@@ -100,14 +100,33 @@ namespace tabulate {
     };
 
     /**
-     * Symbol Table class template
+     * @brief Template class to implement various symbol tables.
+     * @tparam K type of key in the symbol table.
+     * @tparam V type of value representing symbol table record.
     */
     template<typename K, typename V>
     class symtab {
     public:
+        /**
+         * @var symtab::tabulate_symtab
+         * @brief C++ `unordered_map` storing symbol table records
+         * as a stack.
+         */
         std::unordered_map<K, std::stack<V>> tabulate_symtab;
+
+        /**
+         * @fn
+         * @brief Default constructor.
+         */
         symtab() {}
 
+        /**
+         * @fn
+         * @brief Insert record into symbol table.
+         * @param name Key value of symbol table record.
+         * @param rec Symbol table record contents.
+         * @return 0 on successful insertion, -1 on error.
+         */
         int insert(
             K &name, 
             V &rec,
