@@ -53,7 +53,7 @@ namespace tabulate
     
     int driver::compile()
     {
-        int res = std::system(("g++ " + remove_extension() + ".cc -L. -lruntime" ).c_str());
+        int res = std::system(("g++ " + remove_extension() + ".cc -L. -lruntime -o" + remove_extension() + ".out").c_str());
         return res;
     }
 

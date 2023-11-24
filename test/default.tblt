@@ -1,7 +1,0 @@
-struct test {
-
-};
-
-fun main() {
-    let a = new test();
-}

@@ -270,11 +270,13 @@ constant:
 declare: 
     LET 
     {
+        drv.assign_type = TABULATE_LET;
         $$.sem = TABULATE_LET;
         $$.trans = "any";
     }
     | CONST 
     {
+        drv.assign_type = TABULATE_CONST;
         $$.sem = TABULATE_CONST;
         $$.trans = "const any";
     }
@@ -284,25 +286,6 @@ declare:
 declaration_stmt: 
     declare decl_list SEMICOLON
     {
-        /**
-         * 1. (SATG) Collect info here.
-         * 2. Add to symbol table. 
-        */
-        for (auto var : $2.sem) {
-            tabulate::id_symtrec idrec;
-            drv.find(var,idrec);
-            if (idrec.level == -2)
-            {
-                throw yy::parser::syntax_error(@$, "error: Cannot assign variable " + var + " as it is defined already");
-            }
-            idrec.level = drv.scope_level;
-            idrec.modifier = $1.sem;
-            int res = drv.symtab_id.insert(var, idrec, drv.active_func_ptr);
-            if (res == -1) {
-                throw yy::parser::syntax_error(@$, "error: Cannot assign variable " + var + " as it is defined already");
-            }
-        }
-
         // translation
         $$.trans << $1.trans << " " << $2.trans << ";" ;
     }
@@ -311,14 +294,10 @@ declaration_stmt:
 decl_list: 
     decl_item
     {
-        $$.sem.push_back($1.sem);
         $$.trans = $1.trans;
     }
     | decl_list COMMA decl_item
     {
-        $$.sem = $1.sem;
-        $$.sem.push_back($3.sem);
-        
         // translation
         $$.trans << $1.trans << "," << $3.trans;
     }
@@ -327,13 +306,33 @@ decl_list:
 decl_item: 
     ID 
     { 
-        $$.sem = $1; 
         $$.trans = $1;
+        tabulate::id_symtrec idrec;
+        drv.find($1,idrec);
+        if (idrec.level == -2)
+        {
+            throw yy::parser::syntax_error(@$, "error: Cannot assign variable " + $1 + " as it is defined already");
+        }
+        idrec.level = drv.scope_level;
+        int res = drv.symtab_id.insert($1, idrec, drv.active_func_ptr);
+        if (res == -1) {
+            throw yy::parser::syntax_error(@$, "error: Cannot assign variable " + $1 + " as it is defined already");
+        }
     }
     | ID EQUAL expression 
     { 
-        $$.sem = $1; 
         $$.trans << $1 << " = " << $3.trans;
+        tabulate::id_symtrec idrec;
+        drv.find($1,idrec);
+        if (idrec.level == -2)
+        {
+            throw yy::parser::syntax_error(@$, "error: Cannot assign variable " + $1 + " as it is defined already");
+        }
+        idrec.level = drv.scope_level;
+        int res = drv.symtab_id.insert($1, idrec, drv.active_func_ptr);
+        if (res == -1) {
+            throw yy::parser::syntax_error(@$, "error: Cannot assign variable " + $1 + " as it is defined already");
+        }
     }
     ;
 
@@ -343,18 +342,12 @@ decl_item:
 assignment_stmt: 
     variable EQUAL expression SEMICOLON
     {
-        // // Check modifier of variable
-        // tabulate::id_symtrec idrec;
-        // drv.find($1.sem,idrec);
-        // if (idrec.level == -1) {
-        //     throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $1.sem);
-        // }
-        // if (idrec.level == -2) {
-        //     throw yy::parser::syntax_error(@$, "error: already defined " + $1.sem);
-        // }
-        // if (idrec.modifier == TABULATE_CONST) {
-        //     throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
-        // }
+        // Check modifier of variable
+        tabulate::id_symtrec idrec;
+        drv.find($1.sem,idrec);
+        if (idrec.modifier == TABULATE_CONST) {
+            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
+        }
 
         // translation
         $$.trans << $1.trans << " = " << $3.trans << ";";
@@ -362,17 +355,11 @@ assignment_stmt:
     | variable EQUAL expression COMMA assignment_stmt
     {
         // Check modifier of variable
-        // tabulate::id_symtrec idrec;
-        // drv.find($1.sem,idrec);
-        // if (idrec.level == -1) {
-        //     throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $1.sem);
-        // }
-        // if (idrec.level == -2) {
-        //     throw yy::parser::syntax_error(@$, "error: already defined " + $1.sem);
-        // }
-        // if (idrec.modifier == TABULATE_CONST) {
-        //     throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
-        // }
+        tabulate::id_symtrec idrec;
+        drv.find($1.sem,idrec);
+        if (idrec.modifier == TABULATE_CONST) {
+            throw yy::parser::syntax_error(@$, "Cannot assign variable " + $1.sem + " marked as constant.");
+        }
 
         // translation
         $$.trans << $1.trans << " = " << $3.trans << "," << $5.trans;

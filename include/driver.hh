@@ -41,6 +41,9 @@ namespace tabulate {
         // Whether to generate lexer output
         bool isLexOut;
 
+        // Whether assignment statement is LET or CONST
+        int assign_type;
+
         std::ofstream outFile;
 
         translation trans;
