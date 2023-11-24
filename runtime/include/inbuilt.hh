@@ -70,18 +70,18 @@ any BRS(const any &a, const any &b, const pos &p);
 /* Bitwise ends */
 
 // TYPEOF
-any TYPEOF(const any &a,const pos &p);
+any TYPEOF(const any &a, const pos &p);
 
 // DISP
-any DISP(const any &a,const pos &p);
+any DISP(const any &a, const pos &p);
 
-any sum(any &tab1);
-any minimum(any &tab1);
-any maximum(any &tab1);
-any average(any &tab1);
-any product(any &tab1);
-any count(any &tab1);
-any ceiling(any &tab1);
-any floor(any &tab1);
-any modulus(any &tab1, any &N);
-any power(any &tab1, any &N);
+any sum(any &tab1, const pos &p);
+any minimum(any &tab1, const pos &p);
+any maximum(any &tab1, const pos &p);
+any average(any &tab1, const pos &p);
+any product(any &tab1, const pos &p);
+any count(any &tab1, const pos &p);
+any ceiling(any &tab1, const pos &p);
+any floor(any &tab1, const pos &p);
+any modulus(any &tab1, any &K, const pos &p);
+any power(any &tab1, any &K, const pos &p);

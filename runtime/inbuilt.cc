@@ -461,5 +461,47 @@ any floor(any &tab1, const pos &p)
     st.outfunc();
     throw uni_err("FLOOR",tab1);
 }
-any modulus(any &tab1, any &N);
-any power(any &tab1, any &N);
+any modulus(any &tab1, any &K, const pos &p)
+{
+    st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        cell *ptr = new cell(*(cell *)tab1.data);
+        *(int *)ptr->val = (*(int *)ptr->val)%(*(int *)K.data);
+        st.outfunc();
+        return any(ptr, "cell");
+    }
+    if(tab1.type == "table")
+    {
+        table *ptr = new table(*(table *)tab1.data);
+        for (const auto &entry : ptr->tb){
+            *(int *)entry.second.val = (*(int *)entry.second.val)%(*(int *)K.data);
+        }
+        st.outfunc();
+        return any(ptr, "table");
+    }
+    st.outfunc();
+    throw uni_err("MODULUS",tab1);
+}
+any power(any &tab1, any &K, const pos &p)
+{
+    st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        cell *ptr = new cell(*(cell *)tab1.data);
+        *(double *)ptr->val = pow(*(double *)ptr->val,*(double *)K.data);
+        st.outfunc();
+        return any(ptr, "cell");
+    }
+    if(tab1.type == "table")
+    {
+        table *ptr = new table(*(table *)tab1.data);
+        for (const auto &entry : ptr->tb){
+            *(double *)entry.second.val = pow(*(double *)entry.second.val,*(double *)K.data);
+        }
+        st.outfunc();
+        return any(ptr, "table");
+    }
+    st.outfunc();
+    throw uni_err("POWER",tab1);
+}
