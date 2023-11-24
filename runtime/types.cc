@@ -115,11 +115,11 @@ any table::assign(const any &dim, const any &elements)
     if (elements.type != "array") throw runtime_error("2D array not entered");
     std::vector<any> elements_arr = *(std::vector<any> *)elements.data;
     for (int i = r1.start, j = 0; i <= r1.stop; i += r1.step, j++) {
-        if (j >= elements_arr.size()) throw runtime_error("Array of incorrect size");
+        if (j >= (int)elements_arr.size()) throw runtime_error("Array of incorrect size");
         if (elements_arr[j].type != "array") throw runtime_error("2D array not entered");
         std::vector<any> elements_arr_arr = *(std::vector<any> *)elements_arr[j].data;
         for (int ii = r2.start, jj = 0; ii <= r2.stop; ii += r2.step, jj++) {
-            if (jj >= elements_arr_arr.size()) throw runtime_error("Array of incorrect size");
+            if (jj >= (int)elements_arr_arr.size()) throw runtime_error("Array of incorrect size");
             if (!isInbuilt(elements_arr_arr[jj].type)) throw runtime_error("Element is not a primitive");
             tb[{i,ii}] = cell(elements_arr_arr[jj]);
         }

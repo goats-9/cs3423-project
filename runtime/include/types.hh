@@ -11,8 +11,8 @@
 // for translation of classes
 template <typename T>
 using __funcMap = std::map<std::string, any (T::*)(std::vector<any>, const pos &)>;
-using __funcParams = map<string, int>;
-using __memMap = map<string, any>;
+using __funcParams = std::map<std::string, int>;
+using __memMap = std::map<std::string, any>;
 
 /**
  * @class shape
