@@ -8,7 +8,7 @@ extern state st;
 
 void cell::destroy()
 {
-    // Nothiing
+    // Nothing
 }
 void cell::construct(const cell &a)
 {
@@ -16,7 +16,8 @@ void cell::construct(const cell &a)
 }
 void cell::construct(const any &a)
 {
-    val = a;
+    if (isInbuilt(a.type)) val = a;
+    else throw runtime_error("cell cannot take non-primitive datatype.");
 }
 any table::read(const any &_path, const any &_delim = any(new string(","), "string"))
 {
