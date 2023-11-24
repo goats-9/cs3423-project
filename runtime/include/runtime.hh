@@ -9,17 +9,17 @@
 using namespace std;
 
 template <typename T>
-using funcMap = map<string, any (T::*)(vector<any>, const pos &)>;
-using funcParams = map<string, int>;
-using memMap = map<string, any>;
+using __funcMap = map<string, any (T::*)(vector<any>, const pos &)>;
+using __funcParams = map<string, int>;
+using __memMap = map<string, any>;
 
-#define copyConstruct \
+#define __copyConstruct \
     func_decl();      \
     mem = a.mem;      \
     func = a.func;    \
     func_params = a.func_params;
 
-#define runnerCode                                                                                                         \
+#define __runnerCode                                                                                                         \
     f = ptr->func[id];                                                                                                     \
     if (!f)                                                                                                                \
     {                                                                                                                      \

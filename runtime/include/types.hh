@@ -7,28 +7,28 @@
 #include <map>
 
 class any;
-/**
- * @class shape
-*/
-class shape
-{
-public:
-    std::pair<int, int> vals;
-    shape();
-    shape(any &a, any &b);
-};
+// /**
+//  * @class shape
+// */
+// class shape
+// {
+// public:
+//     std::pair<int, int> vals;
+//     shape();
+//     shape(any &a, any &b);
+// };
 
-/**
- * @class range
-*/
-class range 
-{
-public:
-    int start, stop, step;
-    range (int _start, int _stop, int _step) 
-        : start(_start), stop(_stop), step(_step)
-        {}
-};
+// /**
+//  * @class range
+// */
+// class range 
+// {
+// public:
+//     int start, stop, step;
+//     range (int _start, int _stop, int _step) 
+//         : start(_start), stop(_stop), step(_step)
+//         {}
+// };
 class cell
 {
 private:
@@ -63,16 +63,16 @@ public:
     }
 
     // get double value from cell
-    double getDoubleVal() {
-        std::string type = val->type;
-        if (type == "int") {
-            return static_cast<double>(*(reinterpret_cast<int*>(val->data)));
-        } else if (type == "double") {
-            return *(reinterpret_cast<double*>(val->data));
-        } else {
-            return 0.0;
-        }
-    }
+    // double getDoubleVal() {
+    //     std::string type = val->type;
+    //     if (type == "int") {
+    //         return static_cast<double>(*(reinterpret_cast<int*>(val->data)));
+    //     } else if (type == "double") {
+    //         return *(reinterpret_cast<double*>(val->data));
+    //     } else {
+    //         return 0.0;
+    //     }
+    // }
 
     // destructor
     ~cell()
@@ -81,38 +81,38 @@ public:
     }
 };
 
-class table
-{
-public:
-    std::map<std::pair<int, int>, cell> tb;
-    shape sp;
-    // default constructor
-    table()
-    {
-        // empty
-    }
-    // copy constructor
-    table(const table &a)
-    {
-        tb = a.tb;
-    }
-    any operator[](any &dim);
-    int read(any &path, any &delim);
-    int write(any &path, any &delim);
-    any shape();
-};
+// class table
+// {
+// public:
+//     std::map<std::pair<int, int>, cell> tb;
+//     shape sp;
+//     // default constructor
+//     table()
+//     {
+//         // empty
+//     }
+//     // copy constructor
+//     table(const table &a)
+//     {
+//         tb = a.tb;
+//     }
+//     any operator[](any &dim);
+//     int read(any &path, any &delim);
+//     int write(any &path, any &delim);
+//     any shape();
+// };
 
 
-class date
-{
-public:
-    int year, month, day;
-    date(std::string str);
-};
+// class date
+// {
+// public:
+//     int year, month, day;
+//     date(std::string str);
+// };
 
-class time
-{
-public:
-    int hour, min, sec;
-    time(std::string str);
-};
+// class time
+// {
+// public:
+//     int hour, min, sec;
+//     time(std::string str);
+// };
