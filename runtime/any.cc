@@ -10,7 +10,7 @@ extern state st;
 
 bool any::isInbuilt(const string &t)
 {
-    vector<string> primitive{"int", "double", "string", "bool", "none", "array","cell"};
+    vector<string> primitive{"int", "double", "string", "bool", "none", "array", "cell"};
     for (auto i : primitive)
     {
         if (i == t)
@@ -58,6 +58,10 @@ void any::construct(const any &a)
         data = new cell(*(cell *)a.data);
         type = "cell";
     }
+    // if (a.type == "table")
+    // {
+    //     data = new table(*(table *)a.data);
+    // }
     Constructor(a);
 }
 
@@ -91,11 +95,15 @@ void any::destruct()
     {
         delete (cell *)data;
     }
+    // if (type == "table")
+    // {
+    //     delete (table *)data;
+    // }
     Destructor();
 }
 
 // access member
-any &any::access(const string &id,const pos&p)
+any &any::access(const string &id, const pos &p)
 {
     st.infunc(p);
     if (isInbuilt(type))
@@ -118,7 +126,7 @@ any any::run(const string &id, const vector<any> &params, const pos &p)
                 throw runtime_error(id + " accepts 0 params but recieved " + to_string(params.size()));
             }
             st.outfunc();
-            return any(new int(((vector<any>*)data)->size()),"int");
+            return any(new int(((vector<any> *)data)->size()), "int");
         }
         if (id == "add_item")
         {
@@ -126,7 +134,7 @@ any any::run(const string &id, const vector<any> &params, const pos &p)
             {
                 throw runtime_error(id + " accepts 1 params but recieved " + to_string(params.size()));
             }
-            ((vector<any>*)data)->push_back(params[0]);
+            ((vector<any> *)data)->push_back(params[0]);
             st.outfunc();
             return any();
         }
@@ -136,18 +144,18 @@ any any::run(const string &id, const vector<any> &params, const pos &p)
     {
         throw runtime_error(type + " does not have any method " + id);
     }
-    return Runner(id, params,p);
+    return Runner(id, params, p);
 }
 
-any &any::at(const any &i,const pos &p)
+any &any::at(const any &i, const pos &p)
 {
     st.infunc(p);
-    if (i.type != "int")
-    {
-        throw runtime_error("index should be a integer but it was " + i.type);
-    }
     if (type == "array")
     {
+        if (i.type != "int")
+        {
+            throw runtime_error("index of array should be a integer but it was " + i.type);
+        }
         vector<any> *ptr = (vector<any> *)data;
         int idx = *(int *)i.data;
         if (idx >= (int)ptr->size() || idx < 0)
@@ -157,6 +165,15 @@ any &any::at(const any &i,const pos &p)
         st.outfunc();
         return (*ptr)[idx];
     }
+    // if (type == "table")
+    // {
+    //     if (i.type != "shape")
+    //     {
+    //         throw runtime_error("index of table should be a shape but it was " + i.type);
+    //     }
+    //     table *ptr = (table *)data;
+    //     return (*ptr)[i];
+    // }
     throw runtime_error("[] operator does not support (" + type + ")");
 }
 
@@ -323,7 +340,8 @@ ostream &operator<<(ostream &o, const any &a)
         o << (*ptr)[ptr->size() - 1] << "]";
         return o;
     }
-    throw uni_err("DISP",a);;
+    throw uni_err("DISP", a);
+    ;
 }
 
 /* operator overloading ends */
