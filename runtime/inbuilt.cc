@@ -297,7 +297,7 @@ any DISP(const any &a, const pos &p)
     return any();
 }
 
-any sum(any &tab1, const pos &p)
+any SUM(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
@@ -330,7 +330,7 @@ any sum(any &tab1, const pos &p)
     throw uni_err("SUM", tab1);
 }
 
-any minimum(any &tab1, const pos &p)
+any MINIMUM(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
@@ -363,7 +363,7 @@ any minimum(any &tab1, const pos &p)
     throw uni_err("MINIMUM", tab1);
 }
 
-any maximum(any &tab1, const pos &p)
+any MAXIMUM(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
@@ -396,7 +396,7 @@ any maximum(any &tab1, const pos &p)
     throw uni_err("MAXIMUM", tab1);
 }
 
-any average(any &tab1, const pos &p)
+any AVERAGE(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
@@ -437,7 +437,7 @@ any average(any &tab1, const pos &p)
     throw uni_err("AVERAGE", tab1);
 }
 
-any product(any &tab1, const pos &p)
+any PRODUCT(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
@@ -470,7 +470,7 @@ any product(any &tab1, const pos &p)
     throw uni_err("PRODUCT", tab1);
 }
 
-any count(any &tab1, const pos &p)
+any COUNT(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
@@ -487,7 +487,7 @@ any count(any &tab1, const pos &p)
     throw uni_err("COUNT", tab1);
 }
 
-any ceiling(any &tab1, const pos &p)
+any CEILING(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
@@ -521,7 +521,7 @@ any ceiling(any &tab1, const pos &p)
     throw uni_err("CEILING", tab1);
 }
 
-any floor(any &tab1, const pos &p)
+any FLOOR(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
@@ -555,7 +555,7 @@ any floor(any &tab1, const pos &p)
     throw uni_err("FLOOR", tab1);
 }
 
-any modulus(any &tab1, any &K, const pos &p)
+any MODULUS(any &tab1, any &K, const pos &p)
 {
     st.infunc(p);
     if (K.type != "int")
@@ -595,7 +595,7 @@ any modulus(any &tab1, any &K, const pos &p)
     throw uni_err("MODULUS", tab1);
 }
 
-any power(any &tab1, any &K, const pos &p)
+any POWER(any &tab1, any &K, const pos &p)
 {
     st.infunc(p);
     if (K.type != "int" && K.type != "double")
