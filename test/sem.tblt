@@ -55,7 +55,7 @@ fun main()  {
 
     let obj2 = new myclass2(1,2);
     let onj, onj2 = onj;
-    let myclass2 = new myclass2();
+    let myclass = new myclass2();
 
     obj2.test3(56);
     DISP(obj2.a);
@@ -63,6 +63,8 @@ fun main()  {
     let obj1 = new myclass1();
 
     obj1.arr = [1,["2.0ef", "yuy",3],3.932];
+    DISP("BNOT:");
+    DISP(BNOT(obj1.arr[0])); 
     printArray(obj1.arr);
     return 0;
 }
