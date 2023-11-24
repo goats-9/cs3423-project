@@ -417,28 +417,49 @@ any count(any &tab1, const pos &p)
     st.outfunc();
     throw uni_err("COUNT",tab1);
 }
-// any ceiling(any &tab1, const pos &p)
-// {
-//     st.infunc(p);
-//     if(tab1.type == "cell")
-//     {
-//         double value = ceil(*(double *)tab1.data);
-//         st.outfunc();
-//         return any(new cell(any(new double(value), "double")), "cell");
-//     }
-//     if(tab1.type == "table")
-//     {
-//         table *ptr = new table(tab1);
-//         for (const auto &entry : ptr->tb){
-//             double value = ceil(*(double *)entry.second.val);
-//             entry.second.val = value;
-//         }
-//         st.outfunc();
-//         return any(ptr, "table");
-//     }
-//     st.outfunc();
-//     throw uni_err("CEILING",tab1);
-// }
-any floor(any &tab1);
+any ceiling(any &tab1, const pos &p)
+{
+    st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        cell *ptr = new cell(*(cell *)tab1.data);
+        *(double *)ptr->val = ceil(*(double *)ptr->val);
+        st.outfunc();
+        return any(ptr, "cell");
+    }
+    if(tab1.type == "table")
+    {
+        table *ptr = new table(*(table *)tab1.data);
+        for (const auto &entry : ptr->tb){
+            *(double *)entry.second.val = ceil(*(double *)entry.second.val);
+        }
+        st.outfunc();
+        return any(ptr, "table");
+    }
+    st.outfunc();
+    throw uni_err("CEILING",tab1);
+}
+any floor(any &tab1, const pos &p)
+{
+    st.infunc(p);
+    if(tab1.type == "cell")
+    {
+        cell *ptr = new cell(*(cell *)tab1.data);
+        *(double *)ptr->val = floor(*(double *)ptr->val);
+        st.outfunc();
+        return any(ptr, "cell");
+    }
+    if(tab1.type == "table")
+    {
+        table *ptr = new table(*(table *)tab1.data);
+        for (const auto &entry : ptr->tb){
+            *(double *)entry.second.val = floor(*(double *)entry.second.val);
+        }
+        st.outfunc();
+        return any(ptr, "table");
+    }
+    st.outfunc();
+    throw uni_err("FLOOR",tab1);
+}
 any modulus(any &tab1, any &N);
 any power(any &tab1, any &N);
