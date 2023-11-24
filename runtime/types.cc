@@ -1,23 +1,22 @@
 #include "types.hh"
 #include "any.hh"
 #include "helper.hh"
+#include "state.hh"
 using namespace std;
+
+extern state st;
 
 void cell::destroy()
 {
-    if (is_first)
-    {
-        delete val;
-    }
+    // Nothiing
 }
 void cell::construct(const cell &a)
 {
     val = a.val;
-    is_first = false;
 }
 void cell::construct(const any &a)
 {
-    val = new any(a);
+    val = a;
 }
 int table::read(any &path, any &delim) {
     if (path.type != "string" || delim.type != "string") 

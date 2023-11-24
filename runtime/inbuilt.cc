@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include <limits>
 using namespace std;
 
 extern state st;
@@ -237,7 +238,7 @@ any BXOR(const any &a, const any &b, const pos &p)
     return any(new int((*(int *)a.data) ^ (*(int *)b.data)), "int");
 }
 
-any BNOR(const any &a, const pos &p)
+any BNOT(const any &a, const pos &p)
 {
     st.infunc(p);
     bool cond = (a.type == "int");
@@ -296,13 +297,13 @@ any DISP(const any &a, const pos &p)
     return any();
 }
 
-any sum(any &tab1, const pos &p)
+any SUM(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
     {
         st.outfunc();
-        return tab1;
+        return ((cell *)(tab1.data))->val;
     }
     if (tab1.type == "table")
     {
@@ -310,23 +311,32 @@ any sum(any &tab1, const pos &p)
         table *ptr = (table *)tab1.data;
         for (const auto &entry : ptr->tb)
         {
-            double *value = (double *)entry.second.val;
-            total += *value;
+            if (entry.second.val.type == "double")
+            {
+                double *value = (double *)(entry.second.val.data);
+                total += *value;
+                continue;
+            }
+            if (entry.second.val.type == "int")
+            {
+                int *value = (int *)(entry.second.val.data);
+                total += double(*value);
+                continue;
+            }
         }
         st.outfunc();
-        return any(new cell(any(new double(total), "double")), "cell");
+        return any(new double(total), "double");
     }
-    st.outfunc();
     throw uni_err("SUM", tab1);
 }
 
-any minimum(any &tab1, const pos &p)
+any MINIMUM(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
     {
         st.outfunc();
-        return tab1;
+        return ((cell *)(tab1.data))->val;
     }
     if (tab1.type == "table")
     {
@@ -334,23 +344,32 @@ any minimum(any &tab1, const pos &p)
         table *ptr = (table *)tab1.data;
         for (const auto &entry : ptr->tb)
         {
-            double *value = (double *)entry.second.val;
-            m += min(m, *value);
+            if (entry.second.val.type == "double")
+            {
+                double *value = (double *)(entry.second.val.data);
+                m = min(m, *value);
+                continue;
+            }
+            if (entry.second.val.type == "int")
+            {
+                int *value = (int *)(entry.second.val.data);
+                m = min(m, double(*value));
+                continue;
+            }
         }
         st.outfunc();
-        return any(new cell(any(new double(m), "double")), "cell");
+        return any(new double(m), "double");
     }
-    st.outfunc();
     throw uni_err("MINIMUM", tab1);
 }
 
-any maximum(any &tab1, const pos &p)
+any MAXIMUM(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
     {
         st.outfunc();
-        return tab1;
+        return ((cell *)(tab1.data))->val;
     }
     if (tab1.type == "table")
     {
@@ -358,48 +377,73 @@ any maximum(any &tab1, const pos &p)
         table *ptr = (table *)tab1.data;
         for (const auto &entry : ptr->tb)
         {
-            double *value = (double *)entry.second.val;
-            m += max(m, *value);
+            if (entry.second.val.type == "double")
+            {
+                double *value = (double *)(entry.second.val.data);
+                m = max(m, *value);
+                continue;
+            }
+            if (entry.second.val.type == "int")
+            {
+                int *value = (int *)(entry.second.val.data);
+                m = max(m, double(*value));
+                continue;
+            }
         }
         st.outfunc();
-        return any(new cell(any(new double(m), "double")), "cell");
+        return any(new double(m), "double");
     }
-    st.outfunc();
     throw uni_err("MAXIMUM", tab1);
 }
 
-any average(any &tab1, const pos &p)
+any AVERAGE(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
     {
         st.outfunc();
-        return tab1;
+        return ((cell *)(tab1.data))->val;
     }
     if (tab1.type == "table")
     {
         table *ptr = (table *)tab1.data;
         double total = 0.0;
+        int num_val = 0;
         for (const auto &entry : ptr->tb)
         {
-            double *value = (double *)entry.second.val;
-            total += *value;
+            if (entry.second.val.type == "double")
+            {
+                double *value = (double *)(entry.second.val.data);
+                total += *value;
+                num_val++;
+                continue;
+            }
+            if (entry.second.val.type == "int")
+            {
+                int *value = (int *)(entry.second.val.data);
+                total += double(*value);
+                num_val++;
+                continue;
+            }
         }
+        if (!num_val)
+        {
+            throw runtime_error("Inoder to calculate AVERAGE, table should contains atleast one numeric entry");
+        }
+        double avg = total / double(num_val);
         st.outfunc();
-        double avg = total / ptr->tb.size();
-        return any(new cell(any(new double(avg), "double")), "cell");
+        return any(new double(avg), "double");
     }
-    st.outfunc();
     throw uni_err("AVERAGE", tab1);
 }
 
-any product(any &tab1, const pos &p)
+any PRODUCT(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
     {
         st.outfunc();
-        return tab1;
+        return ((cell *)(tab1.data))->val;
     }
     if (tab1.type == "table")
     {
@@ -407,125 +451,206 @@ any product(any &tab1, const pos &p)
         table *ptr = (table *)tab1.data;
         for (const auto &entry : ptr->tb)
         {
-            double *value = (double *)entry.second.val;
-            prod *= *value;
+            if (entry.second.val.type == "double")
+            {
+                double *value = (double *)(entry.second.val.data);
+                prod *= *value;
+                continue;
+            }
+            if (entry.second.val.type == "int")
+            {
+                int *value = (int *)(entry.second.val.data);
+                prod *= double(*value);
+                continue;
+            }
         }
         st.outfunc();
-        return any(new cell(any(new double(prod), "double")), "cell");
+        return any(new double(prod), "double");
     }
-    st.outfunc();
     throw uni_err("PRODUCT", tab1);
 }
 
-any count(any &tab1, const pos &p)
+any COUNT(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
     {
         st.outfunc();
-        return tab1;
+        return any(new int(1), "int");
     }
     if (tab1.type == "table")
     {
         table *ptr = (table *)tab1.data;
         st.outfunc();
-        return any(new cell(any(new int(ptr->tb.size()), "int")), "cell");
+        return any(new int(ptr->tb.size()), "int");
     }
-    st.outfunc();
     throw uni_err("COUNT", tab1);
 }
 
-any ceiling(any &tab1, const pos &p)
+any CEILING(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
     {
-        cell *ptr = new cell(*(cell *)tab1.data);
-        *(double *)ptr->val = ceil(*(double *)ptr->val);
+        cell *ptr = (cell *)tab1.data;
+        if (ptr->val.type == "double")
+        {
+            double val = ceil(*(double *)ptr->val.data);
+            st.outfunc();
+            return any(new cell(any(new double(val), "double")), "cell");
+        }
         st.outfunc();
-        return any(ptr, "cell");
+        return tab1;
     }
     if (tab1.type == "table")
     {
         table *ptr = new table(*(table *)tab1.data);
-        for (const auto &entry : ptr->tb)
+        table res;
+        for (auto &entry : ptr->tb)
         {
-            *(double *)entry.second.val = ceil(*(double *)entry.second.val);
+            if (entry.second.val.type == "double")
+            {
+                res.tb[entry.first] = cell(any(new double(ceil(*(double *)entry.second.val.data)), "double"));
+                continue;
+            }
+            res.tb[entry.first] = cell(entry.second.val);
         }
         st.outfunc();
-        return any(ptr, "table");
+        return any(new table(res), "table");
     }
-    st.outfunc();
     throw uni_err("CEILING", tab1);
 }
 
-any floor(any &tab1, const pos &p)
+any FLOOR(any &tab1, const pos &p)
 {
     st.infunc(p);
     if (tab1.type == "cell")
     {
-        cell *ptr = new cell(*(cell *)tab1.data);
-        *(double *)ptr->val = floor(*(double *)ptr->val);
+        cell *ptr = (cell *)tab1.data;
+        if (ptr->val.type == "double")
+        {
+            double val = floor(*(double *)ptr->val.data);
+            st.outfunc();
+            return any(new cell(any(new double(val), "double")), "cell");
+        }
         st.outfunc();
-        return any(ptr, "cell");
+        return tab1;
     }
     if (tab1.type == "table")
     {
         table *ptr = new table(*(table *)tab1.data);
-        for (const auto &entry : ptr->tb)
+        table res;
+        for (auto &entry : ptr->tb)
         {
-            *(double *)entry.second.val = floor(*(double *)entry.second.val);
+            if (entry.second.val.type == "double")
+            {
+                res.tb[entry.first] = cell(any(new double(floor(*(double *)entry.second.val.data)), "double"));
+                continue;
+            }
+            res.tb[entry.first] = cell(entry.second.val);
         }
         st.outfunc();
-        return any(ptr, "table");
+        return any(new table(res), "table");
     }
-    st.outfunc();
     throw uni_err("FLOOR", tab1);
 }
 
-any modulus(any &tab1, any &K, const pos &p)
+any MODULUS(any &tab1, any &K, const pos &p)
 {
     st.infunc(p);
+    if (K.type != "int")
+    {
+        throw runtime_error("2nd argument should be int but found " + K.type);
+    }
     if (tab1.type == "cell")
     {
-        cell *ptr = new cell(*(cell *)tab1.data);
-        *(int *)ptr->val = (*(int *)ptr->val) % (*(int *)K.data);
+        cell *ptr = (cell *)tab1.data;
+        if (ptr->val.type == "int")
+        {
+            int res = *(int *)ptr->val.data % *(int *)K.data;
+            st.outfunc();
+            return any(new cell(any(new int(res), "int")), "cell");
+        }
         st.outfunc();
-        return any(ptr, "cell");
+        return tab1;
     }
     if (tab1.type == "table")
     {
         table *ptr = new table(*(table *)tab1.data);
+        table res;
         for (const auto &entry : ptr->tb)
         {
-            *(int *)entry.second.val = (*(int *)entry.second.val) % (*(int *)K.data);
+            if (entry.second.val.type == "int")
+            {
+                int val = (*(int *)entry.second.val.data) % (*(int *)K.data);
+                res.tb[entry.first] = cell(any(new int(val), "int"));
+                continue;
+            }
+            res.tb[entry.first] = cell(entry.second.val);
         }
         st.outfunc();
-        return any(ptr, "table");
+        return any(new table(res), "table");
     }
     st.outfunc();
     throw uni_err("MODULUS", tab1);
 }
 
-any power(any &tab1, any &K, const pos &p)
+any POWER(any &tab1, any &K, const pos &p)
 {
     st.infunc(p);
+    if (K.type != "int" && K.type != "double")
+    {
+        throw runtime_error("2nd argument should be int r double but found " + K.type);
+    }
+    double exp;
+    if (K.type == "int")
+    {
+        exp = *(int *)K.data;
+    }
+    if (K.type == "double")
+    {
+        exp = *(double *)K.data;
+    }
     if (tab1.type == "cell")
     {
-        cell *ptr = new cell(*(cell *)tab1.data);
-        *(double *)ptr->val = pow(*(double *)ptr->val, *(double *)K.data);
+        cell *ptr = (cell *)tab1.data;
+        if (ptr->val.type == "int")
+        {
+            int res = pow(*(int *)ptr->val.data, exp);
+            st.outfunc();
+            return any(new cell(any(new double(res), "double")), "cell");
+        }
+        if (ptr->val.type == "double")
+        {
+            int res = pow(*(double *)ptr->val.data, exp);
+            st.outfunc();
+            return any(new cell(any(new double(res), "double")), "cell");
+        }
         st.outfunc();
-        return any(ptr, "cell");
+        return tab1;
     }
     if (tab1.type == "table")
     {
         table *ptr = new table(*(table *)tab1.data);
+        table res;
         for (const auto &entry : ptr->tb)
         {
-            *(double *)entry.second.val = pow(*(double *)entry.second.val, *(double *)K.data);
+            if (entry.second.val.type == "int")
+            {
+                int val = pow(*(int *)entry.second.val.data, exp);
+                res.tb[entry.first] = cell(any(new double(val), "double"));
+                continue;
+            }
+            if (entry.second.val.type  == "double")
+            {
+                int val = pow(*(double *)entry.second.val.data, exp);
+                res.tb[entry.first] = cell(any(new double(val), "double"));
+                continue;
+            }
+            res.tb[entry.first] = cell(entry.second.val);
         }
         st.outfunc();
-        return any(ptr, "table");
+        return any(new table(res), "table");
     }
     st.outfunc();
     throw uni_err("POWER", tab1);

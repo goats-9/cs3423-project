@@ -75,13 +75,13 @@ any TYPEOF(const any &a, const pos &p);
 // DISP
 any DISP(const any &a, const pos &p);
 
-any sum(any &tab1, const pos &p);
-any minimum(any &tab1, const pos &p);
-any maximum(any &tab1, const pos &p);
-any average(any &tab1, const pos &p);
-any product(any &tab1, const pos &p);
-any count(any &tab1, const pos &p);
-any ceiling(any &tab1, const pos &p);
-any floor(any &tab1, const pos &p);
-any modulus(any &tab1, any &K, const pos &p);
-any power(any &tab1, any &K, const pos &p);
+any SUM(any &tab1, const pos &p);
+any MINIMUM(any &tab1, const pos &p);
+any MAXIMUM(any &tab1, const pos &p);
+any AVERAGE(any &tab1, const pos &p);
+any PRODUCT(any &tab1, const pos &p);
+any COUNT(any &tab1, const pos &p);
+any CEILING(any &tab1, const pos &p);
+any FLOOR(any &tab1, const pos &p);
+any MODULUS(any &tab1, any &K, const pos &p);
+any POWER(any &tab1, any &K, const pos &p);
