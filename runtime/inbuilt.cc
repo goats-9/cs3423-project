@@ -213,7 +213,52 @@ any BOR(const any &a, const any &b, const pos &p)
     bool cond = (a.type == "int") && (b.type == "int");
     if (!cond) throw bi_err("BOR", a, b);
     st.outfunc();
-    return any(new int(a.data | b.data), "int");
+    return any(new int((*(int *)a.data) | (*(int *)b.data)), "int");
+}
+
+any BAND(const any &a, const any &b, const pos &p)
+{
+    st.infunc(p);
+    bool cond = (a.type == "int") && (b.type == "int");
+    if (!cond) throw bi_err("BAND", a, b);
+    st.outfunc();
+    return any(new int((*(int *)a.data) && (*(int *)b.data)), "int");
+}
+
+any BXOR(const any &a, const any &b, const pos &p)
+{
+    st.infunc(p);
+    bool cond = (a.type == "int") && (b.type == "int");
+    if (!cond) throw bi_err("BXOR", a, b);
+    st.outfunc();
+    return any(new int((*(int *)a.data) ^ (*(int *)b.data)), "int");
+}
+
+any BNOR(const any &a, const pos &p)
+{
+    st.infunc(p);
+    bool cond = (a.type == "int");
+    if (!cond) throw uni_err("BNOR", a);
+    st.outfunc();
+    return any(new int(~(*(int *)a.data)), "int");
+}
+
+any BLS(const any &a, const any &b, const pos &p)
+{
+    st.infunc(p);
+    bool cond = (a.type == "int") && (b.type == "int");
+    if (!cond) throw bi_err("BLS", a, b);
+    st.outfunc();
+    return any(new int((*(int *)a.data) << (*(int *)b.data)), "int");
+}
+
+any BRS(const any &a, const any &b, const pos &p)
+{
+    st.infunc(p);
+    bool cond = (a.type == "int") && (b.type == "int");
+    if (!cond) throw bi_err("BRS", a, b);
+    st.outfunc();
+    return any(new int((*(int *)a.data) >> (*(int *)b.data)), "int");
 }
 
 /* Bitwise ends */

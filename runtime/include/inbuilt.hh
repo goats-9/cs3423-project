@@ -59,7 +59,7 @@ any BAND(const any &a, const any &b, const pos &p);
 any BXOR(const any &a, const any &b, const pos &p);
 
 // Bitwise NOT
-any BNOT(const any &a, const any &b, const pos &p);
+any BNOT(const any &a, const pos &p);
 
 // Bitwise Left-Shift
 any BLS(const any &a, const any &b, const pos &p);
