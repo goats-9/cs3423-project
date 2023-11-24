@@ -116,7 +116,6 @@ namespace tabulate
             "BOR",
             "BAND",
             "BXOR",
-            "BNOT",
             "BLS",
             "BRS",
             "AND",
@@ -128,6 +127,7 @@ namespace tabulate
         std::vector<std::string> uniop_func_names = 
         {
             "NOT",
+            "BNOT",
             "TYPEOF",
             "LENGTH",
             "DISP",

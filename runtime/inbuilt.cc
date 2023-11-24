@@ -238,7 +238,7 @@ any BXOR(const any &a, const any &b, const pos &p)
     return any(new int((*(int *)a.data) ^ (*(int *)b.data)), "int");
 }
 
-any BNOR(const any &a, const pos &p)
+any BNOT(const any &a, const pos &p)
 {
     st.infunc(p);
     bool cond = (a.type == "int");
