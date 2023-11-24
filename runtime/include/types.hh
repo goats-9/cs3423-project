@@ -5,8 +5,8 @@
 #include <sstream>
 #include <utility>
 #include <map>
+#include "any.hh"
 
-class any;
 // /**
 //  * @class shape
 // */
@@ -37,12 +37,11 @@ private:
     void construct(const any &a);
 
 public:
-    any *val;
-    bool is_first;
+    any val;
     // default constructor
-    cell() : is_first(true)
+    cell()
     {
-        val = NULL;
+        val = any();
     }
     // copy constructor
     cell(const cell &a)
@@ -50,7 +49,7 @@ public:
         construct(a);
     }
     // constructor with any
-    cell(const any &a) : is_first(true)
+    cell(const any &a)
     {
         construct(a);
     }
