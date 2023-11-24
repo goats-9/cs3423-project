@@ -293,13 +293,13 @@ declaration_stmt:
             drv.find(var,idrec);
             if (idrec.level == -2)
             {
-                throw yy::parser::syntax_error(@$, "Cannot assign variable " + var + " as it is defined already");
+                throw yy::parser::syntax_error(@$, "error: Cannot assign variable " + var + " as it is defined already");
             }
             idrec.level = drv.scope_level;
             idrec.modifier = $1.sem;
             int res = drv.symtab_id.insert(var, idrec, drv.active_func_ptr);
             if (res == -1) {
-                throw yy::parser::syntax_error(@$, "error: '" + var + "' previously declared.");
+                throw yy::parser::syntax_error(@$, "error: Cannot assign variable " + var + " as it is defined already");
             }
         }
 
@@ -456,9 +456,6 @@ variable:
         if (idrec.level == -1) {
             throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $1);
         }
-        if (idrec.level == -2) {
-            throw yy::parser::syntax_error(@$, "error: already defined " + $1);
-        }
         $$.sem = $1;
 
         // translation
@@ -531,10 +528,7 @@ function_call:
         tabulate::func_symtrec frec;
         drv.find($1,frec);
         if (frec.level == -1) {
-            throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $1);
-        }
-        if (frec.level == -2) {
-            throw yy::parser::syntax_error(@$, "error: already defined " + $1);
+            throw yy::parser::syntax_error(@$, "error: couldn't find function " + $1);
         }
         if ((int)frec.paramlist.size() != $3.sem) {
             throw yy::parser::syntax_error(@$, "error: incorrect number of arguments for function " + $1);
@@ -564,10 +558,7 @@ constructor_call:
         tabulate::dtype_symtrec crec;
         drv.find($2,crec);
         if (crec.level == -1) {
-            throw yy::parser::syntax_error(@$, "error: couldn't find variable " + $2);
-        }
-        if (crec.level == -2) {
-            throw yy::parser::syntax_error(@$, "error: already defined " + $2);
+            throw yy::parser::syntax_error(@$, "error: couldn't find struct " + $2);
         }
         bool errfl = true;
         for (auto u : crec.constr_args) {
@@ -653,13 +644,19 @@ struct_declaration:
     {
         drv.scope_level--;
         drv.in_struct = false;
+
+        location errLoc(@1.begin,@2.end);
         
         tabulate::dtype_symtrec struc;
+        drv.find($2,struc);
+        if (struc.level == -2) {
+            throw yy::parser::syntax_error(errLoc, "Cannot create new struct " + $2 + " as it is defined already");
+        }
         struc.level = drv.scope_level;
         struc.constr_args = $5.constr_args_list;
         int res = drv.symtab_dtype.insert($2, struc, drv.active_func_ptr);
         if (res == -1) {
-            throw yy::parser::syntax_error(@$, "error: failed to insert struct into symbol table.");
+            throw yy::parser::syntax_error(errLoc, "Cannot create new struct " + $2 + " as it is defined already");
         }
         // translation
         drv.outFile
@@ -957,6 +954,10 @@ function_head:
     {
         /* insert function into ST */
         tabulate::func_symtrec frec;
+        drv.find($2,frec);
+        if (frec.level == -2) {
+            throw yy::parser::syntax_error(@$, "error: Cannot create new function " + $2 + " as it is defined already");
+        }
         /* scope_level was incremented in parameter_list */
         frec.level = drv.scope_level;
         frec.paramlist = $4.sem;

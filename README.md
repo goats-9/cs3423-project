@@ -5,7 +5,7 @@
 mkdir build
 cd build
 cmake ..
-cmake --build . --target install
+cmake --build . --target install -j8
 ./tabulate /path/to/source.tblt
 ./a.out
 ```
