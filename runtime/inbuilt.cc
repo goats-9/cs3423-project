@@ -365,14 +365,14 @@ any average(any &tab1, const pos &p)
     }
     if(tab1.type == "table")
     {
-        double total = 0.0; int count = 0;
         table *ptr = (table *)tab1.data;
+        double total = 0.0;
         for (const auto &entry : ptr->tb){
             double *value = (double *)entry.second.val;
-            total += *value; count++;
+            total += *value;
         }
         st.outfunc();
-        double avg = total / count;
+        double avg = total / ptr->tb.size();
         return any(new cell(any(new double(avg), "double")), "cell");
     }
     st.outfunc();
@@ -410,21 +410,35 @@ any count(any &tab1, const pos &p)
     }
     if(tab1.type == "table")
     {
-        int count = 0;
         table *ptr = (table *)tab1.data;
-        for (const auto &entry : ptr->tb){
-            count++;
-        }
         st.outfunc();
-        return any(new cell(any(new int(count), "int")), "cell");
+        return any(new cell(any(new int(ptr->tb.size()), "int")), "cell");
     }
     st.outfunc();
     throw uni_err("COUNT",tab1);
 }
-any ceiling(any &tab1)
-{
-
-}
+// any ceiling(any &tab1, const pos &p)
+// {
+//     st.infunc(p);
+//     if(tab1.type == "cell")
+//     {
+//         double value = ceil(*(double *)tab1.data);
+//         st.outfunc();
+//         return any(new cell(any(new double(value), "double")), "cell");
+//     }
+//     if(tab1.type == "table")
+//     {
+//         table *ptr = new table(tab1);
+//         for (const auto &entry : ptr->tb){
+//             double value = ceil(*(double *)entry.second.val);
+//             entry.second.val = value;
+//         }
+//         st.outfunc();
+//         return any(ptr, "table");
+//     }
+//     st.outfunc();
+//     throw uni_err("CEILING",tab1);
+// }
 any floor(any &tab1);
 any modulus(any &tab1, any &N);
 any power(any &tab1, any &N);
