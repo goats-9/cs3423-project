@@ -123,16 +123,8 @@ namespace tabulate
             "AND",
             "OR",
             "XOR",
-            "SUM",
-            "MINIMUM",
-            "MAXIMUM",
-            "AVERAGE",
-            "PRODUCT",
-            "COUNT",
-            "CEILING",
-            "FLOOR",
             "MODULUS",
-            "POWER",
+            "POWER"
         };
         std::vector<std::string> uniop_func_names = 
         {
@@ -140,6 +132,14 @@ namespace tabulate
             "TYPEOF",
             "LENGTH",
             "DISP"
+            "SUM",
+            "MINIMUM",
+            "MAXIMUM",
+            "AVERAGE",
+            "PRODUCT",
+            "COUNT",
+            "CEILING",
+            "FLOOR"
         };
         std::vector<std::string> biop_paramlist = {"p1","p2"};
         std::vector<std::string> uniop_paramlist = {"p1"};
