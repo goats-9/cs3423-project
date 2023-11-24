@@ -22,3 +22,6 @@ int to_bool(const any &a, const pos &p);
 
 // displays runtime error message
 void disp_error(const std::runtime_error &e);
+
+// finding whether the type is inbuilt
+bool isInbuilt(const std::string &t);

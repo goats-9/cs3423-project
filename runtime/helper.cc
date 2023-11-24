@@ -81,3 +81,27 @@ void disp_error(const runtime_error &e)
     << st
     << e.what() << '\n';
 }
+
+bool isInbuilt(const string &t)
+{
+    vector<string> primitive{
+        "int", 
+        "double", 
+        "string", 
+        "bool", 
+        "none", 
+        "array",  
+        "shape", 
+        "range", 
+        "date", 
+        "time"
+    };
+    for (auto i : primitive)
+    {
+        if (i == t)
+        {
+            return true;
+        }
+    }
+    return false;
+}

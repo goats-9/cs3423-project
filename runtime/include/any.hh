@@ -13,7 +13,6 @@ private:
     any Runner(const std::string &id, const std::vector<any> &params,const pos &p);
     void construct(const any &a);
     void destruct();
-    bool isInbuilt(const std::string &t);
 
 public:
     void *data;
