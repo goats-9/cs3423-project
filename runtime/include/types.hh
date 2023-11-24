@@ -7,28 +7,26 @@
 #include <map>
 #include "any.hh"
 
-// /**
-//  * @class shape
-// */
-// class shape
-// {
-// public:
-//     std::pair<int, int> vals;
-//     shape();
-//     shape(any &a, any &b);
-// };
+/**
+ * @class shape
+*/
+class shape
+{
+public:
+    std::pair<int, int> vals;
+    shape();
+    shape(any &a, any &b);
+};
 
-// /**
-//  * @class range
-// */
-// class range 
-// {
-// public:
-//     int start, stop, step;
-//     range (int _start, int _stop, int _step) 
-//         : start(_start), stop(_stop), step(_step)
-//         {}
-// };
+/**
+ * @class range
+*/
+class range 
+{
+public:
+    int start, stop, step;
+    range (std::string str,const pos &p);
+};
 class cell
 {
 private:
@@ -90,16 +88,16 @@ public:
 };
 
 
-// class date
-// {
-// public:
-//     int year, month, day;
-//     date(std::string str);
-// };
+class date
+{
+public:
+    int year, month, day;
+    date(std::string str,const pos &p);
+};
 
-// class time
-// {
-// public:
-//     int hour, min, sec;
-//     time(std::string str);
-// };
+class time
+{
+public:
+    int hour, min, sec;
+    time(std::string str,const pos &p);
+};
