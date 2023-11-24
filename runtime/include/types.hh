@@ -5,18 +5,6 @@
 #include <sstream>
 #include <utility>
 #include <map>
-
-class any;
-/**
- * @class shape
-*/
-class shape
-{
-public:
-    std::pair<int, int> vals;
-    shape();
-    shape(any &a, any &b);
-};
 #include "any.hh"
 
 /**
@@ -25,7 +13,7 @@ public:
 class shape
 {
 public:
-    std::pair<int, int> vals;
+    std::pair<any, any> vals;
     shape(const any &a, const any &b,const pos &p);
 };
 

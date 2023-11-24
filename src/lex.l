@@ -33,7 +33,7 @@ map<string,string> uniOp_to_func = {
 
 /* Declare token defination as follow */
 
-RESERVED "any"|"pos"|"state"|"uni_err"|"bi_err"|"split"|"disp_error"|"__funcMap"|"__funcParams"|"__memMap"|"__copyConstruct"|"__runnerCode"
+RESERVED "any"|"time"|"shape"|"range"|"date"|"pos"|"state"|"uni_err"|"bi_err"|"split"|"disp_error"|"__funcMap"|"__funcParams"|"__memMap"|"__copyConstruct"|"__runnerCode"
 DIGIT [0-9]
 INT -?{DIGIT}*
 DOUBLE ({DIGIT}+\.{DIGIT}*)|({DIGIT}*\.{DIGIT}+)
