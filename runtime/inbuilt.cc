@@ -289,30 +289,6 @@ any DISP(const any &a,const pos &p)
     st.outfunc();
     return any();
 }
-
-any ADD(const any &a, const any &b, const pos &p)
-{
-    st.infunc(p);
-    if (a.type == "int" && b.type == "int")
-    {
-        int *ptr1 = (int *)a.data;
-        int *ptr2 = (int *)b.data;
-        st.outfunc();
-        return any(new int(*ptr1 + *ptr2), "int");
-    }
-    if (
-        (a.type == "double" && b.type == "int") ||
-        (a.type == "int" && b.type == "double") ||
-        (a.type == "double" && b.type == "double"))
-    {
-        double *ptr1 = (double *)a.data;
-        double *ptr2 = (double *)b.data;
-        st.outfunc();
-        return any(new double(*ptr1 + *ptr2), "double");
-    }
-    throw bi_err("ADD", a, b);
-}
-
 // any sum(any &tab1, const pos &p)
 // {
 //     st.infunc(p);
