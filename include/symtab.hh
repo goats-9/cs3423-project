@@ -40,25 +40,62 @@
 
 /**
  * Define symbol table and record types in a namespace to prevent clashes with
- * other namespaces 
+ * other namespaces.
  */
 namespace tabulate {
     
-    /* Class definitions for tabulate symbol table records */
-
+    /**
+     * @struct id_symtrec
+     * @brief Symbol table record format for identifiers.
+     */
     struct id_symtrec {
-        /// @brief Scope of declaration.
+        /**
+         * @var id_symtrec::level
+         * @brief Scope level of symbol table record.
+         */
         int level;
+
+        /**
+         * @var id_symtrec::modifier
+         * @brief Modifier of the identifier i.e., whether the identifier is a
+         * constant or is modifiable.
+         */
         int modifier;
     };
 
+    /**
+     * @struct func_symtrec
+     * @brief Symbol table record format for functions.
+     */
     struct func_symtrec {
+        /**
+         * @var func_symtrec::level
+         * @brief Scope level of symbol table record.
+         */
         int level;
+
+        /**
+         * @var paramlist
+         * @brief List of parameters of the function.
+         */
         std::vector<std::string> paramlist;
     };
 
+    /**
+     * @struct dtype_symtrec
+     * @brief Symbol table record format for data types.
+     */
     struct dtype_symtrec {
+        /**
+         * @var dtype_symtrec::level
+         * @brief Scope level of symbol table record.
+         */
         int level;
+
+        /**
+         * @var dtype_symtrec::constr_args
+         * @brief Number of arguments that can be taken in constructor.
+         */
         std::vector<int> constr_args;
     };
 
