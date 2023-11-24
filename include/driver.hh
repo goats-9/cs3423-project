@@ -72,5 +72,17 @@ namespace tabulate {
         driver();
         void symtab_init();
         void delete_scope();
+
+        template <typename K, typename V>
+        V find(K &name) {
+            V ret;
+            ret = symtab_id.find(name);
+            if (ret.level > -1) return ret;
+            ret = symtab_dtype.find(name);
+            if (ret.level > -1) return ret;
+            ret = symtab_func.find(name);
+            if (ret.level > -1) return ret;
+            return ret;
+        }
     };
 }
