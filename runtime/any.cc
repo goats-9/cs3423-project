@@ -58,6 +58,10 @@ void any::construct(const any &a)
         data = new cell(*(cell *)a.data);
         type = "cell";
     }
+    // if (a.type == "table")
+    // {
+    //     data = new table(*(table *)a.data);
+    // }
     Constructor(a);
 }
 
@@ -91,6 +95,10 @@ void any::destruct()
     {
         delete (cell *)data;
     }
+    // if (type == "table")
+    // {
+    //     delete (table *)data;
+    // }
     Destructor();
 }
 
