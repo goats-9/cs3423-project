@@ -1,0 +1,10 @@
+# Testcase ID: P3-T2-PASS #
+
+fun main() {
+    let fl = true;
+    let a = 10;
+    while (fl) {
+        a = SUB(a,1);
+        if (a <= 0) break;
+    }
+}

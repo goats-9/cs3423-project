@@ -1,0 +1,11 @@
+# Testcase ID: P3-T3-FAIL #
+
+fun foo(a, b) {
+    # Parameter redeclaration #
+    let a = 3;
+    b = 4;
+}
+
+fun main() {
+    foo();
+}

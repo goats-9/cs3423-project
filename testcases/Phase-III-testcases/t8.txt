@@ -1,0 +1,19 @@
+# Testcase ID: P3-T4-FAIL #
+
+struct a_struct {
+    constructor(val) {
+        this.val = val;
+    }
+};
+
+struct mask {
+    constructor(a) {
+        this.a = a;
+    }
+};
+
+fun main() {
+    const a = new a_struct(2);
+    # Mask off... #
+    const mask = new mask(a);
+}

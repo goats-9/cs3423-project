@@ -1,0 +1,5 @@
+# Testcase ID: P2-T2-PASS #
+fun main() {
+    const Welcome = "to Tabulate!";
+    let go = ";)";
+}

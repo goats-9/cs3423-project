@@ -1,0 +1,10 @@
+# Testcase ID: P3-T3-PASS #
+
+fun foo(a, b) {
+    a = 3;
+    b = 4;
+}
+
+fun main() {
+    foo();
+}

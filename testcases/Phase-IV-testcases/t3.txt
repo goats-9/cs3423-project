@@ -1,0 +1,6 @@
+# Testcase ID: P3-T3-PASS #
+
+fun main() {
+    let var = 1:5~1;
+    let time = 23:59:59;
+}

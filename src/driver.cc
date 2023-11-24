@@ -157,8 +157,7 @@ namespace tabulate
         std::vector<std::string> dtype_list = 
         {
             "TABLE",
-            "CELL",
-            "RANGE"
+            "CELL"
         };
         dtype_symtrec drec;
         drec.level = 0;

@@ -1,0 +1,6 @@
+# Testcase ID: P3-T1-FAIL #
+
+fun main() {
+    # Main should not return anything! #
+    return "If you're reading this... its too late";
+}

@@ -1,0 +1,12 @@
+# Testcase ID: P4-T2-FAIL #
+
+fun main() {
+    # Create a table #
+    let myTable = new TABLE();
+    let arr = [[1,2,3,4,5]];
+    let a = 0;
+    a = SUB(a, 1);
+    # The shape has a negative index, should error out #
+    myTable[(a,0:4~1)] = arr;
+    myTable.write("test.csv");
+}

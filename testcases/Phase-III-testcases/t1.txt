@@ -1,0 +1,6 @@
+# Testcase ID: P3-T1-PASS #
+
+fun main() {
+    myObj = [23, 24, [25, 26], "lol", ["This", "is", "easy"]];
+    DISP(myObj);
+}

@@ -5,6 +5,18 @@
 #include <sstream>
 #include <utility>
 #include <map>
+
+class any;
+/**
+ * @class shape
+*/
+class shape
+{
+public:
+    std::pair<int, int> vals;
+    shape();
+    shape(any &a, any &b);
+};
 #include "any.hh"
 
 /**
@@ -83,7 +95,7 @@ public:
     any operator[](any &dim);
     int read(any &path, any &delim);
     int write(any &path, any &delim);
-    any shape();
+    any dim();
 };
 
 
