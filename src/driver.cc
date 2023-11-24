@@ -152,6 +152,20 @@ namespace tabulate
         for (auto u :uniop_func_names) {
             symtab_func.tabulate_symtab[u].push(frec);
         }
+        // Initialize the symbol table with datatypes
+        // offered by Tabulate
+        std::vector<std::string> dtype_list = 
+        {
+            "TABLE",
+            "CELL",
+            "RANGE"
+        };
+        dtype_symtrec drec;
+        drec.level = 0;
+        drec.constr_args = {0,1};
+        for (auto u : dtype_list) {
+            symtab_dtype.tabulate_symtab[u].push(drec);
+        }
     }
 
     void driver::delete_scope() {

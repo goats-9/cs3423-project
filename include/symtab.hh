@@ -115,13 +115,11 @@ namespace tabulate {
         std::unordered_map<K, std::stack<V>> tabulate_symtab;
 
         /**
-         * @fn
          * @brief Default constructor.
          */
         symtab() {}
 
         /**
-         * @fn
          * @brief Insert record into symbol table.
          * @param name Key value of symbol table record.
          * @param rec Symbol table record contents.
