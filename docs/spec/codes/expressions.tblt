@@ -13,8 +13,6 @@ let t2 = TYPEOF(10.5); # evaluates to "double" #
 
 let myRange = 1:5~1;
 
-let myFormula = FORMULA([a,j], ADD) # Creating formulae with inbuilt functions #
-
 # Assuming there exists a table called SalesData #
 let myTable = TABLE(SalesData);
 
