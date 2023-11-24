@@ -1,0 +1,24 @@
+# Testcase ID: P2-T4-FAIL #
+
+struct myTable() {
+    constructor() {}
+    constructor(a, b) {
+        this.a1 = a, this.a2 = b;
+    }
+    constructor(a) {
+        this.a1 = a;
+    }
+    fun myAttr() {
+        return this.a1;
+    }
+};
+
+fun main() {
+    const fl = false;
+    if (fl) {
+        # Should produce semantic error even if not executed #
+        fl = true;
+    } else {
+        DISP(OR(fl,false));
+    }
+}

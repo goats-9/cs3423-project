@@ -1,0 +1,23 @@
+# Testcase ID: P2-T4-PASS #
+
+struct myTable() {
+    constructor() {}
+    constructor(a, b) {
+        this.a1 = a, this.a2 = b;
+    }
+    constructor(a) {
+        this.a1 = a;
+    }
+    fun myAttr() {
+        return this.a1;
+    }
+};
+
+fun main() {
+    const fl = false;
+    if (fl) {
+        DISP("You cant see me");
+    } else {
+        DISP(OR(fl,false));
+    }
+}

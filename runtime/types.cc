@@ -72,6 +72,10 @@ any table::operator[] (any &dim)
     shape dim_data = *(shape *)dim.data;
     return any(&tb[dim_data.vals], "cell");
 }
+any table::operator= (any &aval)
+{
+
+}
 date::date(std::string str)
 {
     std::vector<std::string> temp = split(str, "-");

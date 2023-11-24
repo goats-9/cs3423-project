@@ -1,0 +1,11 @@
+# Testcase ID: P3-T2-FAIL #
+
+fun main() {
+    let fl = true;
+    let a = 10;
+    while (fl) {
+        a = SUB(a,1);
+    }
+    # Having a break at the wrong time? #
+    if (a <= 0) break;
+}

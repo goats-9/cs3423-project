@@ -1,0 +1,20 @@
+# Testcase ID: P2-T3-FAIL #
+
+struct myTable {
+    constructor(a, b) {
+        # No let's and const's here :) #
+        let this.a = a, this.b = b;
+    }
+
+    # Swap them around! #
+    fun swap() {
+        let c = this.a;
+        this.a = this.b;
+        this.b = c;
+    }
+};
+
+fun havingFun() {
+    const qn = "Are you enjoying?";
+    let ans = "YES!";
+}

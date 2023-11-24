@@ -1,0 +1,19 @@
+# Testcase ID: P3-T4-PASS #
+
+struct a_struct {
+    constructor(val) {
+        this.val = val;
+    }
+};
+
+struct mask {
+    constructor(a) {
+        this.a = a;
+    }
+};
+
+fun main() {
+    # Happy Halloween! #
+    const a = new a_struct(2);
+    const myMask = new mask(a);
+}

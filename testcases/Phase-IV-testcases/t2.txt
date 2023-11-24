@@ -1,0 +1,9 @@
+# Testcase ID: P4-T2-PASS #
+
+fun main() {
+    # Create a table #
+    let myTable = new TABLE();
+    let arr = [[1,2,3,4,5]];
+    myTable[(0,0:4~1)] = arr;
+    myTable.write("test.csv");
+}
