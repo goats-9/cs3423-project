@@ -1,7 +1,10 @@
 #include "types.hh"
 #include "any.hh"
 #include "helper.hh"
+#include "state.hh"
 using namespace std;
+
+extern state st;
 
 void cell::destroy()
 {
@@ -55,18 +58,74 @@ void cell::construct(const any &a)
 //     shape dim_data = *(shape *)dim.data;
 //     return tb[{dim_data.first, dim_data.second}];
 // }
-// date::date(std::string str)
-// {
-//     std::vector<std::string> temp = split(str, "-");
-//     year = stoi(temp[0]);
-//     month = stoi(temp[1]);
-//     day = stoi(temp[2]);
-// }
 
-// time::time(std::string str)
-// {
-//     std::vector<std::string> temp = split(str, ":");
-//     hour = stoi(temp[0]);
-//     min = stoi(temp[1]);
-//     sec = stoi(temp[2]);
-// }
+range::range(std::string str, const pos &p)
+{
+    st.infunc(p);
+    std::vector<std::string> temp = split(str, "~");
+    step = stoi(temp[1]);
+    temp = split(temp[0],":");
+    start = stoi(temp[0]);
+    stop = stoi(temp[1]);
+    if (step < 0)
+    {
+        throw runtime_error("step of range cannot be negetive");
+    }
+    if (start < 0)
+    {
+        throw runtime_error("start of range cannot be negetive");
+    }
+    if (stop < 0)
+    {
+        throw runtime_error("stop of range cannot be negetive");
+    }
+    if (start > stop)
+    {
+        throw runtime_error("stop of range cannot be less than start of range cannot be negetive");
+    }
+    st.outfunc();
+}
+
+date::date(std::string str, const pos &p)
+{
+    st.infunc(p);
+    std::vector<std::string> temp = split(str, "-");
+    year = stoi(temp[0]);
+    month = stoi(temp[1]);
+    day = stoi(temp[2]);
+    if (year < 0)
+    {
+        throw runtime_error("year cannot be negetive");
+    }
+    if (month < 0)
+    {
+        throw runtime_error("month cannot be negetive");
+    }
+    if (day < 0)
+    {
+        throw runtime_error("day cannot be negetive");
+    }
+    st.outfunc();
+}
+
+time::time(std::string str, const pos &p)
+{
+    st.infunc(p);
+    std::vector<std::string> temp = split(str, ":");
+    hour = stoi(temp[0]);
+    min = stoi(temp[1]);
+    sec = stoi(temp[2]);
+    if (hour < 0 || hour > 24)
+    {
+        throw runtime_error("hour cannot be negetive or more than 24");
+    }
+    if (min < 0 || min > 60)
+    {
+        throw runtime_error("min cannot be negetive or more than 60");
+    }
+    if (sec < 0 || sec > 60)
+    {
+        throw runtime_error("sec cannot be negetive or more than 60");
+    }
+    st.outfunc();
+}
