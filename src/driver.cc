@@ -130,7 +130,7 @@ namespace tabulate
             "NOT",
             "TYPEOF",
             "LENGTH",
-            "DISP"
+            "DISP",
             "SUM",
             "MINIMUM",
             "MAXIMUM",
