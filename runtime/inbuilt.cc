@@ -639,11 +639,13 @@ any POWER(any &tab1, any &K, const pos &p)
             {
                 int val = pow(*(int *)entry.second.val.data, exp);
                 res.tb[entry.first] = cell(any(new double(val), "double"));
+                continue;
             }
             if (entry.second.val.type  == "double")
             {
                 int val = pow(*(double *)entry.second.val.data, exp);
                 res.tb[entry.first] = cell(any(new double(val), "double"));
+                continue;
             }
             res.tb[entry.first] = cell(entry.second.val);
         }
