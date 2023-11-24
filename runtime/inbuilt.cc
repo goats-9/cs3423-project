@@ -294,9 +294,8 @@ any sum(any &tab1, const pos &p)
     st.infunc(p);
     if(tab1.type == "cell")
     {
-        double *ptr = (double *)tab1.data;
         st.outfunc();
-        return any(new double(*ptr), "double");
+        return tab1;
     }
     if(tab1.type == "table")
     {
@@ -307,7 +306,7 @@ any sum(any &tab1, const pos &p)
             total += *value;
         }
         st.outfunc();
-        return any(new double(total), "double");
+        return any(new cell(any(new double(total), "double")), "cell");
     }
     st.outfunc();
     throw uni_err("SUM",tab1);
@@ -317,9 +316,8 @@ any minimum(any &tab1, const pos &p)
     st.infunc(p);
     if(tab1.type == "cell")
     {
-        double *ptr = (double *)tab1.data;
         st.outfunc();
-        return any(new double(*ptr), "double");
+        return tab1;
     }
     if(tab1.type == "table")
     {
@@ -330,7 +328,7 @@ any minimum(any &tab1, const pos &p)
             m += min(m,*value);
         }
         st.outfunc();
-        return any(new double(m), "double");
+        return any(new cell(any(new double(m), "double")), "cell");
     }
     st.outfunc();
     throw uni_err("MINIMUM",tab1);
@@ -340,9 +338,8 @@ any maximum(any &tab1, const pos &p)
     st.infunc(p);
     if(tab1.type == "cell")
     {
-        double *ptr = (double *)tab1.data;
         st.outfunc();
-        return any(new double(*ptr), "double");
+        return tab1;
     }
     if(tab1.type == "table")
     {
@@ -353,7 +350,7 @@ any maximum(any &tab1, const pos &p)
             m += max(m,*value);
         }
         st.outfunc();
-        return any(new double(m), "double");
+        return any(new cell(any(new double(m), "double")), "cell");
     }
     st.outfunc();
     throw uni_err("MAXIMUM",tab1);
@@ -363,9 +360,8 @@ any average(any &tab1, const pos &p)
     st.infunc(p);
     if(tab1.type == "cell")
     {
-        double *ptr = (double *)tab1.data;
         st.outfunc();
-        return any(new double(*ptr), "double");
+        return tab1;
     }
     if(tab1.type == "table")
     {
@@ -376,7 +372,8 @@ any average(any &tab1, const pos &p)
             total += *value; count++;
         }
         st.outfunc();
-        return any(new double(total/count), "double");
+        double avg = total / count;
+        return any(new cell(any(new double(avg), "double")), "cell");
     }
     st.outfunc();
     throw uni_err("AVERAGE",tab1);
@@ -386,9 +383,8 @@ any product(any &tab1, const pos &p)
     st.infunc(p);
     if(tab1.type == "cell")
     {
-        double *ptr = (double *)tab1.data;
         st.outfunc();
-        return any(new double(*ptr), "double");
+        return tab1;
     }
     if(tab1.type == "table")
     {
@@ -399,7 +395,7 @@ any product(any &tab1, const pos &p)
             prod *= *value;
         }
         st.outfunc();
-        return any(new double(prod), "double");
+        return any(new cell(any(new double(prod), "double")), "cell");
     }
     st.outfunc();
     throw uni_err("PRODUCT",tab1);
@@ -410,7 +406,7 @@ any count(any &tab1, const pos &p)
     if(tab1.type == "cell")
     {
         st.outfunc();
-        return any(new int(1), "int");
+        return tab1;
     }
     if(tab1.type == "table")
     {
@@ -420,7 +416,7 @@ any count(any &tab1, const pos &p)
             count++;
         }
         st.outfunc();
-        return any(new int(count), "int");
+        return any(new cell(any(new int(count), "int")), "cell");
     }
     st.outfunc();
     throw uni_err("COUNT",tab1);
