@@ -8,11 +8,6 @@
 #include <stdexcept>
 using namespace std;
 
-template <typename T>
-using __funcMap = map<string, any (T::*)(vector<any>, const pos &)>;
-using __funcParams = map<string, int>;
-using __memMap = map<string, any>;
-
 #define __copyConstruct \
     func_decl();      \
     mem = a.mem;      \

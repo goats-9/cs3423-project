@@ -8,31 +8,6 @@ using namespace std;
 
 extern state st;
 
-bool any::isInbuilt(const string &t)
-{
-    vector<string> primitive{
-        "int", 
-        "double", 
-        "string", 
-        "bool", 
-        "none", 
-        "array", 
-        "cell", 
-        "shape", 
-        "range", 
-        "date", 
-        "time"
-    };
-    for (auto i : primitive)
-    {
-        if (i == t)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 void any::construct(const any &a)
 {
     if (a.type == "int")
