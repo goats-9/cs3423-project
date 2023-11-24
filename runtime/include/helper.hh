@@ -25,3 +25,4 @@ void disp_error(const std::runtime_error &e);
 
 // finding whether the type is inbuilt
 bool isInbuilt(const std::string &t);
+bool isPrimitive(const std::string &t);

@@ -5,6 +5,8 @@ fun main() {
     let a = 10;
     while (fl) {
         a = SUB(a,1);
-        if (a <= 0) break;
+        if (a <= 0) {
+            break;
+        }
     }
 }

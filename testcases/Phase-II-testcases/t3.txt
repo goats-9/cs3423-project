@@ -19,3 +19,5 @@ fun havingFun() {
     const qn = "Are you enjoying?";
     let ans = "YES!";
 }
+
+fun main() {}

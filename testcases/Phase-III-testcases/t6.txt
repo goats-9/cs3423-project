@@ -7,5 +7,7 @@ fun main() {
         a = SUB(a,1);
     }
     # Having a break at the wrong time? #
-    if (a <= 0) break;
+    if (a <= 0) {
+        break;
+    }
 }

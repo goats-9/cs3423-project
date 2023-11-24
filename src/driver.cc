@@ -53,15 +53,16 @@ namespace tabulate
     
     int driver::compile()
     {
-        int res = std::system(("g++ " + remove_extension() + ".cc -L. -lruntime -o" + remove_extension() + ".out").c_str());
+        int res = std::system(("g++ " + remove_extension() + ".cc -g -L. -lruntime -o" + remove_extension() + ".out").c_str());
         return res;
     }
 
     bool driver::check_extension()
     {
-        if (file.substr(file.find_last_of(".") + 1) == "tblt")
-            return true;
-        return false;
+        return true;
+        // if (file.substr(file.find_last_of(".") + 1) == "tblt")
+        //     return true;
+        // return false;
     }
     
     // remove extension
@@ -156,8 +157,8 @@ namespace tabulate
         // offered by Tabulate
         std::vector<std::string> dtype_list = 
         {
-            "TABLE",
-            "CELL"
+            "table",
+            "cell"
         };
         dtype_symtrec drec;
         drec.level = 0;

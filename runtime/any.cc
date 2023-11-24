@@ -65,10 +65,11 @@ void any::construct(const any &a)
         data = new Time(*(Time *)a.data);
         type = "time";
     }
-    // if (a.type == "table")
-    // {
-    //     data = new table(*(table *)a.data);
-    // }
+    if (a.type == "table")
+    {
+        data = new table(*(table *)a.data);
+        type = "table";
+    }
     Constructor(a);
 }
 
@@ -118,10 +119,10 @@ void any::destruct()
     {
         delete (Time *)data;
     }
-    // if (type == "table")
-    // {
-    //     delete (table *)data;
-    // }
+    if (type == "table")
+    {
+        delete (table *)data;
+    }
     Destructor();
 }
 
@@ -162,6 +163,49 @@ any any::run(const string &id, const vector<any> &params, const pos &p)
             return any();
         }
         throw runtime_error(type + " does not have any method " + id);
+    }
+    if (type == "table")
+    {
+        if (id == "assign")
+        {
+            if (params.size() != 2)
+            {
+                throw runtime_error(id + " accepts 2 params but received " + to_string(params.size()));
+            }
+            any res = ((table *)data)->assign(params[0], params[1]);
+            st.outfunc();
+            return res;
+        }
+        if (id == "get")
+        {
+            if (params.size() != 1)
+            {
+                throw runtime_error(id + " accepts 1 params but received " + to_string(params.size()));
+            }
+            any res = ((table *)data)->get(params[0]);
+            st.outfunc();
+            return res;
+        }
+        if (id == "write")
+        {
+            if (params.size() != 2)
+            {
+                throw runtime_error(id + " accepts 2 params but received " + to_string(params.size()));
+            }
+            any res = ((table *)data)->write(params[0], params[1]);
+            st.outfunc();
+            return res;
+        }
+        if (id == "read")
+        {
+            if (params.size() != 2)
+            {
+                throw runtime_error(id + " accepts 2 params but received " + to_string(params.size()));
+            }
+            any res = ((table *)data)->read(params[0], params[1]);
+            st.outfunc();
+            return res;
+        }
     }
     if (isInbuilt(type))
     {
@@ -344,7 +388,7 @@ ostream &operator<<(ostream &o, const any &a)
     }
     if (a.type == "none")
     {
-        o << "none";
+        o << "";
         return o;
     }
     if (a.type == "range")

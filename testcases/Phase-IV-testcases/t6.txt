@@ -2,11 +2,11 @@
 
 fun main() {
     # Create a table #
-    let myTable = new TABLE();
+    let myTable = new table();
     let arr = [[1,2,3,4,5]];
     let a = 0;
     a = SUB(a, 1);
     # The shape has a negative index, should error out #
-    myTable[(a,0:4~1)] = arr;
-    myTable.write("test.csv");
+    myTable.assign((a,0:4~1), arr);
+    myTable.write("test.csv", ",");
 }

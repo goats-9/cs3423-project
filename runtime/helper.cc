@@ -105,3 +105,24 @@ bool isInbuilt(const string &t)
     }
     return false;
 }
+
+bool isPrimitive(const string &t)
+{
+    vector<string> primitive{
+        "int", 
+        "double", 
+        "string", 
+        "bool", 
+        "none", 
+        "date", 
+        "time"
+    };
+    for (auto i : primitive)
+    {
+        if (i == t)
+        {
+            return true;
+        }
+    }
+    return false;
+}

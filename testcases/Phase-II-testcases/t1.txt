@@ -1,1 +1,3 @@
 # Testcase ID: P2-T1-PASS #
+
+fun main() {}

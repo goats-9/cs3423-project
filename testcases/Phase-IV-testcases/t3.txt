@@ -2,5 +2,7 @@
 
 fun main() {
     let var = 1:5~1;
-    let time = 23:59:59;
+    let myTime = 23:59:59;
+    DISP(var);
+    DISP(myTime);
 }

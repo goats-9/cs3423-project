@@ -7,6 +7,9 @@
 #include <map>
 #include <vector>
 #include "any.hh"
+#include "state.hh"
+
+extern state st;
 
 // for translation of classes
 template <typename T>
@@ -41,7 +44,6 @@ public:
 class cell
 {
 private:
-    void destroy();
     void construct(const cell &a);
     void construct(const any &a);
 
@@ -66,15 +68,9 @@ public:
     // assignment operator
     void operator=(const cell &a)
     {
-        destroy();
         construct(a);
     }
 
-    // destructor
-    ~cell()
-    {
-        destroy();
-    }
     any get();
 };
 
@@ -83,10 +79,18 @@ class table
 public:
     std::map<std::pair<int, int>, cell> tb;
     int max_row,max_col;
+    __funcMap<table> funcs;
+    __funcParams func_params; 
     // default constructor
     table() : max_row(0), max_col(0)
     {
         // empty
+    }
+    table(const pos &p) : max_row(0), max_col(0)
+    {
+        st.infunc(p);
+        // empty
+        st.outfunc();
     }
     // copy constructor
     table(const table &a)

@@ -1,7 +1,7 @@
 # Testcase ID: P3-T3-FAIL #
 
 fun main() {
-    let var = 1:5~1
+    let var = 1:5~1;
     # Time is money! #
-    let time = 24:00:00;
+    let myTime = 24:00:00;
 }

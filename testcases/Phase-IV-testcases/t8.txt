@@ -1,10 +1,10 @@
 # Testcase ID: P3-T4-FAIL #
 
 fun main() {
-    let myTab = new TABLE();
-    myTab[(1,1)] = 1;
-    myTab[(2,1:5~1)] = [["I am", "being", "smart!", 13, 37]];
-    let myCell = SUM(myTab[2]);
-    myTab[(10,10)]
-    myTab.WRITE("test.csv");
+    let myTab = new table();
+    
+    myTab.assign((1,1), [[myTab.get((0,0))]]);
+    myTab.assign((2,1:5~1), [["I am", "being", "smart!", 13, 37]]);
+    let myCell = SUM(myTab);
+    myTab.write("test.csv", ",");
 }

@@ -111,7 +111,7 @@ S:
     {
         // checking if main exist
         if (drv.num_main != 1) {
-            yy::parser::syntax_error(@$, "error: there should be exactly one main function.");
+            throw yy::parser::syntax_error(@$, "error: there should be exactly one main function.");
         }
 
         // declaring new datatypes in runtime function

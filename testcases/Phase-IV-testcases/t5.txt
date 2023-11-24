@@ -2,9 +2,9 @@
 
 fun main() {
     # Create a table #
-    let myTable = new TABLE();
-    myTable.read("nonexistent.csv");
+    let myTable = new table();
+    myTable.read("nonexistent.csv", ",");
     let arr = [[1,2,3,4,5]];
-    myTable[(0,0:4~1)] = arr;
-    myTable.write("test.csv");
+    myTable.assign((0,0:4~1),arr);
+    myTable.write("test.csv", ",");
 }

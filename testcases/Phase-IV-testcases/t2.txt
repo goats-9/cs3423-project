@@ -2,8 +2,8 @@
 
 fun main() {
     # Create a table #
-    let myTable = new TABLE();
-    let arr = [[1,2,3,4,5]];
-    myTable[(0,0:4~1)] = arr;
-    myTable.write("test.csv");
+    let myTable = new table();
+    let arr = [[1,"a"],[2,"b"],[3,"c"],[4,"d"],[5,"e"]];
+    myTable.assign((0:4~1,0:1~1), arr);
+    myTable.write("test.csv", ",");
 }

@@ -6,10 +6,6 @@ using namespace std;
 
 extern state st;
 
-void cell::destroy()
-{
-    // Nothing
-}
 void cell::construct(const cell &a)
 {
     val = a.val;
@@ -81,23 +77,24 @@ any table::write(const any &_path, const any &_delim = any(new string(","), "str
         throw runtime_error("deliminiter should be 1 character long only");
     }
     char delim = __delim[0];
-    std::fstream fout(path);
+    std::fstream fout(path, std::ios_base::out);
     if (!fout)
     {
         throw runtime_error("cannot open file " + path);
     }
-    std::vector<std::vector<any>> tb_vec;
+    std::vector<std::vector<any>> tb_vec(max_row, std::vector<any>(max_col));
     for (auto v : tb)
     {
         tb_vec[v.first.first][v.first.second] = any(v.second.val);
     }
-    for (auto row : tb_vec)
+    for (int i = 0; i < max_row; i++)
     {
-        for (auto cell : row)
+        for (int j = 0; j < max_col; j++)
         {
-            fout << cell;
-            if (cell != row.back())
+            fout << tb_vec[i][j];
+            if (j + 1 != max_col) {
                 fout << delim;
+            }
         }
         fout << "\n";
     }
@@ -114,26 +111,21 @@ any table::assign(const any &dim, const any &elements)
     range r1(dshape.vals.first), r2(dshape.vals.second);
     if (elements.type != "array") throw runtime_error("2D array not entered");
     std::vector<any> elements_arr = *(std::vector<any> *)elements.data;
+    int l1 = (r1.stop - r1.start + 1)/r1.step + (r1.stop - r1.start + 1)%r1.step;
+    if (l1 != (int)elements_arr.size()) throw runtime_error("First dimension mismatch");
     for (int i = r1.start, j = 0; i <= r1.stop; i += r1.step, j++) {
-        if (j >= (int)elements_arr.size()) throw runtime_error("Array of incorrect size");
         if (elements_arr[j].type != "array") throw runtime_error("2D array not entered");
         std::vector<any> elements_arr_arr = *(std::vector<any> *)elements_arr[j].data;
+        int l2 = (r2.stop - r2.start + 1)/r2.step + (r2.stop - r2.start + 1)%r2.step;
+        if (l2 != (int)elements_arr_arr.size()) throw runtime_error("Dimension mismatch");
         for (int ii = r2.start, jj = 0; ii <= r2.stop; ii += r2.step, jj++) {
-            if (jj >= (int)elements_arr_arr.size()) throw runtime_error("Array of incorrect size");
-            if (!isInbuilt(elements_arr_arr[jj].type)) throw runtime_error("Element is not a primitive");
+            if (!isPrimitive(elements_arr_arr[jj].type)) throw runtime_error("Element is not a primitive");
             tb[{i,ii}] = cell(elements_arr_arr[jj]);
+            max_col = max(max_col, ii+1);
         }
+        max_row = max(max_row, i+1);
     }
-    std::vector<any> ret;
-    for (int i = r1.start; i <= r1.stop; i += r1.step) {
-        std::vector<any> ret_push;
-        for (int j = r2.start; j <= r2.stop; j += r2.step) {
-            if (tb.find({i,j}) == tb.end()) ret_push.push_back(any());
-            else ret_push.push_back(any(&tb[{i,j}], "cell"));
-        }
-        ret.push_back(any(&ret_push, "array"));
-    }
-    return any(&ret, "array");
+    return any();
 }
 
 any table::dim()
@@ -158,9 +150,9 @@ any table::get(const any &dim)
             if (tb.find({i,j}) == tb.end()) ret_push.push_back(any());
             else ret_push.push_back(any(&tb[{i,j}], "cell"));
         }
-        ret.push_back(any(&ret_push, "array"));
+        ret.push_back(any(new std::vector<any>(ret_push), "array"));
     }
-    return any(&ret, "array");
+    return any(new std::vector<any>(ret), "array");
 }
 
 range::range(std::string str, const pos &p)
@@ -229,17 +221,17 @@ Time::Time(std::string str, const pos &p)
     hour = stoi(temp[0]);
     min = stoi(temp[1]);
     sec = stoi(temp[2]);
-    if (hour < 0 || hour > 24)
+    if (hour < 0 || hour >= 24)
     {
-        throw runtime_error("hour cannot be negetive or more than 24");
+        throw runtime_error("hour must be between 0 and 23");
     }
-    if (min < 0 || min > 60)
+    if (min < 0 || min >= 60)
     {
-        throw runtime_error("min cannot be negetive or more than 60");
+        throw runtime_error("min must be between 0 and 59");
     }
-    if (sec < 0 || sec > 60)
+    if (sec < 0 || sec >= 60)
     {
-        throw runtime_error("sec cannot be negetive or more than 60");
+        throw runtime_error("sec must be between 0 and 59");
     }
     st.outfunc();
 }
