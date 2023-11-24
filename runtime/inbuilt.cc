@@ -289,3 +289,55 @@ any DISP(const any &a,const pos &p)
     st.outfunc();
     return any();
 }
+// any sum(any &tab1, const pos &p)
+// {
+//     st.infunc(p);
+//     if(tab1.type == "cell")
+//     {
+//         double *ptr1 = (double *)tab1.data;
+//         st.outfunc();
+//         return any(new double(*ptr1), "double");
+//     }
+//     if(tab1.type == "table")
+//     {
+//         double total = 0.0;
+//         for (const auto &entry : tab1.data.tb){
+//             double value = (double *)entry.second.val;
+//             total += value;
+//         }
+//         st.outfunc();
+//         return any(new double(total), "double");
+//     }
+//     st.outfunc();
+//     throw uni_error("SUM",tab1);
+// }
+// any minimum(any &tab1, )
+// {
+//     st.infunc(p);
+//     if(tab1.type == "cell")
+//     {
+//         double *ptr1 = (double *)tab1.data;
+//         st.outfunc();
+//         return any(new double(*ptr1), "double");
+//     }
+//     if(tab1.type == "table")
+//     {
+//         double total = 0.0;
+//         for (const auto &entry : tab1.data.tb){
+//             double value = (double *)entry.second.val;
+//             total += value;
+//         }
+//         st.outfunc();
+//         return any(new double(total), "double");
+//     }
+//     st.outfunc();
+//     throw uni_err("SUM",tab1);
+// }
+any maximum(any &tab1);
+any average(any &tab1);
+any product(any &tab1);
+any count(any &tab1);
+any ceiling(any &tab1);
+any floor(any &tab1);
+any modulus(any &tab1, any &N);
+any power(any &tab1, any &N);
