@@ -73,16 +73,34 @@ namespace tabulate {
         void symtab_init();
         void delete_scope();
 
-        template <typename K, typename V>
-        V find(K &name) {
-            V ret;
-            ret = symtab_id.find(name);
-            if (ret.level > -1) return ret;
-            ret = symtab_dtype.find(name);
-            if (ret.level > -1) return ret;
-            ret = symtab_func.find(name);
-            if (ret.level > -1) return ret;
-            return ret;
+        void find(std::string &name, tabulate::id_symtrec &rec) {
+            rec = symtab_id.find(name, scope_level);
+            auto rec2 = symtab_dtype.find(name, scope_level);
+            auto rec3 = symtab_func.find(name, scope_level);
+            if (rec2.level > -1 || rec3.level > -1)
+            {
+                rec.level = -2;
+            }
+        }
+        
+        void find(std::string &name, tabulate::dtype_symtrec &rec) {
+            rec = symtab_dtype.find(name, scope_level);
+            auto rec2 = symtab_id.find(name, scope_level);
+            auto rec3 = symtab_func.find(name, scope_level);
+            if (rec2.level > -1 || rec3.level > -1)
+            {
+                rec.level = -2;
+            }
+        }
+
+        void find(std::string &name, tabulate::func_symtrec &rec) {
+            rec = symtab_func.find(name, scope_level);
+            auto rec2 = symtab_dtype.find(name, scope_level);
+            auto rec3 = symtab_id.find(name, scope_level);
+            if (rec2.level > -1 || rec3.level > -1)
+            {
+                rec.level = -2;
+            }
         }
     };
 }
