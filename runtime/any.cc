@@ -10,7 +10,19 @@ extern state st;
 
 bool any::isInbuilt(const string &t)
 {
-    vector<string> primitive{"int", "double", "string", "bool", "none", "array", "cell"};
+    vector<string> primitive{
+        "int", 
+        "double", 
+        "string", 
+        "bool", 
+        "none", 
+        "array", 
+        "cell", 
+        "shape", 
+        "range", 
+        "date", 
+        "time"
+    };
     for (auto i : primitive)
     {
         if (i == t)
@@ -58,6 +70,26 @@ void any::construct(const any &a)
         data = new cell(*(cell *)a.data);
         type = "cell";
     }
+    if (a.type == "shape")
+    {
+        data = new shape(*(shape *)a.data);
+        type = "shape";
+    }
+    if (a.type == "range")
+    {
+        data = new range(*(range *)a.data);
+        type = "range";
+    }
+    if (a.type == "date")
+    {
+        data = new date(*(date *)a.data);
+        type = "date";
+    }
+    if (a.type == "time")
+    {
+        data = new Time(*(Time *)a.data);
+        type = "time";
+    }
     // if (a.type == "table")
     // {
     //     data = new table(*(table *)a.data);
@@ -94,6 +126,22 @@ void any::destruct()
     if (type == "cell")
     {
         delete (cell *)data;
+    }
+    if (type == "shape")
+    {
+        delete (shape *)data;
+    }
+    if (type == "range")
+    {
+        delete (range *)data;
+    }
+    if (type == "date")
+    {
+        delete (date *)data;
+    }
+    if (type == "time")
+    {
+        delete (Time *)data;
     }
     // if (type == "table")
     // {

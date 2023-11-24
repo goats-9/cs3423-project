@@ -26,8 +26,7 @@ class shape
 {
 public:
     std::pair<int, int> vals;
-    shape();
-    shape(any &a, any &b);
+    shape(const any &a, const any &b,const pos &p);
 };
 
 /**
@@ -107,9 +106,9 @@ public:
     date(std::string str,const pos &p);
 };
 
-class time
+class Time
 {
 public:
     int hour, min, sec;
-    time(std::string str,const pos &p);
+    Time(std::string str,const pos &p);
 };

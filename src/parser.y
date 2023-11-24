@@ -211,7 +211,7 @@ shape_initializer:
     OPEN_PARENTHESIS expression COMMA expression CLOSE_PARENTHESIS
     {
         $$.type = "shape";
-        $$.value << "shape(" << $2.trans << "," << $4.trans << ")";
+        $$.value << "shape(" << $2.trans << "," << $4.trans << "," << tabulate::translatePos(@$,"constant: shape") << ")";
     }
 
 // all constants
@@ -239,17 +239,17 @@ constant:
     | DATE
     {
         $$.type = "date";
-        $$.value << "date(" << $1 << ")";
+        $$.value << "date(" << $1 << "," << tabulate::translatePos(@$,"constant: date") << ")";
     }
     | TIME
     {
         $$.type = "time";
-        $$.value << "time(" << $1 << ")";
+        $$.value << "Time(" << $1 << "," << tabulate::translatePos(@$,"constant: time") << ")";
     }
     | RANGE
     {
         $$.type = "range";
-        $$.value << "range(" << $1 << ")";
+        $$.value << "range(" << $1 << "," << tabulate::translatePos(@$,"constant: range") << ")";
     }
     | array_initializer 
     {
