@@ -56,6 +56,7 @@ fun main()  {
     let obj2 = new myclass2(1,2);
     let onj, onj2 = onj;
     let myclass = new myclass2();
+    let sp = (1,3);
 
     obj2.test3(56);
     DISP(obj2.a);

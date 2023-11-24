@@ -108,7 +108,7 @@ date::date(std::string str, const pos &p)
     st.outfunc();
 }
 
-time::time(std::string str, const pos &p)
+Time::Time(std::string str, const pos &p)
 {
     st.infunc(p);
     std::vector<std::string> temp = split(str, ":");
@@ -127,5 +127,24 @@ time::time(std::string str, const pos &p)
     {
         throw runtime_error("sec cannot be negetive or more than 60");
     }
+    st.outfunc();
+}
+
+shape::shape(const any &a,const any &b,const pos &p)
+{
+    st.infunc(p);
+    if (a.type != "int" || b.type != "int" )
+    {
+        throw runtime_error("both elements of shape should be (int,int) but found (" + a.type + "," + b.type + ")");
+    }
+    int a_val = *(int *)a.data;
+    int b_val = *(int *)b.data;
+
+    if (a_val < 0 || b_val < 0)
+    {
+        throw runtime_error("both elements have to be positive");
+    }
+
+    vals = {a_val,b_val};
     st.outfunc();
 }
