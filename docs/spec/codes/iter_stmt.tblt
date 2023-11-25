@@ -1,5 +1,5 @@
 # Iteration statements in Tabulate #
-let fl = TRUE;
+let fl = true;
 
 #...#
 
