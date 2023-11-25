@@ -127,10 +127,9 @@
 	90pt+%
 	90pt+%
 	90pt+%
-	90pt+%
-	90pt+%
+	124pt+%
 0pt}
-\def\gumericNumCols{6}
+\def\gumericNumCols{5}
 \setlength\gnumericTableWidthComplete{\gnumericTableWidth+%
          \tabcolsep*\gumericNumCols*2+\arrayrulewidth*\gumericNumCols}
 \ifthenelse{\lengthtest{\gnumericTableWidthComplete > \linewidth}}%
@@ -152,8 +151,7 @@
 \ifthenelse{\isundefined{\gnumericColB}}{\newlength{\gnumericColB}}{}\settowidth{\gnumericColB}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
 \ifthenelse{\isundefined{\gnumericColC}}{\newlength{\gnumericColC}}{}\settowidth{\gnumericColC}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
 \ifthenelse{\isundefined{\gnumericColD}}{\newlength{\gnumericColD}}{}\settowidth{\gnumericColD}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColE}}{\newlength{\gnumericColE}}{}\settowidth{\gnumericColE}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
-\ifthenelse{\isundefined{\gnumericColF}}{\newlength{\gnumericColF}}{}\settowidth{\gnumericColF}{\begin{tabular}{@{}p{90pt*\gnumericScale}@{}}x\end{tabular}}
+\ifthenelse{\isundefined{\gnumericColE}}{\newlength{\gnumericColE}}{}\settowidth{\gnumericColE}{\begin{tabular}{@{}p{124pt*\gnumericScale}@{}}x\end{tabular}}
 
 \begin{tabular}[c]{%
 	b{\gnumericColA}%
@@ -161,7 +159,6 @@
 	b{\gnumericColC}%
 	b{\gnumericColD}%
 	b{\gnumericColE}%
-	b{\gnumericColF}%
 	}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -172,121 +169,119 @@
 %%  the first, last or every page. Use \multicolumn if you want.    %%
 
 %%  Header for the first page.                                      %%
-%	\multicolumn{6}{c}{The First Header} \\ \hline 
+%	\multicolumn{5}{c}{The First Header} \\ \hline 
 %	\multicolumn{1}{c}{colTag}	%Column 1
 %	&\multicolumn{1}{c}{colTag}	%Column 2
 %	&\multicolumn{1}{c}{colTag}	%Column 3
 %	&\multicolumn{1}{c}{colTag}	%Column 4
-%	&\multicolumn{1}{c}{colTag}	%Column 5
 %	&\multicolumn{1}{c}{colTag}	\\ \hline %Last column
 %	\endfirsthead
 
 %%  The running header definition.                                  %%
 %	\hline
-%	\multicolumn{6}{l}{\ldots\small\slshape continued} \\ \hline
+%	\multicolumn{5}{l}{\ldots\small\slshape continued} \\ \hline
 %	\multicolumn{1}{c}{colTag}	%Column 1
 %	&\multicolumn{1}{c}{colTag}	%Column 2
 %	&\multicolumn{1}{c}{colTag}	%Column 3
 %	&\multicolumn{1}{c}{colTag}	%Column 4
-%	&\multicolumn{1}{c}{colTag}	%Column 5
 %	&\multicolumn{1}{c}{colTag}	\\ \hline %Last column
 %	\endhead
 
 %%  The running footer definition.                                  %%
 %	\hline
-%	\multicolumn{6}{r}{\small\slshape continued\ldots} \\
+%	\multicolumn{5}{r}{\small\slshape continued\ldots} \\
 %	\endfoot
 
 %%  The ending footer definition.                                   %%
-%	\multicolumn{6}{c}{That's all folks} \\ \hline 
+%	\multicolumn{5}{c}{That's all folks} \\ \hline 
 %	\endlastfoot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\hhline{|-|-|-|-|-|-}
+\hhline{|-|-|-|-|-}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
-	{\gnumericPB{\centering}\gnumbox{IF}}
+	{\gnumericPB{\centering}\gnumbox{if}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{BNOT}}
+	{\gnumericPB{\centering}\gnumbox{date}}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\centering}\gnumbox{INT}}
+	{\gnumericPB{\centering}\gnumbox{int}}
 	&\multicolumn{1}{p{\gnumericColD}|}%
-	{\gnumericPB{\centering}\gnumbox{AND}}
+	{\gnumericPB{\centering}\gnumbox{break}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}\gnumbox{BRS}}
-	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{SUM}}
+	{\gnumericPB{\centering}\gnumbox{\_\_runnerCode}}
 \\
-\hhline{|------|}
+\hhline{|-----|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
-	{\gnumericPB{\centering}\gnumbox{ELSE}}
+	{\gnumericPB{\centering}\gnumbox{else}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{TRUE}}
+	{\gnumericPB{\centering}\gnumbox{$true$}}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\centering}\gnumbox{TABLE}}
+	{\gnumericPB{\centering}\gnumbox{table}}
 	&\multicolumn{1}{p{\gnumericColD}|}%
-	{\gnumericPB{\centering}\gnumbox{OR}}
+	{\gnumericPB{\centering}\gnumbox{continue}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}\gnumbox{BLS}}
-	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{PROD}}
+	{\gnumericPB{\centering}\gnumbox{\_\_copyConstruct}}
 \\
-\hhline{|------|}
+\hhline{|-----|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
-	{\gnumericPB{\centering}\gnumbox{VOID}}
+	{\gnumericPB{\centering}\gnumbox{void}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{FALSE}}
+	{\gnumericPB{\centering}\gnumbox{$false$}}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\centering}\gnumbox{DOUBLE}}
+	{\gnumericPB{\centering}\gnumbox{double}}
 	&\multicolumn{1}{p{\gnumericColD}|}%
-	{\gnumericPB{\centering}\gnumbox{NOT}}
+	{\gnumericPB{\centering}\gnumbox{main}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}\gnumbox{BREAK}}
-	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{MUL}}
+	{\gnumericPB{\centering}\gnumbox{\_\_memMap}}
 \\
-\hhline{|------|}
+\hhline{|-----|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
-	{\gnumericPB{\centering}\gnumbox{WHILE}}
+	{\gnumericPB{\centering}\gnumbox{while}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{CELL}}
+	{\gnumericPB{\centering}\gnumbox{cell}}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\centering}\gnumbox{STRING}}
+	{\gnumericPB{\centering}\gnumbox{string}}
 	&\multicolumn{1}{p{\gnumericColD}|}%
-	{\gnumericPB{\centering}\gnumbox{TYPEOF}}
+	{\gnumericPB{\centering}\gnumbox{return}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}\gnumbox{CONTINUE}}
-	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{DIV}}
+	{\gnumericPB{\centering}\gnumbox{\_\_funcParams}}
 \\
-\hhline{|------|}
+\hhline{|-----|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
-	{\gnumericPB{\centering}\gnumbox{FUN}}
+	{\gnumericPB{\centering}\gnumbox{fun}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{RANGE}}
+	{\gnumericPB{\centering}\gnumbox{range}}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\centering}\gnumbox{CLASS}}
+	{\gnumericPB{\centering}\gnumbox{class}}
 	&\multicolumn{1}{p{\gnumericColD}|}%
-	{\gnumericPB{\centering}\gnumbox{RETURN}}
+	{\gnumericPB{\centering}\gnumbox{split}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}\gnumbox{MAIN}}
-	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{MOD}}
+	{\gnumericPB{\centering}\gnumbox{\_\_funcMap}}
 \\
-\hhline{|------|}
+\hhline{|-----|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
-	{\gnumericPB{\centering}\gnumbox{MODULUS}}
+	{\gnumericPB{\centering}\gnumbox{time}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}\gnumbox{POW}}
+	{\gnumericPB{\centering}\gnumbox{double}}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\centering}\gnumbox{FLOOR}}
+	{\gnumericPB{\centering}\gnumbox{bool}}
 	&\multicolumn{1}{p{\gnumericColD}|}%
-	{\gnumericPB{\centering}\gnumbox{BOR}}
+	{\gnumericPB{\centering}\gnumbox{any}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}\gnumbox{BAND}}
-	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}\gnumbox{BXOR}}
+	{\gnumericPB{\centering}\gnumbox{disp\_error}}
 \\
-\hhline{|-|-|-|-|-|-|}
+\hhline{|-----|}
+	 \multicolumn{1}{|p{\gnumericColA}|}%
+	{\gnumericPB{\centering}\gnumbox{pos}}
+	&\multicolumn{1}{p{\gnumericColB}|}%
+	{\gnumericPB{\centering}\gnumbox{state}}
+	&\multicolumn{1}{p{\gnumericColC}|}%
+	{\gnumericPB{\centering}\gnumbox{uni\_err}}
+	&\multicolumn{1}{p{\gnumericColD}|}%
+	{\gnumericPB{\centering}\gnumbox{bi\_err}}
+	&\multicolumn{1}{p{\gnumericColE}|}%
+	{}
+\\
+\hhline{|-|-|-|-|-|}
 \end{tabular}
 
 \ifthenelse{\isundefined{\languageshorthands}}{}{\languageshorthands{\languagename}}

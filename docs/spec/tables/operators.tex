@@ -235,7 +235,7 @@
 	{\setlength{\gnumericMultiRowLength}{0pt}%
 	 \addtolength{\gnumericMultiRowLength}{\gnumericColE}%
 	 \multirow{6}[3]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
-	 \gnumericPB{\centering}cell, int, double}}}
+	 \gnumericPB{\centering}int, double}}}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}ADD(2,3)}
 \\
@@ -328,7 +328,7 @@
 	{\setlength{\gnumericMultiRowLength}{0pt}%
 	 \addtolength{\gnumericMultiRowLength}{\gnumericColE}%
 	 \multirow{2}[1]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
-	 \gnumericPB{\centering}cell, bool}}}
+	 \gnumericPB{\centering}bool}}}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}cell1 = cell2}
 \\
@@ -359,7 +359,7 @@
 	{\setlength{\gnumericMultiRowLength}{0pt}%
 	 \addtolength{\gnumericMultiRowLength}{\gnumericColE}%
 	 \multirow{4}[2]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
-	 \gnumericPB{\centering}cell, int, double}}}
+	 \gnumericPB{\centering}int, double}}}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}cell1 $>$ 100}
 \\
@@ -424,7 +424,7 @@
 	{\setlength{\gnumericMultiRowLength}{0pt}%
 	 \addtolength{\gnumericMultiRowLength}{\gnumericColE}%
 	 \multirow{3}[1]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
-	 \gnumericPB{\centering}cell, bool}}}
+	 \gnumericPB{\centering}bool}}}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}(cell1 $>$ 100) AND (cell2 $<$ 50)}
 \\
@@ -475,7 +475,7 @@
 	{\setlength{\gnumericMultiRowLength}{0pt}%
 	 \addtolength{\gnumericMultiRowLength}{\gnumericColE}%
 	 \multirow{6}[3]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
-	 \gnumericPB{\centering}cell, int, double, bool}}}
+	 \gnumericPB{\centering}int, double, bool}}}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}BOR(cell1, 2)}
 \\
@@ -519,7 +519,7 @@
 	&\multicolumn{1}{p{\gnumericColE}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}BNOT(cell1, 2)}
+	{\gnumericPB{\centering}BNOT(cell1)}
 \\
 \hhline{~|--|~~|-|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -559,7 +559,7 @@
 	&\multicolumn{1}{p{\gnumericColD}|}%
 	{\gnumericPB{\centering}Right to Left}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}cell}
+	{\gnumericPB{\centering}any}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}cell1 = 5}
 \\
@@ -579,7 +579,7 @@
 	 \multirow{3}[1]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
 	 \gnumericPB{\centering}Right to Left}}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}cell, int, double}
+	{\gnumericPB{\centering}int, double}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}-cell1}
 \\
@@ -607,7 +607,7 @@
 	&\multicolumn{1}{p{\gnumericColD}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}cell, int, double, bool}
+	{\gnumericPB{\centering}int, double, bool}
 	&\multicolumn{1}{p{\gnumericColF}|}%
 	{\gnumericPB{\centering}\~{ }cell3}
 \\
@@ -618,7 +618,7 @@
 	 \multirow{2}[1]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
 	 \gnumericPB{\centering}\textbf{Reference}}}}
 	&\multicolumn{1}{p{\gnumericColB}|}%
-	{\gnumericPB{\centering}:}
+	{\gnumericPB{\centering}: \~{ }}
 	&\multicolumn{1}{p{\gnumericColC}|}%
 	{\gnumericPB{\raggedright}Range Reference}
 	&\multicolumn{1}{p{\gnumericColD}|}%
@@ -627,9 +627,9 @@
 	 \multirow{2}[1]{\gnumericMultiRowLength}{\parbox{\gnumericMultiRowLength}{%
 	 \gnumericPB{\centering}None}}}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}cell}
+	{\gnumericPB{\centering}table}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}1:5:1}
+	{\gnumericPB{\centering}1:5\~{ }1}
 \\
 \hhline{~|--|~|--|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
@@ -637,13 +637,13 @@
 	&\multicolumn{1}{p{\gnumericColB}|}%
 	{\gnumericPB{\centering}[ ]}
 	&\multicolumn{1}{p{\gnumericColC}|}%
-	{\gnumericPB{\raggedright}Table Reference}
+	{\gnumericPB{\raggedright}Array Reference}
 	&\multicolumn{1}{p{\gnumericColD}|}%
 	{}
 	&\multicolumn{1}{p{\gnumericColE}|}%
-	{\gnumericPB{\centering}table}
+	{\gnumericPB{\centering}array}
 	&\multicolumn{1}{p{\gnumericColF}|}%
-	{\gnumericPB{\centering}myTable[1:5:1,1:5:1]}
+	{\gnumericPB{\centering}Num[1][5]}
 \\
 \hhline{|------|}
 	 \multicolumn{1}{|p{\gnumericColA}|}%
