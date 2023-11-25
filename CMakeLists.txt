@@ -17,7 +17,7 @@ enable_testing()
 function(testcase_pass testname testfile)
     add_test(
         NAME ${testname}
-        COMMAND ./tabulate ${testfile}
+        COMMAND ${CMAKE_BINARY_DIR}/tabulate ${testfile}
     )
     set_tests_properties(
         ${testname}
@@ -28,12 +28,12 @@ endfunction(testcase_pass)
 function(testcase_fail testname testfile)
     add_test(
         NAME ${testname}
-        COMMAND ./tabulate ${testfile}
+        COMMAND ${CMAKE_BINARY_DIR}/tabulate ${testfile}
     )
     set_tests_properties(
         ${testname}
-        PROPERTIES PASS_REGULAR_EXPRESSION "error"
+        PROPERTIES PASS_REGULAR_EXPRESSION "[0-9]*\.[0-9]*"
     )
 endfunction(testcase_fail)
 
-testcase_pass(test1 "../test/sem.tblt")
+add_subdirectory(testcases)
