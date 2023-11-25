@@ -4,14 +4,14 @@ fun addNumbers(a, b) {
     return result;
 }
 
-fun findMax(rng) {
+fun findMax(arr) {
     let maxVal = -10000;
-    let rangeLength = LENGTH(rng);
+    let rangeLength = LENGTH(arr);
     let currIdx = 0;
 
     while(currIdx < rangeLength) {
-        if(GET(range, currIdx) > maxVal) {
-            maxVal = GET(rng, currIdx);
+        if(arr.get(currIdx) > maxVal) {
+            maxVal = arr.get(currIdx);
         }
         currIdx = ADD(currIdx, 1);
     }

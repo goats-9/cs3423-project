@@ -14,7 +14,7 @@ let t2 = TYPEOF(10.5); # evaluates to "double" #
 let myRange = 1:5~1;
 
 # Assuming there exists a table called SalesData #
-let myTable = new TABLE(SalesData);
+let myTable = new table(SalesData);
 
 # Assuming a struct Student with members name and grade #
 let s1 = new Student("hastar", "A");

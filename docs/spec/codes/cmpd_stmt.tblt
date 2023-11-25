@@ -1,9 +1,9 @@
 # Compound statements in Tabulate #
-let val1 = GET(cell1);
-let val2 = GET(cell2);
+let val1 = cell1.get();
+let val2 = cell2.get();
 let res;
 
-if(val1 > 50) {
+if (val1 > 50) {
     if(val2 > 20) {
         res = ADD(MUL(val1,0.8),val2);
     } else {
